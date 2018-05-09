@@ -1,0 +1,21 @@
+// Created     : 2014-04-9 15:44:6
+// DLL id      : C:\Program Files (x86)\DHI\2016\bin\x64\pfs2004.dll
+// PFS version : Feb 19 2014 19:27:39
+
+[MIKE1DAdditional]
+   format_version = 100
+   [Plugins]
+
+   EndSect  // Plugins
+   
+   [Params]
+      HDParameters_SolverSettings_BottomSlotType = 'Classic'
+      HDParameters_SolverSettings_Delh = 0.01
+      HDParameters_SolverSettings_MinWaterDepth = 0.0
+      HDParameters_SolverSettings_MinWaterDepthRelative = 0.0
+      HDParameters_SolverSettings_UseQZeroMethod = true
+      HDParameters_SolverSettings_UseOscillationDamping = false
+
+   EndSect  // Params
+
+EndSect  // MIKE1DAdditional

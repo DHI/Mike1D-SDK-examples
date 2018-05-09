@@ -1,0 +1,19 @@
+// Created     : 2014-04-9 15:44:6
+// DLL id      : C:\Program Files (x86)\DHI\2016\bin\x64\pfs2004.dll
+// PFS version : Feb 19 2014 19:27:39
+
+[MIKE1DAdditional]
+   format_version = 100
+   [Plugins]
+      [Plugin]
+         AssemblyName = 'DisableOutput.dll'
+         ClassName = 'DHI.Mike1D.Examples.Plugins.DisableOutput'
+         [Arguments]
+
+         EndSect  // Arguments
+         
+      EndSect  // Plugin
+
+   EndSect  // Plugins
+
+EndSect  // MIKE1DAdditional

@@ -1,0 +1,65 @@
+// Created     : 2008-03-13 9:46:36
+// DLL id      : C:\Program Files\Common Files\DHI\MIKEZero\pfs2004.dll
+// PFS version : Feb  6 2008 21:21:15
+
+[BndCondition]
+   Comment = ''
+   [BndCndArray]
+      [BndItem]
+         DescType = 0, 1, 'Main', 0, 0, '', ''
+         OpenDesc = 0, 0
+         Dam = 0, 0, 0
+         Inflow = true, false, false, false
+         ADRR = '', 0, 0
+         QhADM12 = 2, 0, 0
+         AutoCalQh = 0, 0, 0
+         BndTS = 0, ||, 0, 0, '', 0, 1
+         [FractionArray]
+         EndSect  // FractionArray
+
+         [HDArray]
+         EndSect  // HDArray
+
+         [InflowArray]
+            Inflow = 2, 0, 1, ||, 1, 0, '', 0, 1
+         EndSect  // InflowArray
+
+         [QhArray]
+         EndSect  // QhArray
+
+         [ComponentArray]
+         EndSect  // ComponentArray
+
+      EndSect  // BndItem
+
+      [BndItem]
+         DescType = 0, 5, 'Main', 1000, 0, '', ''
+         OpenDesc = 0, 0
+         Dam = 0, 0, 0
+         Inflow = false, false, false, false
+         ADRR = '', 0, 0
+         QhADM12 = 2, 0, 0
+         AutoCalQh = 0, 0, 0
+         BndTS = 0, ||, 0, 0, '', 0, 1
+         [FractionArray]
+         EndSect  // FractionArray
+
+         [HDArray]
+         EndSect  // HDArray
+
+         [InflowArray]
+            Inflow = 2, 0, 1, ||, 1, 0, '', 0, 1
+         EndSect  // InflowArray
+
+         [QhArray]
+         EndSect  // QhArray
+
+         [ComponentArray]
+         EndSect  // ComponentArray
+
+      EndSect  // BndItem
+
+   EndSect  // BndCndArray
+
+EndSect  // BndCondition
+

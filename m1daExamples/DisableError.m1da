@@ -1,0 +1,21 @@
+// Created     : 2016-09-13 22:7:36
+// DLL id      : C:\Program Files (x86)\DHI\2016\bin\x64\pfs2004.dll
+// PFS version : Nov 22 2015 02:58:09
+
+[MIKE1DAdditional]
+   format_version = 100
+   [ToWarning]
+      MessageId = 'BR_ERR_LinkChannelBedLevelBelowBLDownstream'
+      MessageId = 'BR_ERR_LinkChannelAddStorZeroDownstream'
+
+   EndSect  // ToWarning
+
+   [Plugins]
+
+   EndSect  // Plugins
+   
+   [Params]
+
+   EndSect  // Params
+
+EndSect  // MIKE1DAdditional

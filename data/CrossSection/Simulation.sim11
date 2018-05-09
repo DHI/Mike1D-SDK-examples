@@ -1,0 +1,89 @@
+// Created     : 2014-02-5 14:3:44
+// DLL id      : C:\Program Files (x86)\DHI\2016\bin\x64\pfs2004.dll
+// PFS version : Feb  2 2014 19:13:32
+
+[Run11]
+   format_version = 107, 'MIKEZero, 2016'
+   Comment = ''
+   [Models]
+      hd = true, false
+      ad = false
+      st = false
+      wq = false, 1, 0
+      rr = false
+      ff = false
+      da = false
+      ice = false
+      SimMode = 0
+      QSS = 0
+   EndSect  // Models
+
+   [Input]
+      nwk = |.\Network.nwk11|
+      xs = |.\CrossSections.xns11|
+      bnd = |.\Boundaries.bnd11|
+      rr = ||
+      hd = |.\HD.hd11|
+      ad = ||
+      wq = ||
+      st = ||
+      ff = ||
+      rhd = ||
+      rrr = ||
+      da = ||
+      ice = ||
+   EndSect  // Input
+
+   [Simulation]
+      [Simulation_Period]
+         start = 1990, 1, 1, 12, 0, 0
+         end = 1990, 1, 10, 12, 0, 0
+         TimeStepType = 0
+         timestep = 1
+         timestepunit = 2
+         dtFileName = ||
+         dtItemName = ''
+         dtItemNo = 0
+         ddtMin = 1
+         ddtMax = 30
+         idtMinMaxUnit = 2
+         ddtChangeRatio = 1.3
+         bDelB_BFlag = true
+         dDelB_BVal = 0.01
+         dDelB_BLim = 0.01
+         bDelQFlag = false
+         dDelQVal = 1
+         bDelQ_QFlag = true
+         dDelQ_QVal = 0.01
+         dDelQ_QLim = 0.01
+         bDelhFlag = false
+         dDelhVal = 0.01
+         bDelh_hFlag = true
+         dDelh_hVal = 0.01
+         dDelh_hLim = 0.01
+         bCourantFlagHD = false
+         dCourantValHD = 10
+         bCourantFlagAD = true
+         dCourantValAD = 1
+         ST_timestep_multiplier = 1
+         RR_timestep_multiplier = 1
+      EndSect  // Simulation_Period
+
+      [Initial_Conditions]
+         hd = 1, ||, false, 1990, 1, 1, 12, 0, 0
+         ad = 0, ||, false, 1990, 1, 1, 12, 0, 0
+         st = 0, ||, false, 1990, 1, 1, 12, 0, 0
+         rr = 0, ||, false, 1990, 1, 1, 12, 0, 0
+      EndSect  // Initial_Conditions
+
+   EndSect  // Simulation
+
+   [Results]
+      hd = ||, 'results.res11', 1, 0
+      ad = ||, '', 1, 0
+      st = ||, '', 1, 0
+      rr = ||, '', 1, 0
+   EndSect  // Results
+
+EndSect  // Run11
+

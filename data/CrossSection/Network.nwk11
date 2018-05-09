@@ -1,0 +1,126 @@
+// Created     : 2009-09-14 11:56:20
+// DLL id      : C:\Program Files\DHI\2009\bin\pfs2004.dll
+// PFS version : Mar 15 2009 20:08:49
+
+[MIKE_11_Network_editor]
+   [FORMAT_VERSION]
+      verno = 115
+   EndSect  // FORMAT_VERSION
+
+   [DATA_AREA]
+      x0 = 0
+      y0 = 0
+      x1 = 2000
+      y1 = 2000
+      projection = 'NON-UTM'
+   EndSect  // DATA_AREA
+
+   [POINTS]
+      point = 1, 1500, 1000, 1, 1000, 0
+      point = 2, 500, 1000, 1, 0, 0
+   EndSect  // POINTS
+
+   [BRANCHES]
+      [branch]
+         definitions = 'river B', '1', 0, 1000, 0, 10000, 0
+         connections = '', -1e-155, '', -1e-155
+         points = 2, 1
+      EndSect  // branch
+
+   EndSect  // BRANCHES
+
+   [STRUCTURE_MODULE]
+      Structure_Version = 1, 1
+      [CROSSSECTIONS]
+         CrossSectionDataBridge = 'xns11'
+         CrossSectionFile = |.\Test.xns11|
+      EndSect  // CROSSSECTIONS
+
+      [WEIR]
+      EndSect  // WEIR
+
+      [CULVERTS]
+      EndSect  // CULVERTS
+
+      [PUMPS]
+      EndSect  // PUMPS
+
+      [REGULATING_STR]
+      EndSect  // REGULATING_STR
+
+      [CONTROL_STR]
+      EndSect  // CONTROL_STR
+
+      [DAMBREAK_STR]
+      EndSect  // DAMBREAK_STR
+
+      [BRIDGE]
+      EndSect  // BRIDGE
+
+      [USER_DEFINED]
+      EndSect  // USER_DEFINED
+
+      [TABULATED]
+      EndSect  // TABULATED
+
+      [ENERGYBALANCE]
+      EndSect  // ENERGYBALANCE
+
+      [MIKE12_HYDRAU]
+      EndSect  // MIKE12_HYDRAU
+
+   EndSect  // STRUCTURE_MODULE
+
+   [CATCHMENT]
+   EndSect  // CATCHMENT
+
+   [COMPUTATIONAL_SETUP]
+      SaveAllGridPoints = true
+      [branch]
+         name = 'Branch1'
+         [points]
+            point = 0, 1, 0, 0
+            point = 500, 1, 1, 0
+            point = 1000, 1, 0, 0
+         EndSect  // points
+
+      EndSect  // branch
+
+   EndSect  // COMPUTATIONAL_SETUP
+
+   [MIKESHECOUPLING]
+   EndSect  // MIKESHECOUPLING
+
+   [CHANNELROUTING]
+   EndSect  // CHANNELROUTING
+
+   [FLOOD_QQ]
+   EndSect  // FLOOD_QQ
+
+   [FLOOD_HQ]
+   EndSect  // FLOOD_HQ
+
+   [FLOOD_ORIFICE]
+   EndSect  // FLOOD_ORIFICE
+
+   [DIVERSION]
+   EndSect  // DIVERSION
+
+   [ALIGNMENTLINE]
+   EndSect  // ALIGNMENTLINE
+
+   [JUNCTION]
+   EndSect  // JUNCTION
+
+   [MIKE11_ROUTING]
+   EndSect  // MIKE11_ROUTING
+
+   [MODFLOW]
+      CalculateLevels = 0
+   EndSect  // MODFLOW
+
+   [LAYER_FILES]
+   EndSect  // LAYER_FILES
+
+EndSect  // MIKE_11_Network_editor
+

@@ -1,0 +1,55 @@
+// Created     : 2014-04-9 15:44:6
+// DLL id      : C:\Program Files (x86)\DHI\2016\bin\x64\pfs2004.dll
+// PFS version : Feb 19 2014 19:27:39
+
+[MIKE1DAdditional]
+   format_version = 100
+   [Plugins]
+      [Plugin]
+         AssemblyName = 'DHI.Mike1D.Mike1DDataAccess, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf'
+         ClassName = 'DHI.Mike1D.Plugins.AddToOutput'
+         [Arguments]
+            ResultId = 'DefaultRRResults'
+
+            UserQuantity = 'eumIDischarge::Runoff [ImperviousSteep]'
+            UserQuantity = 'eumIStorageDepth::Depth [ImperviousSteep]'
+            UserQuantity = 'eumIStorageDepth::WettingLoss [ImperviousSteep]'
+            UserQuantity = 'eumIStorageDepth::StorageLoss [ImperviousSteep]'
+            UserQuantity = 'eumIInfiltration::Infiltration [ImperviousSteep]'
+            UserQuantity = 'eumIInfiltration::InfiltrationPotential [ImperviousSteep]'
+
+            UserQuantity = 'eumIDischarge::Runoff [ImperviousFlat]'
+            UserQuantity = 'eumIStorageDepth::Depth [ImperviousFlat]'
+            UserQuantity = 'eumIStorageDepth::WettingLoss [ImperviousFlat]'
+            UserQuantity = 'eumIStorageDepth::StorageLoss [ImperviousFlat]'
+            UserQuantity = 'eumIInfiltration::Infiltration [ImperviousFlat]'
+            UserQuantity = 'eumIInfiltration::InfiltrationPotential [ImperviousFlat]'
+
+            UserQuantity = 'eumIDischarge::Runoff [PerviousSmall]'
+            UserQuantity = 'eumIStorageDepth::Depth [PerviousSmall]'
+            UserQuantity = 'eumIStorageDepth::WettingLoss [PerviousSmall]'
+            UserQuantity = 'eumIStorageDepth::StorageLoss [PerviousSmall]'
+            UserQuantity = 'eumIInfiltration::Infiltration [PerviousSmall]'
+            UserQuantity = 'eumIInfiltration::InfiltrationPotential [PerviousSmall]'
+            
+            UserQuantity = 'eumIDischarge::Runoff [PerviousMedium]'
+            UserQuantity = 'eumIStorageDepth::Depth [PerviousMedium]'
+            UserQuantity = 'eumIStorageDepth::WettingLoss [PerviousMedium]'
+            UserQuantity = 'eumIStorageDepth::StorageLoss [PerviousMedium]'
+            UserQuantity = 'eumIInfiltration::Infiltration [PerviousMedium]'
+            UserQuantity = 'eumIInfiltration::InfiltrationPotential [PerviousMedium]'
+
+            UserQuantity = 'eumIDischarge::Runoff [PerviousLarge]'
+            UserQuantity = 'eumIStorageDepth::Depth [PerviousLarge]'
+            UserQuantity = 'eumIStorageDepth::WettingLoss [PerviousLarge]'
+            UserQuantity = 'eumIStorageDepth::StorageLoss [PerviousLarge]'
+            UserQuantity = 'eumIInfiltration::Infiltration [PerviousLarge]'
+            UserQuantity = 'eumIInfiltration::InfiltrationPotential [PerviousLarge]'
+
+         EndSect  // Arguments
+         
+      EndSect  // Plugin
+
+   EndSect  // Plugins
+
+EndSect  // MIKE1DAdditional

@@ -1,0 +1,234 @@
+// Created     : 2006-11-13 14:58:12
+// DLL id      : C:\PROGRA~1\COMMON~1\DHI\MikeZero\pfs2004.dll
+// PFS version : Nov  9 2006 20:08:58
+
+[BndCondition]
+   Comment = ''
+   [BndCndArray]
+      [BndItem]
+         DescType = 0, 5, 'VIDAA-NED', 11300, 0, '', ''
+         OpenDesc = 0, 0
+         Dam = 0, 0, 0
+         Inflow = true, false, false, false
+         ADRR = '', 0, 0
+         QhADM12 = 2, 1, 0
+         AutoCalQh = 0, 0.001, 40
+         BndTS = 0, ||, 0, 0, '', 0, 1
+         [FractionArray]
+         EndSect  // FractionArray
+
+         [HDArray]
+         EndSect  // HDArray
+
+         [InflowArray]
+            Inflow = 2, 0, 0, |.\M4220H.DFS0|, 0, 1, 'M4220h', 0, 1
+         EndSect  // InflowArray
+
+         [QhArray]
+         EndSect  // QhArray
+
+         [ComponentArray]
+         EndSect  // ComponentArray
+
+      EndSect  // BndItem
+
+      [BndItem]
+         DescType = 0, 1, 'SEJERSBK-NED', 15, 0, '', ''
+         OpenDesc = 0, 0
+         Dam = 0, 0, 0
+         Inflow = true, false, false, false
+         ADRR = '', 0, 0
+         QhADM12 = 2, 1, 0
+         AutoCalQh = 0, 0.001, 40
+         BndTS = 0, ||, 0, 0, '', 0, 1
+         [FractionArray]
+         EndSect  // FractionArray
+
+         [HDArray]
+            BndTS = 0, ||, 0, 0, '', 0, 1
+         EndSect  // HDArray
+
+         [InflowArray]
+            Inflow = 2, 0, 0, |.\Q-CONSTANT.DFS0|, 0, 1, 'Q=0', 0, 1
+         EndSect  // InflowArray
+
+         [QhArray]
+         EndSect  // QhArray
+
+         [ComponentArray]
+         EndSect  // ComponentArray
+
+      EndSect  // BndItem
+
+      [BndItem]
+         DescType = 0, 1, 'LINDSKOV', 1, 0, '', ''
+         OpenDesc = 0, 0
+         Dam = 0, 0, 0
+         Inflow = true, false, false, false
+         ADRR = '', 0, 0
+         QhADM12 = 2, 1, 0
+         AutoCalQh = 0, 0.001, 40
+         BndTS = 0, ||, 0, 0, '', 0, 1
+         [FractionArray]
+         EndSect  // FractionArray
+
+         [HDArray]
+            BndTS = 0, ||, 0, 0, '', 0, 1
+         EndSect  // HDArray
+
+         [InflowArray]
+            Inflow = 2, 0, 0, |.\Q-CONSTANT.DFS0|, 0, 2, 'Q=.5', 0, 1
+         EndSect  // InflowArray
+
+         [QhArray]
+         EndSect  // QhArray
+
+         [ComponentArray]
+         EndSect  // ComponentArray
+
+      EndSect  // BndItem
+
+      [BndItem]
+         DescType = 0, 1, 'VIDAA-RES', 0, 0, '', ''
+         OpenDesc = 0, 0
+         Dam = 0, 0, 0
+         Inflow = true, false, false, false
+         ADRR = '', 0, 0
+         QhADM12 = 2, 1, 0
+         AutoCalQh = 0, 0.001, 40
+         BndTS = 0, ||, 0, 0, '', 0, 1
+         [FractionArray]
+         EndSect  // FractionArray
+
+         [HDArray]
+            BndTS = 0, ||, 0, 0, '', 0, 1
+         EndSect  // HDArray
+
+         [InflowArray]
+            Inflow = 2, 0, 0, |.\Q-CONSTANT.DFS0|, 0, 1, 'Q=0', 0, 1
+         EndSect  // InflowArray
+
+         [QhArray]
+         EndSect  // QhArray
+
+         [ComponentArray]
+         EndSect  // ComponentArray
+
+      EndSect  // BndItem
+
+      [BndItem]
+         DescType = 0, 1, 'VIDAA-RUD', 0, 0, '', ''
+         OpenDesc = 0, 0
+         Dam = 0, 0, 0
+         Inflow = true, false, false, false
+         ADRR = '', 0, 0
+         QhADM12 = 2, 1, 0
+         AutoCalQh = 0, 0.001, 40
+         BndTS = 0, ||, 0, 0, '', 0, 1
+         [FractionArray]
+         EndSect  // FractionArray
+
+         [HDArray]
+            BndTS = 0, ||, 0, 0, '', 0, 1
+         EndSect  // HDArray
+
+         [InflowArray]
+            Inflow = 2, 0, 0, |.\Q-CONSTANT.DFS0|, 0, 1, 'Q=0', 0, 1
+         EndSect  // InflowArray
+
+         [QhArray]
+         EndSect  // QhArray
+
+         [ComponentArray]
+         EndSect  // ComponentArray
+
+      EndSect  // BndItem
+
+      [BndItem]
+         DescType = 0, 1, 'SONDERAA', 0, 0, '', ''
+         OpenDesc = 0, 0
+         Dam = 0, 0, 0
+         Inflow = true, false, false, false
+         ADRR = '', 0, 0
+         QhADM12 = 2, 1, 0
+         AutoCalQh = 0, 0.001, 40
+         BndTS = 0, ||, 0, 0, '', 0, 1
+         [FractionArray]
+         EndSect  // FractionArray
+
+         [HDArray]
+            BndTS = 0, ||, 0, 0, '', 0, 1
+         EndSect  // HDArray
+
+         [InflowArray]
+            Inflow = 2, 0, 0, |.\Q-CONSTANT.DFS0|, 0, 1, 'Q=0', 0, 1
+         EndSect  // InflowArray
+
+         [QhArray]
+         EndSect  // QhArray
+
+         [ComponentArray]
+         EndSect  // ComponentArray
+
+      EndSect  // BndItem
+
+      [BndItem]
+         DescType = 0, 1, 'GRONAA-TM', 1601, 0, '', ''
+         OpenDesc = 0, 0
+         Dam = 0, 0, 0
+         Inflow = true, false, false, false
+         ADRR = '', 0, 0
+         QhADM12 = 2, 1, 0
+         AutoCalQh = 0, 0.001, 40
+         BndTS = 0, ||, 0, 0, '', 0, 1
+         [FractionArray]
+         EndSect  // FractionArray
+
+         [HDArray]
+            BndTS = 0, ||, 0, 0, '', 0, 1
+         EndSect  // HDArray
+
+         [InflowArray]
+            Inflow = 2, 0, 0, |.\M4234Q.DFS0|, 0, 1, 'M4234-Q', 0, 1
+         EndSect  // InflowArray
+
+         [QhArray]
+         EndSect  // QhArray
+
+         [ComponentArray]
+         EndSect  // ComponentArray
+
+      EndSect  // BndItem
+
+      [BndItem]
+         DescType = 0, 1, 'VIDAA-OVR', 108, 0, '', ''
+         OpenDesc = 0, 0
+         Dam = 0, 0, 0
+         Inflow = true, false, false, false
+         ADRR = '', 0, 0
+         QhADM12 = 2, 1, 0
+         AutoCalQh = 0, 0.001, 40
+         BndTS = 0, ||, 0, 0, '', 0, 1
+         [FractionArray]
+         EndSect  // FractionArray
+
+         [HDArray]
+            BndTS = 0, ||, 0, 0, '', 0, 1
+         EndSect  // HDArray
+
+         [InflowArray]
+            Inflow = 2, 0, 0, |.\M4214Q.DFS0|, 0, 1, 'M4214Q', 0, 1
+         EndSect  // InflowArray
+
+         [QhArray]
+         EndSect  // QhArray
+
+         [ComponentArray]
+         EndSect  // ComponentArray
+
+      EndSect  // BndItem
+
+   EndSect  // BndCndArray
+
+EndSect  // BndCondition
+

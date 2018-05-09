@@ -1,0 +1,89 @@
+// Created     : 2008-04-1 12:44:12
+// DLL id      : C:\Program Files\Common Files\DHI\MIKEZero\pfs2004.dll
+// PFS version : Mar 25 2008 21:49:14
+
+[Run11]
+   format_version = 107, 'MIKEZero, 2010'
+   Comment = ''
+   [Models]
+      hd = true, false
+      ad = false
+      st = false
+      wq = false, 1, 0
+      rr = false
+      ff = false
+      da = false
+      ice = false
+      SimMode = 0
+      QSS = 0
+   EndSect  // Models
+
+   [Input]
+      nwk = |.\UnitFlow.nwk11|
+      xs = |.\UnitFlow.xns11|
+      bnd = |.\UnitFlow.bnd11|
+      rr = ||
+      hd = |.\UnitFlow.HD11|
+      ad = ||
+      wq = ||
+      st = ||
+      ff = ||
+      rhd = ||
+      rrr = ||
+      da = ||
+      ice = ||
+   EndSect  // Input
+
+   [Simulation]
+      [Simulation_Period]
+         start = 2002, 10, 4, 0, 0, 0
+         end = 2002, 10, 5, 0, 0, 0
+         TimeStepType = 0
+         timestep = 30
+         timestepunit = 3
+         dtFileName = ||
+         dtItemName = ''
+         dtItemNo = 0
+         ddtMin = 1
+         ddtMax = 30
+         idtMinMaxUnit = 2
+         ddtChangeRatio = 1.3
+         bDelB_BFlag = true
+         dDelB_BVal = 0.01
+         dDelB_BLim = 0.01
+         bDelQFlag = false
+         dDelQVal = 1
+         bDelQ_QFlag = true
+         dDelQ_QVal = 0.01
+         dDelQ_QLim = 0.01
+         bDelhFlag = false
+         dDelhVal = 0.01
+         bDelh_hFlag = true
+         dDelh_hVal = 0.01
+         dDelh_hLim = 0.01
+         bCourantFlagHD = false
+         dCourantValHD = 10
+         bCourantFlagAD = true
+         dCourantValAD = 1
+         ST_timestep_multiplier = 1
+         RR_timestep_multiplier = 1
+      EndSect  // Simulation_Period
+
+      [Initial_Conditions]
+         hd = 1, ||, false, 1990, 1, 1, 12, 0, 0
+         ad = 0, ||, false, 1990, 1, 1, 12, 0, 0
+         st = 0, ||, false, 1990, 1, 1, 12, 0, 0
+         rr = 0, ||, false, 1990, 1, 1, 12, 0, 0
+      EndSect  // Initial_Conditions
+
+   EndSect  // Simulation
+
+   [Results]
+      hd = |.\UnitFlow.res1d|, '', 1, 0
+      ad = ||, '', 1, 0
+      st = ||, '', 1, 0
+      rr = ||, '', 1, 0
+   EndSect  // Results
+
+EndSect  // Run11
+

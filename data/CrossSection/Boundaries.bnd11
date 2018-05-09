@@ -1,0 +1,65 @@
+// Created     : 2009-09-14 11:58:5
+// DLL id      : C:\Program Files\DHI\2009\bin\pfs2004.dll
+// PFS version : Mar 15 2009 20:08:49
+
+[BndCondition]
+   Comment = ''
+   [BndCndArray]
+      [BndItem]
+         DescType = 0, 1, 'river B', 0, 0, '', ''
+         OpenDesc = 0, 0
+         Dam = 0, 0, 0
+         Inflow = true, false, false, false
+         ADRR = '', 0, 0
+         QhADM12 = 2, 1, 0
+         AutoCalQh = 0, 0.001, 40
+         BndTS = 0, ||, 0, 0, '', 0, 1
+         [FractionArray]
+         EndSect  // FractionArray
+
+         [HDArray]
+         EndSect  // HDArray
+
+         [InflowArray]
+            Inflow = 2, 0, 1, ||, 0.1, 0, '', 0, 1
+         EndSect  // InflowArray
+
+         [QhArray]
+         EndSect  // QhArray
+
+         [ComponentArray]
+         EndSect  // ComponentArray
+
+      EndSect  // BndItem
+
+      [BndItem]
+         DescType = 0, 5, 'river B', 1000, 0, '', ''
+         OpenDesc = 0, 0
+         Dam = 0, 0, 0
+         Inflow = true, false, false, false
+         ADRR = '', 0, 0
+         QhADM12 = 2, 1, 0
+         AutoCalQh = 0, 0.001, 40
+         BndTS = 0, ||, 0, 0, '', 0, 1
+         [FractionArray]
+         EndSect  // FractionArray
+
+         [HDArray]
+         EndSect  // HDArray
+
+         [InflowArray]
+            Inflow = 2, 0, 1, ||, 1, 0, '', 0, 1
+         EndSect  // InflowArray
+
+         [QhArray]
+         EndSect  // QhArray
+
+         [ComponentArray]
+         EndSect  // ComponentArray
+
+      EndSect  // BndItem
+
+   EndSect  // BndCndArray
+
+EndSect  // BndCondition
+
