@@ -1,0 +1,965 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DHI.Mike1D.SimLauncher</name>
+    </assembly>
+    <members>
+        <member name="T:DHI.Mike1D.SimLauncher.Mike1DApplicationForm">
+            <summary>
+            Application form, showing warnings, progress etc.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.ISimulationUI">
+            <summary>
+            Interface that for customize the simulation UI
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ISimulationUI.SetStatus(System.String)">
+            <summary>
+            Set simulation status
+            </summary>
+            <param name="text">status</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ISimulationUI.SetLabelSimTimeCurrent(System.String)">
+            <summary>
+            Set current simulation time
+            </summary>
+            <param name="text">current simualtion time</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ISimulationUI.SetLabelSimTimeStart(System.String)">
+            <summary>
+            Set simulation start time
+            </summary>
+            <param name="text">simualtion start time</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ISimulationUI.SetLabelSimTimeEnd(System.String)">
+            <summary>
+            Set simulation end time
+            </summary>
+            <param name="text">simualtion end time</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ISimulationUI.SetLabelName(System.String)">
+            <summary>
+            Set label name
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ISimulationUI.SetLabelSimType(System.String)">
+            <summary>
+            Set simulation type
+            </summary>
+            <param name="text">simualtion type</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ISimulationUI.SetLabelWallTimeCurrent(System.String)">
+            <summary>
+            Set current simulation wall time
+            </summary>
+            <param name="text">current time</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ISimulationUI.SetLabelWallTimeLeft(System.String)">
+            <summary>
+            Set simulation wall time left
+            </summary>
+            <param name="text">time left</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ISimulationUI.UpdateProgress(System.Int32)">
+            <summary>
+            Update simulation progress
+            </summary>
+            <param name="value">current progress</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ISimulationUI.SetLabelWallTimeEnd(System.String)">
+            <summary>
+            Set simulation wall end time
+            </summary>
+            <param name="text">end time</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ISimulationUI.SetLabelWallTimeStart(System.String)">
+            <summary>
+            Set simulation wall start time
+            </summary>
+            <param name="text">start time</param>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.ISimulationUI.Timer">
+            <summary>
+            Timer used for UI update progress and simulation information
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.Mike1DApplicationForm._simulationParameters">
+            <summary>
+            Simulation parameters are stored here, in case the simulation
+            is restarted from within the GUI.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.Mike1DApplicationForm._closed">
+            <summary>
+            True when window has been closed.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.#ctor(DHI.Mike1D.SimLauncher.SimulationWorker,System.String,System.Boolean,DHI.Mike1D.Generic.WorkspaceContainer)">
+            <summary>
+            Create a new form
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.OnShown(System.EventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.EnableViewSummaryAndErrorLogButtons">
+            <summary>
+            Enable the view-summary and view-errorlog buttons
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.UpdateProgress(System.Int32,System.Drawing.Color)">
+            <summary>
+            Update progress in form
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.UpdateProgress(System.Int32)">
+            <summary>
+            Update progress in form
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.SetLabelWallTimeStart(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.SetLabelWallTimeEnd(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.SetLabelWallTimeCurrent(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.SetLabelWallTimeLeft(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.SetLabelSimTimeStart(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.SetLabelSimTimeEnd(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.SetLabelSimTimeCurrent(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.SetLabelName(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.SetLabelSimType(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.SetStatus(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.AddToText(System.String,System.Drawing.Color)">
+            <summary>
+            Add text to log windows
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.pauseMenuItemEnabled(System.Boolean)">
+            <summary>
+            Enable/disable the pause menu item.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.openMenuItemEnabled(System.Boolean)">
+            <summary>
+            Enable/disable the open menu item.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.rerunMenuItemEnabled(System.Boolean)">
+            <summary>
+            Enable/disable the rerun menu item.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.ViewSummaryButtonEnabled(System.Boolean)">
+            <summary>
+            Enable/disable the view summary button.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.ViewErrorLogButtonEnabled(System.Boolean)">
+            <summary>
+            Enable/disable the view error log button.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.Quit">
+            <summary>
+            Quit the GUi thread. This method is called from the worker thread and the worker thread will 
+            close itself down, so we only need to quit the GUI thread itself.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.resumeMenuItemEnabled(System.Boolean)">
+            <summary>
+            Enable/disable the resume menu item.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.stopMenuItemEnabled(System.Boolean)">
+            <summary>
+            Enable/disable the stop menu item.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.QuitWhenDone">
+            <summary>
+            Flag specifying that the application should quit when the simulation is done
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.Timer">
+            <summary>
+            A Windows Forms timer that runs in the applications GUI thread, 
+            i.e. you can access all the GUI controls without the InvokeRequired logic.
+            Be carefull with putting heavy load on this timer, since it will slow
+            down the GUI response.
+            </summary>
+            <remarks>
+            Be sure to start/stop this timer from the GUI thread, otherwise
+            it will not start/stop.
+            </remarks>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.Apv">
+            <summary>
+            Class for handling APV files, especially the _spi_ file and _kill_ files
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Apv.Start(DHI.Mike1D.Generic.FilePath)">
+            <summary>
+            Start APV system
+            </summary>
+            <param name="simFilePath">Path of simulation files</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Apv.CancelSimulation">
+            <summary>
+            Returns true if the simulation should be cancelled.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Apv.SetMessageLabel(System.String)">
+            <summary>
+            Label to show in message field (at mouse-over)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Apv.SetStatusLabel(System.String)">
+            <summary>
+            Label to show in status field (at mouse-over)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Apv.Status(System.String)">
+            <summary>
+            Status - usually simulation date/time
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Apv.Message(System.String)">
+            <summary>
+            Message - usually time step counter, '5 of 1000' or similar. 
+            Also used to say: 'Initialize' etc.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Apv.Progress(System.Int32)">
+            <summary>
+            Report the simulation progress in per-mille.
+            </summary>
+            <param name="progress"></param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Apv.TimeLeft(System.Int32)">
+            <summary>
+            Report the time left before simulation end
+            </summary>
+            <param name="timeLeft">Time left in seconds</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Apv.Speed(System.Int32)">
+            <summary>
+            Set speed of simulation
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Apv.Signal(System.String)">
+            <summary>
+            Signal is a way to report events through the
+            APV system. Signal string should not be localized.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Apv.Custom(System.String,System.String)">
+            <summary>
+            Custom text to APV file.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.Apv.Finish">
+            <summary>
+            Finish APV system
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.HTMLLog">
+            <summary>
+            Base class for HTML log file writers. It is handling log file rolling, i.e.
+            when a new mysim.html log file is created, the existing is renamed to 
+            mysim01.html, and the mysim01.html is renamed to mysim02.html etc. up til
+            <see cref="P:DHI.Mike1D.SimLauncher.HTMLLog.MaxNumberOfFileBackups"/>.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.HTMLLog._filePath">
+            <summary>
+            Name and path of html log file
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.HTMLLog.Write">
+            <summary>
+            Write log to disk
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.HTMLLog.WriteHTMLContent(System.IO.TextWriter)">
+            <summary>
+            Write HTML content
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.HTMLLog.RollLogFile(System.Int32)">
+            <summary>
+            For n == 0: Rename an existing log file with name NAME.html to NAME001.html and NAME001.html to NAME002.html etc.
+            For n > 0: Rename an existing log file with name NAME00n.html to NAME00{n+1}.html etc.
+            For n == _maxNumberOfErrorLogFileBackups: Delete NAME010.html if it exists.
+            If _maxNumberOfErrorLogFileBackups == 0 then this does nothing (no backups are created)
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.HTMLLog.FilePath">
+            <summary>
+            The file path of the html summary file.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.HTMLLog.MaxNumberOfFileBackups">
+            <summary>
+            Number of backups of the error log. If a *name*.html log file exists, then it is backed up with a 
+            *name*01.html ending. If *name*01.html exists, then it is moved to *name*02.html etc. 
+            MaxNumberOfErrorLogFileBackups is the last number of the backed up files. The last backed up file is
+            deleted. The default value is 10.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.HTMLSummary">
+            <summary>
+            Write a summary of a simulation to an HTML file. 
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.HTMLSummary.#ctor(DHI.Mike1D.Mike1DDataAccess.IMike1DController)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="controller"></param>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.ISimulationLauncher">
+            <summary>
+            A simple simulation launcher interface that loads 
+            and runs a setup, either with a GUI or silently.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ISimulationLauncher.Run(System.Boolean)">
+            <summary>
+            Runs a simulation. If blocking is false, then the simulation runs in a background thread.
+            </summary>
+            <param name="blocking"></param>
+        </member>
+        <member name="E:DHI.Mike1D.SimLauncher.ISimulationLauncher.SimulationDoneEvent">
+            <summary>
+             Event for signaling that simulation is over
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.ISimulationLauncher.QuitWhenDone">
+            <summary>
+            If true, then the simulation thread will terminate when the simulation ends.
+            If false, then the simulation dialog window will stay open until the user exist the dialog.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.ISimulationLauncher.InputFileName">
+            <summary>
+            File name of the simulation set up file (.mdb, .gdb or .sim11 file)
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.PipeDesignWindow">
+            <summary>
+            Pipe design form window
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.PipeDesignWindow.#ctor(DHI.Mike1D.Mike1DDataAccess.HDPipeDesignData)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="pipeDesignData"></param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.PipeDesignWindow.Update(DHI.Mike1D.Mike1DDataAccess.HDPipeDesignData)">
+            <summary>
+            Update pipedesign info
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.PipeDesignWindow.SetInActive">
+            <summary>
+            Set form to inactive
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.PipeDesignWindow.SetLabelNReruns(System.String)">
+            <summary>
+            Set label text of current run output.
+            </summary>
+            <param name="text"></param>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.PipeDesignWindow.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.PipeDesignWindow.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.PipeDesignWindow.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.PipeDesignWindow.NRerunsInput">
+            <summary>
+            Number of reruns input textbox
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.ProgressWriterGuiTimeStepping">
+            <summary>
+            Write progress to GUI for time stepping type of simulations
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ProgressWriterGuiTimeStepping.#ctor(DHI.Mike1D.Mike1DDataAccess.IMike1DController,DHI.Mike1D.SimLauncher.ISimulationUI)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ProgressWriterGuiTimeStepping.Dispose">
+            <summary>
+            Dispose, object is not longer in use.
+            <para>
+            The dispose object must be called explicitly to
+            disconnect the object from the form.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.ProgressWriterGuiRRCalibration">
+            <summary>
+            Write progress to GUI for time stepping type of simulations
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ProgressWriterGuiRRCalibration.#ctor(DHI.Mike1D.Mike1DDataAccess.Mike1DControllerRRCalibrate,DHI.Mike1D.SimLauncher.ISimulationUI)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ProgressWriterGuiRRCalibration.Dispose">
+            <summary>
+            Dispose, object is no longer to be used.
+            <para>
+            The dispose object must be called explicitly to
+            disconnect the object from the form.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.HTMLErrorLog">
+            <summary>
+            Write diagnostics items to an HTML file. 
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.HTMLErrorLog.Add(DHI.Mike1D.Generic.IDiagnostics)">
+            <summary>
+            Collect a complete diagnostics items tree
+            </summary>
+            <param name="diagnostics"></param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.HTMLErrorLog.HasErrors">
+            <summary>
+            Returns true if there are errors in the log
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.HTMLErrorLog.HasWarnings">
+            <summary>
+            Returns true if there are warnings in the log
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.HTMLErrorLog.WriteHTMLContent(System.IO.TextWriter)">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.HTMLErrorLog.SimulationID">
+            <summary>
+            File name of simulation input file. Only used as part of the html output.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.HTMLErrorLog.UsesRainfallRunoff">
+            <summary>
+            Flag indicating that rainfall runoff was used.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.SimulationLauncher">
+            <summary>
+            The simulation launcher loads and runs a setup in a simple GUI, 
+            with progress bar and start/stop capabilities.
+            <para>
+            It is using the <see cref="T:DHI.Mike1D.SimLauncher.SimulationWorker"/> to do the 
+            actual simulation, so in case the GUI is not required, use
+            instead the <see cref="T:DHI.Mike1D.SimLauncher.SimulationWorker"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationLauncher._inputFileName">
+            <summary> Name of setup file to load </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationLauncher._quitWhenDone">
+            <summary> Exit the program when done (do not leave the GUI window open) </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationLauncher._silent">
+            <summary> Do not start a GUI </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationLauncher._storageAccess">
+            <summary> Pointer to storage with MU DB data, unmarshalled </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationLauncher._storageContainer">
+            <summary> Pointer to storage with MU DB data, marshalled </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationLauncher._blockingMode">
+            <summary>
+            If _blockingMode is false, then the simulation runs in a background thread.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationLauncher._mike1DApplicationForm">
+            <summary>
+            If GUI is enabled, this is the GUI form.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationLauncher.AddSimulationDoneEvent(DHI.Mike1D.SimLauncher.SimulationLauncher.SimulationDoneEventType)">
+            <summary>
+            Add delegate to <see cref="E:DHI.Mike1D.SimLauncher.SimulationLauncher.SimulationDoneEvent"/>
+            </summary>
+            <remarks>
+            The custom delegate definition in <see cref="T:DHI.Mike1D.SimLauncher.SimulationLauncher.SimulationDoneEventType"/> 
+            is needed here (instead of using e.g. System.Action)
+            since the type needs to be accessible via reflection from c++.
+            The <see cref="M:DHI.Mike1D.SimLauncher.SimulationLauncher.AddSimulationDoneEvent(DHI.Mike1D.SimLauncher.SimulationLauncher.SimulationDoneEventType)"/> is used from c++ via reflection.
+            </remarks>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationLauncher.Run(System.Boolean)">
+            <summary>
+            Runs a simulation. If blocking is false, then the simulation runs in a background thread.
+            </summary>
+            <param name="blocking"></param>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationLauncher.SimulationParameters">
+            <summary>
+            Simulation parameters.
+            <para>
+            Setting to null is the same as setting all default parameters
+            </para>
+            </summary>
+        </member>
+        <member name="E:DHI.Mike1D.SimLauncher.SimulationLauncher.SimulationDoneEvent">
+            <summary>
+            Simulation done event
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationLauncher.QuitWhenDone">
+            <summary>
+            If true, then the simulation thread will terminate when the simulation ends.
+            If false, then the simulation dialog window will stay open until the user exist the dialog.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationLauncher.InputFileName">
+            <summary>
+            File name of the simulation set up file (.mdb, .gdb or .sim11 file)
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationLauncher.StorageAccess">
+            <summary>
+            Pointer to MU DB storage.
+            <para>
+            Used by MU GUI to reuse storage from MU in M1D without reloading it.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationLauncher.Silent">
+            <summary>
+            When true, run without MIKE 1D GUI.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.SimulationLauncher.SimulationDoneEventType">
+            <summary>
+            Delegate type, called when simulation is done
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.ProgressWriterApv2">
+            <summary>
+            Write progress to APV _spi_ files and check for a _kill_ file.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ProgressWriterApv2.#ctor(DHI.Mike1D.Generic.IFilePath,DHI.Mike1D.SimLauncher.SimulationWorker)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ProgressWriterApv2.SetController(DHI.Mike1D.Mike1DDataAccess.IMike1DController)">
+            <summary>
+            Set controller, and connect to controller events.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ProgressWriterApv2.Initialize">
+            <summary>
+            Initialize progress writer. 
+            <para>
+            Multiple calls to initialize is allowed, subsequent calls will be ignored.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ProgressWriterApv2.Finish">
+            <summary>
+            Finish APV system
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.ProgressWriterApv2.Spi">
+            <summary>
+            Access the _spi_ simulation progress file. Call <see cref="M:DHI.Mike1D.SimLauncher.ProgressWriterApv2.Initialize"/> first.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.ProgressWriterApv2.TimeSteppingProgress">
+            <summary>
+            Class that writes time stepping progress to _spi_ file for a HD or an RR simulation
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.ProgressWriterApv2.ProgressRRCalibration">
+            <summary>
+            Class that writes time stepping progress to _spi_ file for an RR calibration
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ProgressWriterApv2.ProgressRRCalibration.Initialize">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.ProgressWriterApv2.ProgressRRCalibration.Finish">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.SimulationParameters">
+            <summary>
+            Simulation parameters, used by the <see cref="T:DHI.Mike1D.SimLauncher.SimulationLauncher"/> and <see cref="T:DHI.Mike1D.SimLauncher.SimulationWorker"/>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationParameters.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationParameters.WriteM1Dx">
+            <summary>
+            If true, no simulation is executed, data is loaded and stored
+            in the MIKE 1D .m1dx format
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationParameters.M1DxFileName">
+            <summary>
+            If <see cref="P:DHI.Mike1D.SimLauncher.SimulationParameters.WriteM1Dx"/> is set, this is the name of the .m1dx file to write. 
+            <para>
+            If this is not set, the extension of the input file name is changed to .m1dx.
+            </para>
+            <para>
+            M1DxFileName is relative to the input file name directory.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationParameters.MzIntegration">
+            <summary>
+            Enable use of MIKE Zero APV2 standard for updating progress
+            in MIKE Zero (MIKE Zero integration)
+            Default value: False
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationParameters.DisableLogfile">
+            <summary>
+            Flag to disable log-file writing.
+            Default value: False
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationParameters.CreateHtmllogs">
+            <summary>
+            Create the HTML summary and error log files.
+            Default value: True
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationParameters.FlexibleLoad">
+            <summary>
+            If true, then input files will be searched for even if the name is wrong.
+            Presently used in the MU bridge to change the extension of RR input files
+            from .CRF to RR.res1d.
+            Default value: False;
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationParameters.MaxNumThreads">
+            <summary>
+            Maximum number of threads to use. Set to zero for unlimited.
+            <para>
+            Using more than one thread may give different results, due change in order of calculations 
+            and therefor different rounding errors from simulation to simulation when running multiple threads. 
+            If exact same results are required for each simulation, set this to 1.
+            </para>
+            <para>
+            The number of threads actually used are limited by the smallest of
+            this number, the number of logical processing units (number of CPU cores),
+            the license and the OMP_NUM_THREADS environment variable.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationParameters.useThreadedDomainDecomposition">
+            <summary>
+            Use Threaded Domain Decomposition
+            <para>
+            If you are using more than one thread this flag may be used to deside if domain decomposition is used.
+            Default this is true.
+            </para>
+            <para>
+            This value is true by default if running with more than 1 thread.
+            If running with 1 thread this value is false.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationParameters.IncludeExceptionStackTraceInLog">
+            <summary>
+            If true, in case of an unexpected exception the stack trace will be printed to
+            the log file.
+            Default value: False
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationParameters.TopMost">
+            <summary>
+            If true, the simulation launcher GUI will be started with the 
+            topmost flag set, showing up on top of all other windows
+            Default value: False
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationParameters.Options">
+            <summary>
+            General options, added to the IConnection Options
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.SimulationWorker">
+            <summary>
+            Simulation worker is a class that performs the actual simulation, by
+            using the <see cref="T:DHI.Mike1D.Mike1DDataAccess.IMike1DController"/>. It handles special log file
+            writing, html summery/error, apv files. It also takes care of 
+            running any autocalibration before the actual simulation.
+            <para>
+            Special behavior can be specified in the <see cref="P:DHI.Mike1D.SimLauncher.SimulationWorker.SimulationParameters"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationWorker.DateTimeFormatString">
+            <summary>
+            Date time format used for log files and GUI.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationWorker._inFirstCallToRun">
+            <summary> Used by pipe-design run  </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationWorker.StorageContainer">
+            <summary> Pointer to storage with MU DB data, marshalled </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationWorker.#ctor(DHI.Mike1D.Generic.IFilePath)">
+            <summary>
+            Constructor. If form is null, then the simulation run in silent mode (no GUI output)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationWorker.StartWorkInBackground">
+            <summary>
+            Calling this method will load and run the simulation (call <see cref="M:DHI.Mike1D.SimLauncher.SimulationWorker.Work"/>) in a background thread
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationWorker.Work">
+            <summary>
+            Start work, main method of <see cref="T:DHI.Mike1D.SimLauncher.SimulationWorker"/>.
+            <para>
+            Calls <see cref="M:DHI.Mike1D.SimLauncher.SimulationWorker.Load"/> and <see cref="M:DHI.Mike1D.SimLauncher.SimulationWorker.Run"/> in order.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationWorker.Load">
+            <summary>
+            Load the setup
+            </summary>
+            <returns>false on failure</returns>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationWorker.CreateSetupfilenameWithID(System.String,System.String)">
+            <summary>
+            Create a setup file name including the id provided.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationWorker.ModifySetupfilepathWithID(DHI.Mike1D.Generic.IFilePath,System.String)">
+            <summary>
+            Modify the setup file path to include the id.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationWorker.Run">
+            <summary>
+            Run the simulation. <see cref="M:DHI.Mike1D.SimLauncher.SimulationWorker.Load"/> must have been called first, but <see cref="M:DHI.Mike1D.SimLauncher.SimulationWorker.Run"/>
+            can be called multiple times.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationWorker.StopSimulation">
+            <summary>
+            Stop the simulation. The simulation will end
+            when the current time step has been completed.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationWorker.FlipPauseFlag">
+            <summary>
+            Flip the Pause flag, i.e. if running, make it pause, if paused, make it run.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationWorker.ExceptionToLogFile(System.Exception)">
+            <summary>
+            Prints exception message and stack to log file, including
+            inner exceptions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationWorker.RunXmlCompare(System.String)">
+            <summary>
+            Run compare on original mike1d data object and 
+            an object loaded from xml.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationWorker._disableTextProgressBar">
+            <summary>
+            Flag that disables text progress bar on first excpetion
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimulationWorker.DrawTextProgressBar(System.Double)">
+            <summary>
+            Draw a progress bar at the current cursor position.
+            Be careful not to Console.WriteLine or anything whilst using this to show progress!
+            </summary>
+            <param name="progress">Progress, between 0 and 1</param>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationWorker.Timer">
+            <summary> Timer that is triggered once every 0.2 seconds. Used to update progress. </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationWorker.SimulationParameters">
+            <summary>
+            Simulation parameters
+            </summary>
+        </member>
+        <member name="E:DHI.Mike1D.SimLauncher.SimulationWorker.SetupLoadingEvent">
+            <summary> Event triggered when a setup starts loading </summary>
+        </member>
+        <member name="E:DHI.Mike1D.SimLauncher.SimulationWorker.SetupLoadedEvent">
+            <summary> Event triggered when a setup has been loaded </summary>
+        </member>
+        <member name="E:DHI.Mike1D.SimLauncher.SimulationWorker.NewControllerEvent">
+            <summary> 
+            Event triggered when a new controller is created. This can be used to retrieve 
+            and connect to the latest controller by using the <see cref="P:DHI.Mike1D.SimLauncher.SimulationWorker.Controller"/> property
+            </summary>
+        </member>
+        <member name="E:DHI.Mike1D.SimLauncher.SimulationWorker.ControllerEvent">
+            <summary>
+            Event that is raised while the controller is running.
+            It is raised whenever the state of the controller changes.
+            <para>
+            This is a shortcut for registering for the <see cref="E:DHI.Mike1D.Mike1DDataAccess.IMike1DController.ControllerEvent"/>.
+            The sender of the event is the <see cref="T:DHI.Mike1D.Mike1DDataAccess.IMike1DController"/> that triggered the event.
+            </para> 
+            <para>
+            Note that some simulation types use more than one controller, and the same
+            set of events will be triggered several times.
+            </para>
+            </summary>
+        </member>
+        <member name="E:DHI.Mike1D.SimLauncher.SimulationWorker.SimulationDoneEvent">
+            <summary> Event triggered when the simulation is done </summary>
+        </member>
+        <member name="E:DHI.Mike1D.SimLauncher.SimulationWorker.ErrorEvent">
+            <summary> Event triggered in case an error occured. This will also be triggered before an exception is thrown. </summary>
+        </member>
+        <member name="E:DHI.Mike1D.SimLauncher.SimulationWorker.SimulationPauseEvent">
+            <summary> Event triggered in case the simulation has been paused. </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationWorker.Mike1DData">
+            <summary>
+            MIKE 1D setup.
+            <para>
+            This will be populated during <see cref="M:DHI.Mike1D.SimLauncher.SimulationWorker.Load"/>. It is also possible to 
+            provide the <see cref="P:DHI.Mike1D.SimLauncher.SimulationWorker.Mike1DData"/> and call directly <see cref="M:DHI.Mike1D.SimLauncher.SimulationWorker.Run"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationWorker.Controller">
+            <summary>
+            Controller that the worker is currently working on.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationWorker.NumberOfRuns">
+            <summary>
+            Number of consecutive runs to complete when the user chooses to re-run the calculation.
+            Only relevant for Pipe Design simulations.
+            Default value is 1.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.SimLauncher.SimulationWorker.DiagnosticsHandler">
+            <summary>
+            Diagnostics handler that are used for all diagnostics objects and events.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.SimulationWorker.MessageType">
+            <summary>
+            Type of message
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationWorker.MessageType.Error">
+            <summary> Error </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationWorker.MessageType.Warning">
+            <summary> Warning </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationWorker.MessageType.Info">
+            <summary> Information </summary>
+        </member>
+        <member name="F:DHI.Mike1D.SimLauncher.SimulationWorker.MessageType.Status">
+            <summary> Status </summary>
+        </member>
+        <member name="T:DHI.Mike1D.SimLauncher.SimLauncherUtil">
+            <summary>
+            Misc helper methods
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimLauncherUtil.ToSteadySetup(System.String)">
+            <summary>
+            Test helper method, creating a "steady-dynamic" setup by replacing
+            all boundaries having time series items with a constant item instead
+            </summary>
+            <param name="sim11FileName">Name of setup file (sim11)</param>
+        </member>
+    </members>
+</doc>
