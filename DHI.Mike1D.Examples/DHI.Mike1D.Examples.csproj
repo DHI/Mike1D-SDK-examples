@@ -110,6 +110,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultDataExamples.cs" />
     <Compile Include="RunExamples.cs" />
+    <Compile Include="Scripts\AdditionalOutput.cs" />
     <Compile Include="Scripts\HonmaWeirCoefficient.cs" />
     <Compile Include="Scripts\InitialWaterLevel.cs" />
     <Compile Include="UserDataExamples.cs" />
