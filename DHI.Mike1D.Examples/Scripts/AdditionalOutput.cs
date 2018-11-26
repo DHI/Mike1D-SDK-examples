@@ -22,7 +22,7 @@ namespace DHI.Mike1D.Examples.Scripts
     public void AddToOutput(Mike1DData mike1DData)
     {
 
-      // Add energy level to default HD result output
+      // Add Water Depth to default HD result output
       ResultSpecification hdResSpec = mike1DData.ResultSpecifications.Find(rs => rs.ID == "DefaultHDResults");
       if (hdResSpec != null)
       {
