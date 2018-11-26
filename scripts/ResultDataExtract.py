@@ -22,11 +22,18 @@ def FindQuantity(dataSet, quantityId):
     return None;
 
 # Print out quantities on IRes1DDataSet
+def PrintAllQuantities():
+    for j in range (resultData.Quantities.Count):
+        print "'%s'"  % (resultData.Quantities[j].Id);
+    return None;
+
+# Print out all quantities
 def PrintQuantities(dataSet):
     numItems = dataSet.DataItems.Count;
     for j in range(numItems):
         print "'%s'"  % (dataSet.DataItems[j].Quantity.Id);
     return None;
+
 
 # Find a given quantity on the node with the given nodeId
 def FindNodeQuantity(quantityToFind, nodeId):
@@ -145,7 +152,7 @@ from DHI.Generic.MikeZero.DFS import *
 # To use invariant culture (always dots)
 #System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
-if (len(sys.argv) <= 2):
+if (len(sys.argv) <= 1):
     print ""
     print "Usage: Extracts data from network result files to text file"
     print "    ipy.exe ResultDataExtract.py resultFile.res1d output.txt [extractPoints]*"
@@ -181,14 +188,21 @@ if (len(sys.argv) <= 2):
     print "    crf, nrf, nof : MOUSE RR result files"
     sys.exit()
 
+
 resfilename = sys.argv[1];
-outfilename = sys.argv[2];
+if (len(sys.argv) >= 3):
+  outfilename = sys.argv[2];
 
 # Load result file
 diagnostics = Diagnostics("Loading file");
 resultData = ResultData();
 resultData.Connection = Connection.Create(resfilename);
 resultData.Load(diagnostics);
+
+if (len(sys.argv) == 2 or len(sys.argv) == 3):
+    print "All quantities in file:"
+    PrintAllQuantities();
+    sys.exit();
 
 # Searcher is helping to find reaches, nodes and catchments
 searcher = ResultDataSearch(resultData);
