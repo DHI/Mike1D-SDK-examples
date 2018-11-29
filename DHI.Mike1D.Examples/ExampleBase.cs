@@ -21,8 +21,7 @@ namespace DHI.Mike1D.Examples
 
     static ExampleBase()
     {
-      DHI.Mike1D.Generic.Util.SetupDebugEnvironmentNoGac(@"C:\Work\Rel2017\Products");
-      ExampleRoot = @"..\..\..\data";
+
     }
 
     [Test]

@@ -153,7 +153,8 @@ namespace DHI.Mike1D.Examples.PluginStruc
     /// </summary>
     /// <param name="timeN">Time at beginning of time step</param>
     /// <param name="timeNp1">Time at end of time step</param>
-    private void PreTimeStepEvent(DateTime timeN, DateTime timeNp1)
+    /// <param name="redoCount">redo-counter, incremented when an adaptive time step is redone. Initially zero.</param>
+    private void PreTimeStepEvent(DateTime timeN, DateTime timeNp1, int redoCount)
     {
       // In this method we will vary the WeirCoefficient as a function of time.
       // This method can add many kinds of user defined control of structures

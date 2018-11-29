@@ -5,6 +5,7 @@ using DHI.Mike1D.Generic;
 using DHI.Mike1D.Mike1DDataAccess;
 using DHI.Mike1D.Plugins;
 using DHI.Mike1D.StructureModule;
+using DDoubleGetter = System.Func<double>;
 
 namespace DHI.Mike1D.Examples.Scripts
 {

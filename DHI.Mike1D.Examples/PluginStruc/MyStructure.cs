@@ -1,5 +1,6 @@
 using System;
 using DHI.Mike1D.StructureModule;
+using DDoubleGetter = System.Func<double>;
 
 namespace DHI.Mike1D.Examples.PluginStruc
 {
@@ -229,7 +230,7 @@ namespace DHI.Mike1D.Examples.PluginStruc
     /// </summary>
     /// <param name="quantityIndex">Requested Quantity, index in <see cref="DHI.Mike1D.Generic.IQuantityProxy.Offers"/> list</param>
     /// <returns>A value getter delegate that can get the value</returns>
-    public override DHI.Mike1D.Generic.DDoubleGetter ValueGetter(int quantityIndex)
+    public override DDoubleGetter ValueGetter(int quantityIndex)
     {
       switch (quantityIndex)
       {
