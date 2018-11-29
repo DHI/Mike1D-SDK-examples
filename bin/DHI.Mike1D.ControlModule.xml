@@ -1,0 +1,2156 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DHI.Mike1D.ControlModule</name>
+    </assembly>
+    <members>
+        <member name="T:DHI.Mike1D.ControlModule.Action">
+            <summary>
+            Base implementation of an <see cref="T:DHI.Mike1D.ControlModule.IAction"/>, containing 
+            the Id and strategyId for the action.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.Action.Id">
+            <summary>
+            Id of action
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.Action.IsActive">
+            <summary>
+            Boolean indicating if action is active
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.Action.ActivationTime">
+            <summary>
+            Time when action was activated
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.Action.Implement(System.DateTime,System.DateTime,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.Action.Validate">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.Action.Activate(System.DateTime,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.Action.SetActive(System.DateTime)">
+            <summary>
+            Set this action as the active one
+            </summary>
+            <param name="time"></param>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.Action.Reset">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.Action.Deactivate(System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ActionSetBase">
+            <summary>
+            Base class for actions using the <see cref="T:DHI.Mike1D.Generic.ActionControl"/>
+            method for implementing an action.
+            <para>
+            It contains methods for getting values of the controlled item
+            and updating the controlled item.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionSetBase.Control">
+            <summary>
+            Function called when the action is implemented.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionSetBase.CurrentControlValueGetter">
+            <summary>
+            <see cref="P:DHI.Mike1D.ControlModule.ActionSetBase.CurrentControlValueGetter"/> is a getter to access the current value 
+            of the controlled structure. For <see cref="T:DHI.Mike1D.ControlModule.ActionPID"/> and
+            <see cref="T:DHI.Mike1D.ControlModule.ActionChange"/>, the new control value is calculated as 
+            a adjustment of the value of the controlled structure.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ActionUnchanged">
+            <summary>
+            Action that, when activated, will read the current control value (<see cref="P:DHI.Mike1D.ControlModule.ActionSetBase.CurrentControlValueGetter"/>)
+            and set that to the controlled item as the new target value.
+            <para>
+            In case the control has another target value
+            and is has not yet reached the target (because of a velocity limitation or similar) 
+            but is moving towards that target, 
+            this action will stop that process, by resetting the target value to the current
+            value.
+            </para>
+            <para>
+            Compared to the <see cref="T:DHI.Mike1D.ControlModule.ActionNoOperation"/>, the <see cref="T:DHI.Mike1D.ControlModule.ActionNoOperation"/>
+            will not do anything, hence if the control is approaching a target value, it will
+            continue do so. If the control is not in the move, there will be no difference
+            between <see cref="T:DHI.Mike1D.ControlModule.ActionNoOperation"/> and this <see cref="T:DHI.Mike1D.ControlModule.ActionUnchanged"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionUnchanged.#ctor(System.String)">
+            <summary>
+            Create new action
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionUnchanged.Validate">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionUnchanged.Implement(System.DateTime,System.DateTime,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ActionSet">
+            <summary>
+            Action that will set the value of the <see cref="P:DHI.Mike1D.ControlModule.ActionSet.ValueExpression"/>
+            to the controlled item.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionSet.#ctor(System.String)">
+            <summary>
+            Create new action
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionSet.ValueExpression">
+            <summary>
+            Expression value used when action is implemented
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionSet.__valueExpression">
+            <summary>
+            Serialization property
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionSet.Validate">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionSet.Implement(System.DateTime,System.DateTime,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ActionChange">
+            <summary>
+            Action that will change the value of controlled item 
+            with the value of <see cref="P:DHI.Mike1D.ControlModule.ActionSet.ValueExpression"/>.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionChange.#ctor(System.String)">
+            <summary>
+            Create new actino
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionChange.Implement(System.DateTime,System.DateTime,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionChange.Reset">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionTableLookup">
+            <summary>
+            A control functino that looks up in table based on the value of an expression
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionAccumulate">
+            <summary>
+            Control function that accumulates over the time of the simulation.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlFunctionAccumulate._argument">
+            Exact time integral of argument.
+            The Update method only calculates an estimate of the
+            _thisTimestepValue, a preliminary value. For many arguments,
+            especially sensors, the correct value in the integral is only
+            available when the time step has finished.
+            The correct integral contribution is calculated in FinalizeTimeStep
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionTimeSinceChange">
+            <summary>
+            Control function that accumulates over the time of the simulation
+            <para>
+            If the value is changed during a time step, then time since change should not be zero.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionSimTime">
+            <summary>
+            Control function that accumulates over the time of the simulation
+            <para>
+            If the value is changed during a time step, then time since change should not be zero.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionSimStartTime">
+            <summary>
+            Control function that accumulates over the time of the simulation
+            <para>
+            If the value is changed during a time step, then time since change should not be zero.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionSimTimeSpan">
+            <summary>
+            Control function that accumulates over the time of the simulation
+            <para>
+            If the value is changed during a time step, then time since change should not be zero.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionSimTimeStep">
+            <summary>
+            Control function returning simulation time step
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionDt">
+            <summary>
+            Control function returning simulation time step
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionMax">
+            <summary>
+            A control function that returns the maximum value throughout the simulation
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlFunctionMax._valueExpression">
+            <summary>
+            expression where time value is extracted from
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionMax.#ctor(DHI.Math.Expression.IExpression{System.Double})">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlFunctionMax.ResultType">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionMax.Evaluate(System.Collections.Generic.IList{DHI.Math.Expression.ITypedExpression})">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionMax.Prepare(System.DateTime,DHI.Mike1D.Generic.IDiagnostics)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionMax.Update(System.DateTime,System.DateTime)">
+            <summary>
+            Does nothing here
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionMax.FinalizeTimeStep(System.DateTime)">
+            <summary>
+            At FinalizeTimeStep we can extract the final value from the 
+            expression and evaluate the new global max value.
+            </summary>
+            <param name="timeNp1"></param>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionMax.Accept``1(DHI.Math.Expression.IUserFunctionVisitor{``0})">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionMin">
+            <summary>
+            A control function that returns the maximum value throughout the simulation
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlFunctionMin._valueExpression">
+            <summary>
+            expression where time value is extracted from
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionMin.#ctor(DHI.Math.Expression.IExpression{System.Double})">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlFunctionMin.ResultType">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionMin.Evaluate(System.Collections.Generic.IList{DHI.Math.Expression.ITypedExpression})">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionMin.Prepare(System.DateTime,DHI.Mike1D.Generic.IDiagnostics)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionMin.Update(System.DateTime,System.DateTime)">
+            <summary>
+            Does nothing here
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionMin.FinalizeTimeStep(System.DateTime)">
+            <summary>
+            At FinalizeTimeStep we can extract the final value from the 
+            expression and evaluate the new global max value.
+            </summary>
+            <param name="timeNp1"></param>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionMin.Accept``1(DHI.Math.Expression.IUserFunctionVisitor{``0})">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionTimeValues">
+            <summary>
+            Base class for control function that stores a number of values
+            back in time. 
+            <para>
+            Values within [currentTime-startTimeSpan; currentTime] are stored.
+            </para>
+            <para>
+            In case the timespan back in time is increased suddenly,
+            it will take some time for the control function to fill the buffer
+            with values that far back in time to provide correct results. Until
+            then, the oldest data in the buffer is returned.
+            Usually the timespan back in time is constant, in which case
+            this is not an issue.
+            </para>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlFunctionTimeValues._valueExpression">
+            <summary>
+            expression where time value is extracted from
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlFunctionTimeValues._latestTime">
+            <summary>
+            Time of latest update in buffer (TimeN)
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlFunctionTimeValues.ResultType">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTimeValues.Evaluate(System.Collections.Generic.IList{DHI.Math.Expression.ITypedExpression})">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTimeValues.Accept``1(DHI.Math.Expression.IUserFunctionVisitor{``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTimeValues.Prepare(System.DateTime,DHI.Mike1D.Generic.IDiagnostics)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTimeValues.Update(System.DateTime,System.DateTime)">
+            <summary>
+            Update values within time interval 
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTimeValues.DequeueOldValues(System.DateTime)">
+            <summary>
+            Dequeue all values older than currentTime-startTimeSpan, 
+            i.e. keep the first one older than currentTime-startTimeSpan,
+            such that we can do interpolation.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionTimeInterval">
+            <summary>
+            Base class for control functions that stores a number of values
+            back in time, and operates on values within a time interval
+            <para>
+            Values are stored within [currentTime-startTimeSpan; currentTime].
+            </para>
+            <para>
+            Values are being processed within [currentTime-startTimeSpan; currentTime-endTimeSpan].
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionPreviousInTime">
+            <summary>
+            A control function that returns a value from a previous point in time
+            <para>
+            It stores values back in time such that an interpolation to the previous point
+            in time is possible.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionPreviousInTime.Accept``1(DHI.Math.Expression.IUserFunctionVisitor{``0})">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionMinInTime">
+            <summary>
+            A control function that returns the minimum value within a time interval
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionMaxInTime">
+            <summary>
+            A control function that returns the minimum value within a time interval
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionTimeDerivative">
+            <summary>
+            A control function that returns the derivative for the current time 
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionDiffInTime">
+            <summary>
+            A control function that returns the difference in value at 
+            the two times. 
+            <para>
+            Can also handle derivatives in time.
+            </para>
+            
+            <para>
+            if interpolation is disabled, in case no values are found exactly 
+            at that time, the first value after the time is used.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionTimeIntegrate">
+            <summary>
+            A control function that integrates an argument in time
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlFunctionTimeIntegrate.FullyInside">
+            <summary>
+            Flag specifying only to include time steps that are fully inside the
+            time interval. This is the M11 implementation.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTimeIntegrate.DequeueOldValues(System.DateTime)">
+            <summary>
+            Dequeue all values older than currentTime-startTimeSpan
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTimeIntegrate.Integrate(System.TimeSpan@)">
+            <summary>
+            Integrate values within [currentTime-startTimeSpan; currentTime-endTimeSpan]
+            that fullfills the apply criteria
+            </summary>
+            <param name="timeSpan">Time span of values that have been integrated</param>
+            <returns>Integrated value</returns>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionTimeAverage">
+            <summary>
+            A control function that average an argument in time
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionPreviousValue">
+            <summary>
+            A control function that returns a previous value. i.e. a value from the previous time step
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlFunctionPreviousValue._valueExpression">
+            <summary>
+            expression where time value is extracted from
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlFunctionPreviousValue.ResultType">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionPreviousValue.Evaluate(System.Collections.Generic.IList{DHI.Math.Expression.ITypedExpression})">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionPreviousValue.Accept``1(DHI.Math.Expression.IUserFunctionVisitor{``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionPreviousValue.Prepare(System.DateTime,DHI.Mike1D.Generic.IDiagnostics)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionPreviousValue.Update(System.DateTime,System.DateTime)">
+            <summary>
+            Do nothing (pre-iteration update)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionPreviousValue.FinalizeTimeStep(System.DateTime)">
+            <summary>
+            When time step has finished, update buffer values
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionTSLookup">
+            <summary>
+            A control function that looks up in time series based on the time of the simulation
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTSLookup.#ctor(DHI.Mike1D.ControlModule.ControlData,System.String)">
+            <summary>
+            Create a TimeSeries lookup function based on the <paramref name="tsId"/>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTSLookup.#ctor(DHI.Mike1D.ControlModule.ControlData,System.String,System.String)">
+            <summary>
+            Create a TimeSeries lookup function based on the time series file path/name and item name
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTSLookup.Prepare(System.DateTime,DHI.Mike1D.Generic.IDiagnostics)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTSLookup.Update(System.DateTime,System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTSLookup.FinalizeTimeStep(System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionTSDataLookup">
+            <summary>
+            A control function that looks up in time series based on the time of the simulation
+            <para>
+            Compared to the <see cref="T:DHI.Mike1D.ControlModule.ControlFunctionTSLookup"/> this function stores
+            the values of the time series locally in arrays. 
+            </para>
+            <para>
+            The times can be stored as absolute in <see cref="P:DHI.Mike1D.ControlModule.ControlFunctionTSDataLookup.DateTimes"/>
+            or as relative from start time in seconds in <see cref="P:DHI.Mike1D.ControlModule.ControlFunctionTSDataLookup.RelativeTimeSeconds"/>
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlFunctionTSDataLookup.DateTimes">
+            <summary>
+            Date times of time axis. Null if relative time axis
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlFunctionTSDataLookup.RelativeTimeSeconds">
+            <summary>
+            Relative time axis in seconds. Null if absolute time axis
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlFunctionTSDataLookup.Values">
+            <summary>
+            Values in time
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTSDataLookup.Prepare(System.DateTime,DHI.Mike1D.Generic.IDiagnostics)">
+            <summary>
+            Prepare the function. Copy the time series data to the 
+            time series classes and use those.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlFunctionTSTable2DLookup">
+            <summary>
+            A control function that looks up in a 2D table where the X-axis is a DateTime axis
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlFunctionTSTable2DLookup.ResultType">
+            <summary>
+            Type of result returned by expression 
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTSTable2DLookup.Prepare(System.DateTime,DHI.Mike1D.Generic.IDiagnostics)">
+            <summary>
+            Prepare the function. Copy the time series data to the 
+            time series classes and use those.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTSTable2DLookup.Update(System.DateTime,System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTSTable2DLookup.FinalizeTimeStep(System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTSTable2DLookup.Evaluate(System.Collections.Generic.IList{DHI.Math.Expression.ITypedExpression})">
+            <summary>
+            Evaluate the user function 
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTSTable2DLookup.Accept``1(DHI.Math.Expression.IUserFunctionVisitor{``0})">
+            <summary>
+            Acceptor for visitor pattern for user functions, matching <see cref="T:DHI.Math.Expression.IUserFunctionVisitor`1"/>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.IControlFunctionDischargeDemandLookup.LocationOfControlDischarge">
+            <summary>
+            Read in prepare, from the PhaseLagFile
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlFunctionDischargeDemandLookup.PhaseLagFile">
+            <summary>
+            File name of phase lag text file. This file contains three columns, separated by semi-colons (;): 
+            1) Discharge, 2) time until first downstream rise, 3) time until first downstream decrease. First line
+            is a comment.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlFunctionDischargeDemandLookup.ProportionalityFactor">
+            <summary>
+            Proportionality factor on demand
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlFunctionDischargeDemandLookup._locationOfControlDischarge">
+            <summary>
+            Read in prepare, from the PhaseLagFile
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlFunctionDischargeDemandLookup.LocationOfControlDischarge">
+            <summary>
+            Read in prepare, from the PhaseLagFile
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlFunctionDischargeDemandLookup._qRisingAndFallingShiftTable">
+            <summary>
+            Holds (discharge, rising lag time, falling lag time).
+            Read in prepare, from the PhaseLagFile
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionDischargeDemandLookup.Validate(System.DateTime,System.DateTime)">
+            <summary>
+            Validation
+            </summary>
+            <param name="simulationStart"></param>
+            <param name="simulationEnd"></param>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionDischargeDemandLookup.Update(System.DateTime,System.DateTime)">
+            <summary>
+            Update the value of the sensor. If time is outside the bounds of the time series, then 
+            the first/last value of the time series will be used.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionDischargeDemandLookup.CalculateTimeOfValueChange(System.DateTime)">
+            <summary>
+            Calculate the point in time after startTime when the value of _timeSeriesData.GetValue(time)
+            changes from _timeSeriesData.GetValue(startTime). 
+            </summary>
+            <param name="startTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionDischargeDemandLookup.CalculateNextIncrease(System.DateTime,System.DateTime,System.DateTime,System.Double,System.Double,System.Boolean@,System.DateTime@,System.Double@)">
+            <summary>
+            Find out if there is a relevant rise in _timeSeriesData (demand) from startTime to endTime. A rise
+            _relevant_ if the effect of a rise at this gate can be felt downstream at or after the rise. If the effect
+            of a rise at this gate will be felt _before_ the rise in demand, then the rise is not relevant.
+            </summary>
+            <param name="timeN">Current time</param>
+            <param name="startTime"></param>
+            <param name="endTime"></param>
+            <param name="baseLineDischarge">Current discharge</param>
+            <param name="proportionalityFactor"> </param>
+            <param name="foundLocalRise"></param>
+            <param name="localRiseTime"></param>
+            <param name="localRiseValue"></param>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionDischargeDemandLookup.LoadPhaseLagFile(DHI.Mike1D.Generic.IDiagnostics,DHI.Mike1D.Generic.IFilePath)">
+            <summary>
+            Load phase lag information from the file pointed to by PhaseLagFile
+            </summary>
+            <param name="diagnostics"></param>
+            <param name="setupBasePath"></param>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlStateMachine">
+            <summary>
+            State machine used for applying different actions to the setup. 
+            <para>
+            The Control State Machine implements a finite-state machine (FSM). 
+            It can only be in one of the <see cref="P:DHI.Mike1D.ControlModule.ControlStateMachine.States"/> defined, being the
+            <see cref="P:DHI.Mike1D.ControlModule.ControlStateMachine.CurrentState"/>. Each <see cref="T:DHI.Mike1D.ControlModule.State"/> has its own
+            transition table, <see cref="P:DHI.Mike1D.ControlModule.State.TransitionTable"/>, defining
+            conditions for changing to a new state, and an <see cref="P:DHI.Mike1D.ControlModule.State.Action"/>
+            is associated to every state. 
+            </para>
+            <para>
+            Actions can be reused by several states, but actions cannot (should not)
+            be reused between by several ControlStateMachine's.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.#ctor(System.Boolean)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlStateMachine.Id">
+            <summary>
+            The Id of the machine.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlStateMachine._transitionTables">
+            <summary>
+            State transition tables can be reused. This is a serializing variable
+            storing all state transition tables in one list, and using 
+            the <see cref="F:DHI.Mike1D.ControlModule.State._transitionTableIndex"/> as and index into this
+            list when (de)serializing.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlStateMachine.CurrentState">
+            <summary>
+            The current state of the machine.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlStateMachine.States">
+            <summary>
+            States in the state machine. 
+            <para>
+            Do not modify this list. Use <see cref="M:DHI.Mike1D.ControlModule.ControlStateMachine.CreateState(DHI.Mike1D.ControlModule.IAction)"/> to add to list.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlStateMachine.Actions">
+            <summary>
+            Actions in the state machine. 
+            <para>
+            Actions may be reused, so number of actions
+            may be less than number of states.
+            </para>
+            <para>
+            Do not modify this list.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.SetGlobalStateTransitionTable(DHI.Mike1D.ControlModule.StateTransitionTable)">
+            <summary>
+            Set the same transition table to all states
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.SetStateTransitionTable(DHI.Mike1D.ControlModule.State,DHI.Mike1D.ControlModule.StateTransitionTable)">
+            <summary>
+            Set the same transition table to all states
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.CreateState(DHI.Mike1D.ControlModule.IAction)">
+            <summary>
+            Create a new state, add it to the state machine and
+            return it.
+            </summary>
+            <param name="action">Action to set to the state</param>
+            <returns>Returns the newly created state</returns>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.GetOrCreateAction(System.String,DHI.Mike1D.ControlModule.ActionTypes)">
+            <summary>
+            Get action with id, or create it if it does not exist
+            </summary>
+            <param name="id">Id if action</param>
+            <param name="actionType">Type of action</param>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.ReplaceAction(DHI.Mike1D.ControlModule.IAction,DHI.Mike1D.ControlModule.IAction)">
+            <summary>
+            Replace one action with a new action, updating the <see cref="P:DHI.Mike1D.ControlModule.ControlStateMachine.Actions"/> list
+            and also the action in all states.
+            </summary>
+            <param name="actionold">Action to replace</param>
+            <param name="actionNew">New action</param>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.UpdateStateAction(DHI.Mike1D.ControlModule.State,DHI.Mike1D.ControlModule.IAction)">
+            <summary>
+            Update action of a state.
+            <para>
+            Both the state and the action must be part of this control, i.e. in the
+            list of <see cref="P:DHI.Mike1D.ControlModule.ControlStateMachine.States"/> and <see cref="P:DHI.Mike1D.ControlModule.ControlStateMachine.Actions"/> respectively.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.Initialize(DHI.Mike1D.Generic.Diagnostics)">
+            <summary>
+            Initialize state machine
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.Update(System.DateTime,System.DateTime)">
+            <summary>
+            Update control state machine for the given time interval
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.Reset">
+            <summary>
+            Reset the state machine and all the states.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.Validate">
+            <summary>
+            Validate state machine and all states.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlStateMachine.CreateSimpleControl(DHI.Mike1D.ControlModule.ControlStateMachine,DHI.Mike1D.ControlModule.IAction)">
+            <summary>
+            Create a simple control that at every time step applies the specified action.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ActionPID">
+            <summary>
+            Action to set a value (via Action.ValueSetter) based on an input expression.
+            Optinally, the value can be multiplied by the value of OutExpressionFactor, before
+            the value is passed on to the value setter.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionPID.#ctor(System.String)">
+            <summary>
+            Create new action
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionPID._proportionalityFactor">
+            <summary>
+            Factor of proportionality
+            Type: Dimensionless factor
+            Default: 1
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionPID.ProportionalityFactor">
+            <summary>
+            Factor of proportionality
+            Type: Dimensionless factor
+            Default: 1
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionPID._integrationPeriod">
+            <summary>
+            Integration period.
+            Type: Duration
+            Default: 300 hours
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionPID.IntegrationPeriod">
+            <summary>
+            Integration period.
+            Default : 300 hours
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionPID._derivationPeriod">
+            <summary>
+            Derivation period.
+            Default: 0.8 hour
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionPID.DerivationPeriod">
+            <summary>
+            Derivation period.
+            Default: 0.8 hour
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionPID._weightTimeStep1">
+            <summary>
+            Weighting factor for time step 1
+            Type: Dimensionless factor
+            Default: 1
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionPID.WeightTimeStep1">
+            <summary>
+            Weighting factor for time step 1
+            Type: Dimensionless factor
+            Default: 1
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionPID._weightTimeStep2">
+            <summary>
+            Weighting factor for time step 2
+            Type: Dimensionless factor
+            Default: 1
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionPID.WeightTimeStep2">
+            <summary>
+            Weighting factor for time step 2
+            Type: Dimensionless factor
+            Default: 0.7
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionPID._weightTimeStep3">
+            <summary>
+            Weighting factor for time step 3
+            Type: Dimensionless factor
+            Default: 1
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionPID.WeightTimeStep3">
+            <summary>
+            Weighting factor for time step 3
+            Type: Dimensionless factor
+            Default: 1
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionPID.ReferenceExpression">
+            <summary>
+            Reference expression, often called Set Point, is the value that we
+            want the <see cref="P:DHI.Mike1D.ControlModule.ActionPID.RegulatedExpression"/> to be, and what the PID
+            will try to obtain.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionPID.__referenceExpression">
+            <summary>
+            Serialization property
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionPID.RegulatedExpression">
+            <summary>
+            <see cref="P:DHI.Mike1D.ControlModule.ActionPID.RegulatedExpression"/> is an expression for the measured control variable.
+            This value is what the PID controller will try to get to match the
+            setpoint expression value.
+            The new control value is calculated so as to minimize the difference between
+            RegulatedExpressionValue() and InputExpressionValue(), where RegulatedExpressionValue() is the value
+            that changes in resopnse to the control.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionPID.__regulatedExpression">
+            <summary>
+            Serialization property
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionPID._samplingPeriod">
+            <summary>
+            Sampling period.
+            Type: Duration
+            Default: always equal to dt
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionPID._regulatedValue">
+            <summary>
+            The actual and current value of the regulated value.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionPID._regulatedValueTMinus1">
+            <summary>
+            The actual value of the regulated value at the previous time step.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionPID._regulatedValueTMinus2">
+            <summary>
+            The actual value of the regulated value at the time step before the previous.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionPID._referenceValue">
+            <summary>
+            The current reference value.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionPID._referenceValueTMinus1">
+            <summary>
+            The reference value at the previous time step.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionPID._referenceValueTMinus2">
+            <summary>
+            The reference value at the time step before the previous.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionPID.Implement(System.DateTime,System.DateTime,System.Int32)">
+            <summary>
+            Implement constant action.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionPID.Reset">
+            <summary>
+            Reset the internal state of the action
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionPID.Activate(System.DateTime,System.Int32)">
+            <summary>
+            Called when action is first activated. The state of the action should be initialized here.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionPID.ComputeOutputValue">
+            <summary>
+            Method that maps the target reference value onto the output value.
+            </summary>
+            <returns>The output value</returns>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.TimeSeriesInfo">
+            <summary>
+            Time series info.
+            <para>
+            If both <see cref="F:DHI.Mike1D.ControlModule.TimeSeriesInfo._itemNumber"/> and <see cref="F:DHI.Mike1D.ControlModule.TimeSeriesInfo._itemName"/>
+            is specified, the <see cref="F:DHI.Mike1D.ControlModule.TimeSeriesInfo._itemNumber"/> takes precedense and
+            the <see cref="F:DHI.Mike1D.ControlModule.TimeSeriesInfo._itemName"/> is only used for validation.
+            </para>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.TimeSeriesInfo._filePath">
+            <summary>
+            Name and path of time series file
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.TimeSeriesInfo._itemNumber">
+            <summary>
+            Number of item in time series file. One-based. 
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.TimeSeriesInfo._itemName">
+            <summary>
+            Name of item in time series file.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.TimeSeriesInfo._targetUnit">
+            <summary>
+            Target unit of time series file.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.TimeSeriesInfo.TargetUnit">
+            <summary>
+            Target unit of time series file.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.TimeSeriesInfo.ItemName">
+            <summary>
+            Name of item in time series file.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.TimeSeriesInfo.ItemNumber">
+            <summary>
+            Number of item in time series file. One-based. 
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.TimeSeriesInfo.FilePath">
+            <summary>
+            Name and path of time series file
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.VariableExpression.Expression">
+            <summary>
+            Expression that is evaluated
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.VariableExpression.__expression">
+            <summary>
+            Serialization property
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlData">
+            <summary>
+            Control Data object, specifying a number of controls
+            in the form of state machines and states with actions.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.ControlStateMachines">
+            <summary>
+            List of controls handled by the control module.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlData._sensorDescriptions">
+            <summary>
+            Use to set up sensors during Prepare()
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.SensorDescriptions">
+            <summary>
+            Sensor descriptions, indexed by their id.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.__sensorDescriptions">
+            <summary>
+            Serialization version, to handle the comparer of the dictionary.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlData._actionTargetDescriptions">
+            <summary>
+            Use to set up actions during Prepare()
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.ActionTargetDescriptions">
+            <summary>
+            Dictionary with sensor descriptions as value and sensor ID as key
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.__actionTargetDescriptions">
+            <summary>
+            Serialization version of the <see cref="F:DHI.Mike1D.ControlModule.ControlData._actionTargetDescriptions"/>, to handle the comparer of the dictionary.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.TimeSeriesInfos">
+            <summary>
+            Information on time series. Each time series info has their own unique ID. 
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlData._timeSeriesInfos">
+            <summary>
+            Information on time series. Each time series info has their own unique ID. 
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.__timeseriesInfos">
+            <summary>
+            Serialization version of the <see cref="F:DHI.Mike1D.ControlModule.ControlData._timeSeriesInfos"/>, to handle the comparer of the dictionary.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.TableInfos">
+            <summary>
+            Information on time series. Each time series info has their own unique ID. 
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlData._tableInfos">
+            <summary>
+            Information on time series. Each time series info has their own unique ID. 
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.__tableInfos">
+            <summary>
+            Serialization version of the <see cref="F:DHI.Mike1D.ControlModule.ControlData._tableInfos"/>, to handle the comparer of the dictionary.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.NumberOfIterations">
+            <summary>
+            Number of iterations when applying the control.
+            <para>
+            Default value is 1. Only increase if there are controls depending on other controls.
+            </para>
+            <para>
+            In case some controls depends on other controls, it can be 
+            necessary to evaluate the controls twice, such having the
+            second control updated in the second iteration, after the
+            first control has updated in first iteration.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.BaseFilePath">
+            <summary>
+            Base file path is use to find supporting files when reading control structures
+            For M11 setups, this points to the directory of the .nwk file
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.ExpressionFactory">
+            <summary>
+            Expression factory that must be used when creating expressions
+            for this control data object.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.UserFunctions">
+            <summary>
+            User defined functions in the expression. 
+            All user defined functions must be added to the set of <see cref="P:DHI.Mike1D.ControlModule.ControlData.UserFunctions"/> 
+            or be returned by a <see cref="P:DHI.Mike1D.ControlModule.ControlData.UserFunctionFactories"/>.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.UserFunctionFactories">
+            <summary>
+            Factory for creating user functions.
+            All user defined functions must be added to the set of <see cref="P:DHI.Mike1D.ControlModule.ControlData.UserFunctions"/> 
+            or be returned by a <see cref="P:DHI.Mike1D.ControlModule.ControlData.UserFunctionFactories"/>.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.Sensors">
+            <summary>
+            List of sensors. 
+            <para>
+            Used during simulation. All sensors in <see cref="P:DHI.Mike1D.ControlModule.ControlData.SensorDescriptions"/>
+            are automatically created during <see cref="M:DHI.Mike1D.ControlModule.ControlData.Initialize(DHI.Mike1D.Generic.Diagnostics)"/>. 
+            </para>
+            <para>
+            Sensors that are required but not part of <see cref="P:DHI.Mike1D.ControlModule.ControlData.SensorDescriptions"/>
+            must be added explicitly.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.Variables">
+            <summary>
+            List of user defined variables.
+            <para>
+            User defined variables are variables that are evalauted in every <see cref="M:DHI.Mike1D.ControlModule.ControlData.Update(System.DateTime,System.DateTime)"/>
+            and can be used in other expressions. 
+            </para>
+            <para>
+            The variables are evaluated in-order, if a variable "A" is used in the expresion of another variable "B",
+            then "A" must be defined before "B" in this list.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.BuildInVariables">
+            <summary>
+            List of build in predefined variables. 
+            <para>
+            Used during simulation. If a sensor or another variable 
+            is defined, variables in this list is ignored.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.ControlUpdaters">
+            <summary>
+            List of <see cref="T:DHI.Mike1D.ControlModule.IControlFunctionTime"/> objects, which need an explicit call
+            to <see cref="M:DHI.Mike1D.ControlModule.IControlFunctionTime.Update(System.DateTime,System.DateTime)"/> before it can evaluate control/function/etc.
+            <para>
+            Used during simulation. Used e.g. by control functions (functions in expressions) 
+            that depend on time (added automatically during <see cref="M:DHI.Mike1D.ControlModule.ControlData.Prepare(System.DateTime,DHI.Mike1D.Generic.IDiagnostics)"/>).
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.TsBuffer">
+            <summary>
+            A buffer containing all timeseries, so they can be reused as much as possible.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ControlData.LCRV">
+            <summary>
+            Internal method
+            </summary>
+        </member>
+        <member name="E:DHI.Mike1D.ControlModule.ControlData.PreUpdateEvent">
+            <summary>
+            Event that is triggered initially at any call to <see cref="M:DHI.Mike1D.ControlModule.ControlData.Update(System.DateTime,System.DateTime)"/>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.GetOrCreateSensor``1(System.String,DHI.Mike1D.ControlModule.SensorLocationType,DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            Get or create sensor. This is relevant for sensors 
+            that is not connected to anything by default, 
+            but needs user interaction to get connected.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.CreateSensor``1(System.String,DHI.Mike1D.ControlModule.SensorLocationType,DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            Create sensor, type specific version
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.CreateSensor(System.String,DHI.Mike1D.ControlModule.SensorLocationType,DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            Create sensor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.Initialize(DHI.Mike1D.Generic.Diagnostics)">
+            <summary>
+            Initialize control module.
+            <para>
+            It creates all sensors defined in <see cref="P:DHI.Mike1D.ControlModule.ControlData.SensorDescriptions"/>
+            and initializes all <see cref="P:DHI.Mike1D.ControlModule.ControlData.ControlStateMachines"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.CreateSensors">
+            <summary>
+            Create sensors for all sensor descriptions, skipping sensors already defined.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.Prepare(System.DateTime,DHI.Mike1D.Generic.IDiagnostics)">
+            <summary>
+            Prepare control data.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.PrepareForTimestep(System.DateTime,System.DateTime,System.Int32)">
+            <summary>
+            Prepare control data for time step.
+            </summary>
+            <param name="timeN">Start of time step</param>
+            <param name="timeNp1">End of time step</param>
+            <param name="redoCount">Number of times this time is repeated (adaptive time stepping). Initial value is zero.</param>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.Update(System.DateTime,System.DateTime)">
+            <summary>
+            Update control data and all its controls
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.FinalizeTimeStep(System.DateTime)">
+            <summary>
+            Update control data and all its controls
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.Reset">
+            <summary>
+            Reset inner state of sensors, control state machines and actions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.Validate(System.DateTime,System.DateTime)">
+            <summary>
+            Validate all of control data, including time series sensors
+            </summary>
+            <param name="simulationStart"></param>
+            <param name="simulationEnd"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.Validate">
+            <summary>
+            Validate control data, except time series sensors
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlData.ReleaseLicense">
+            <summary>
+            Internal method
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.SensorLocationType">
+            <summary>
+            Location of sensor
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.None">
+            <summary> User defined location type. User must manually configure sensor </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.Node">
+            <summary> Sensor on node </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.UpstreamNode">
+            <summary> Sensor on upstream node from location </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.Location">
+            <summary> Sensor on location </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.LocationSpan">
+            <summary> Sensor summing up value on location span of reach </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.LocationSpanGridPoints">
+            <summary> Sensor summing up value on location span of reach, all grid points with center inside span is fully included (M11 functionality)</summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.CenterOfReach">
+            <summary> Sensor on reach center, of reach containing location </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.UpstreamOfLocation">
+            <summary> Sensor on upstream grid point of location</summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.DownstreamOfLocation">
+            <summary> Sensor on downstream grid point of location</summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.Structure">
+            <summary> Sensor on structure </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.UpstreamOfStructure">
+            <summary> Sensor on grid point upstream of structure</summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.DownstreamOfStructure">
+            <summary> Sensor on grid point downstream of structure</summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.Catchment">
+            <summary> Sensor on catchment </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.Action">
+            <summary> Sensor on action </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.ActionActiveTime">
+            <summary> Sensor on action, time that action has been active </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.ActionBlockTime">
+            <summary> Sensor on action, time that action has been blocked </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.Sensor">
+            <summary> Sensor on another sensor (copy) </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorLocationType.HDModuleIterationNumber">
+            <summary> HD module iteration number sensor - internal use only </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.SensorDescription">
+            <summary>
+            Sensor description defines where the sensor
+            gets its data from.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorDescription.LocationType">
+            <summary>
+            Type of location of sensor
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorDescription.LocationId">
+            <summary>
+            ID of location. Depending on <see cref="F:DHI.Mike1D.ControlModule.SensorDescription.LocationType"/> this refers to various object types. 
+            For structures, this is the structure id.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorDescription.Location">
+            <summary>
+            Location on branch
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorDescription.LocationSpan">
+            <summary>
+            Location span on branch
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.SensorDescription.Quantity">
+            <summary>
+            Quantity that sensor is returning
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ActionTargetGroupTypes">
+            <summary>
+            The group types of the target
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ActionTargetTypes">
+            <summary>
+            The types of structures 
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ActionTypes">
+            <summary>
+            Types of actions
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionTypes.NoOperation">
+            <summary> Action that does nothing </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionTypes.Unchanged">
+            <summary> Action that keeps the current value of the structure </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionTypes.Activate">
+            <summary> Action that activates (stops/closes/opens) </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionTypes.Set">
+            <summary> Action that sets a value to the controlled item </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionTypes.Change">
+            <summary> Action that updates the controlled item with some change</summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionTypes.PID">
+            <summary> Action that updates the controlled item using a PID algorithm</summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionTypes.Set2">
+            <summary> Action that sets two values to the controlled item </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ActionTargetDescription">
+            <summary>
+            Description of the target of an action
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionTargetDescription.TargetId">
+            <summary>
+            Id of action target, 
+            when <see cref="F:DHI.Mike1D.ControlModule.ActionTargetDescription.TargetGroupType"/> is <see cref="F:DHI.Mike1D.ControlModule.ActionTargetGroupTypes.Structure"/> then it is the structure id. 
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionTargetDescription.TargetLocation">
+            <summary>
+            Location of action target, when <see cref="F:DHI.Mike1D.ControlModule.ActionTargetDescription.TargetGroupType"/>
+            is network or pipe-design.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ActionTargetDescription.TargetGroupType">
+            <summary>
+            Type of action target
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlExtensions">
+            <summary>
+            Extension methods for classes in the ControlModule namespace
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlExtensions.CreateUniqueId(System.Collections.Generic.Dictionary{System.String,DHI.Mike1D.Generic.IAnyTable},System.String)">
+            <summary>
+            Create a unique table id, i.e. an id that does not already exist 
+            as a key in the <paramref name="tableInfos"/> dictionary.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlExtensions.Add(DHI.Mike1D.ControlModule.LogicalCondition,DHI.Math.Expression.IExpression{System.Boolean},DHI.Math.Expression.ExpressionFactory)">
+            <summary>
+            Add <paramref name="expr2"/> to <see cref="P:DHI.Mike1D.ControlModule.LogicalCondition.Expression"/>, 
+            use an AND operator if the <see cref="P:DHI.Mike1D.ControlModule.LogicalCondition.Expression"/> is alrady populated.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlExtensions.ExpressionString(DHI.Math.Expression.MathExpression)">
+            <summary>
+            Create a string representing the expression
+            <para>
+            The MathExpression.Expression can contain as well an
+            expression string as an evaluator expression tree.
+            In case of the latter, a string representation of the
+            tree is returned.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ActionWith2Setters">
+            <summary>
+            Control action with two setters. The second setter, ValueSetter2, is secondary in the
+            sense that ValueSetter can depend on the values that are set by ValueSetter2. In other words
+            ValueSetter2 is called first. The thinking is that ValueSetter is still the main control function. 
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionWith2Setters.#ctor(System.String)">
+            <summary>
+            Create new action
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionWith2Setters.ValueExpression2">
+            <summary>
+            Expression value used when action is implemented
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ActionWith2Setters.__valueExpression2">
+            <summary>
+            Serialization property
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionWith2Setters.Implement(System.DateTime,System.DateTime,System.Int32)">
+            <summary>
+            Implement action.
+            </summary>
+            <param name="timeN"></param>
+            <param name="timeNp1"></param>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ActionNoOperation">
+            <summary>
+            Action that does nothing.
+            <para>
+            See also <see cref="T:DHI.Mike1D.ControlModule.ActionUnchanged"/> for the difference
+            between this and the <see cref="T:DHI.Mike1D.ControlModule.ActionUnchanged"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionNoOperation.#ctor(System.String)">
+            <summary>
+            Create new action
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionNoOperation.Implement(System.DateTime,System.DateTime,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionNoOperation.Validate">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ActionActivate">
+            <summary>
+            Simple class that calls a setter with no arguments when implemented
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionActivate.#ctor(System.String)">
+            <summary>
+            Create new action
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionActivate.Activate(System.DateTime,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionActivate.Implement(System.DateTime,System.DateTime,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionActivate.Validate">
+            <summary>
+            Validate
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.IControlFunctionTime">
+            <summary>
+            Interface for control functions that are aware of time
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.IControlFunctionTime.Prepare(System.DateTime,DHI.Mike1D.Generic.IDiagnostics)">
+            <summary>
+            Prepare, before simulation start
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.IControlFunctionTime.Update(System.DateTime,System.DateTime)">
+            <summary>
+            Update, during simulation
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.IControlFunctionTime.FinalizeTimeStep(System.DateTime)">
+            <summary>
+            Finalize Timestep, during simulation
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlUserFunctionFactory">
+            <summary>
+            Factory for creating user functions specific for the MIKE 1D engine.
+            <para>
+            When a <see cref="T:DHI.Mike1D.ControlModule.ControlData"/> object is not provided, the object
+            can be used for validation purposes. 
+            Validation without a <see cref="T:DHI.Mike1D.ControlModule.ControlData"/> object will not validate 
+            if time series and tables has been properly defined.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlUserFunctionFactory.#ctor">
+            <summary>
+            Create new factory, without backing control data object.
+            <para>
+            The factory can only be used for validation purposes,
+            it canNOT be used for actual calculations.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlUserFunctionFactory.#ctor(DHI.Mike1D.ControlModule.ControlData)">
+            <summary>
+            Create new factory, using provided control data object.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlUserFunctionFactory.TryCreateUserFunction(System.String,System.Collections.Generic.IList{DHI.Math.Expression.ITypedExpression},System.Collections.Generic.IList{System.String}@)">
+            <summary>
+            Main method, creating the control user functions
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.ControlUserFunctionFactory.BuildInFunctions">
+            <summary>
+            List of MIKE 1D engine specific functions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlUserFunctionFactory.AddError(System.Collections.Generic.IList{System.String}@,System.String)">
+            <summary>
+            Add error to list of errors
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlUserFunctionFactory.AddErrors(System.Collections.Generic.IList{System.String}@,System.Collections.Generic.IList{System.String})">
+            <summary>
+            Add more errors to list of errors
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlUserFunctionFactory.FunArguments">
+            <summary>
+            Dictionary class with FunArgument's, which are updating 
+            the Known flag whenever they are accessed.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ControlUserFunctionFactory.FunArgument">
+            <summary>
+            Simple class with function arguments
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.Encryption">
+            <summary>
+            Class for encrypting strings
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.Encryption.Encrypt(System.String,System.String)">
+            <summary>
+            Encrypt string
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.Encryption.Decrypt(System.String,System.String)">
+            <summary>
+            Decrypt string
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeTable">
+            <summary>
+            Expression node that takes an input value and performs a lookup in a table. 
+            Linear interpolation is performed on the values in the table to obtain
+            the output value.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ExpressionNodeTable.XYTable">
+            <summary>
+            XY table used to convert input values to output values.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.IAction">
+            <summary>
+            Base interface for an action.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.IAction.Id">
+            <summary>
+            Unique id
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.IAction.ControllableUpdate">
+            <summary>
+            Delegate to call when the action-implement is issued. Can be null.
+            Call with timeN and timeNp1 arguments.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.IAction.Validate">
+            <summary>
+            Validate
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.IAction.IsActive">
+            <summary>
+            Boolean indicating if action is active
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.IAction.ActivationTime">
+            <summary>
+            Time when action was activated
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.IAction.Activate(System.DateTime,System.Int32)">
+            <summary>
+            Called when action is first activated. The state of the action should be initialized here.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.IAction.Deactivate(System.DateTime)">
+            <summary>
+            Called when this action is deactivated and another action is activated.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.IAction.Implement(System.DateTime,System.DateTime,System.Int32)">
+            <summary>
+            Implement action, update value of controlled item.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.IAction.Reset">
+            <summary>
+            Reset the internal state of the action.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionFactory">
+            <summary>
+            Helper class for creating expression trees.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ExpressionFactory.Table(DHI.Mike1D.ControlModule.IExpressionNode,DHI.Mike1D.Generic.IXYTable)">
+            <summary>
+            Create expression node that takes an input value and performs a lookup in a table. 
+            Linear interpolation is performed on the values in the table to obtain
+            the output value.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.IExpressionNode">
+            <summary>
+            Double node of expression tree
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.IExpressionNodeBool">
+            <summary>
+            Bool node of expression tree
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeConstant">
+            <summary>
+            Constant double expression node
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeConstantBool">
+            <summary>
+            Constant bool expression node
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionAdd">
+            <summary>
+            An expression node that adds two double expression nodes
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionMult">
+            <summary>
+            An expression node that multiplies two double expression nodes
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionDiv">
+            <summary>
+            An expression node that divides two double expression nodes
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionSub">
+            <summary>
+            An expression node that subtracts two double expression nodes
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionMax">
+            <summary>
+            An expression node that finds the maximum of two double expression nodes
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionMin">
+            <summary>
+            An expression node that finds the minimum of two double expression nodes
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionEquals">
+            <summary>
+            An expression node that finds out if two double expression nodes are equal
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionNotEquals">
+            <summary>
+            An expression node that finds out if two double expression nodes are un-equal
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionLessThan">
+            <summary>
+            An expression node that finds out if one double expression node is less than another 
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionGreaterThan">
+            <summary>
+            An expression node that finds out if one double expression node is greater than another 
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionGreaterThanOrEquals">
+            <summary>
+            An expression node that finds out if one double expression node is greater than or equal to another 
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionLessThanOrEquals">
+            <summary>
+            An expression node that finds out if one double expression node is less than or equal to another 
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionAnd">
+            <summary>
+            An expression node that computes the AND of two bool expression nodes
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionOr">
+            <summary>
+            An expression node that computes the OR of two bool expression nodes
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionXOr">
+            <summary>
+            An expression node that computes the XOR of two bool expression nodes
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionAbs">
+            <summary>
+            An expression node that computes the absolute value of a double expression node
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeFunctionNot">
+            <summary>
+            An expression node that computes the logical not of a bool expression node
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ExpressionNodeVariable">
+            <summary>
+            An expression node that contains a variable double. 
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ISensor">
+            <summary>
+            A sensor retrieves a value from the simulation
+            and acts as a variable in the control expressions.
+            <para>
+            This interface should never be implemented directly, but
+            always through the <see cref="T:DHI.Mike1D.ControlModule.ISensor`1"/> interface.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ISensor.Id">
+            <summary>
+            Unique id
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ISensor.TargetUnit">
+            <summary>
+            Target unit
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ISensor`1">
+            <summary>
+            A sensor retrieves a value from the simulation
+            and acts as a variable in the control expressions.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ISensor`1.Getter">
+            <summary>
+            Getter used to extract the value of the sensor
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.Sensor`1">
+            <summary>
+            A sensor retrieves a value from the simulation
+            and acts as a variable in the control expressions.
+            <para>
+            Default implementation of <see cref="T:DHI.Mike1D.ControlModule.ISensor`1"/>
+            interface.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.Sensor`1.#ctor(System.String)">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.Sensor`1.Id">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.Sensor`1.TargetUnit">
+            <inheritdoc/>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.Sensor`1.Getter">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.Sensor`1.ResultType">
+            <summary>
+            Type of value that the sensor retrieves.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.Sensor`1.DHI#Math#Expression#IVariable#Name">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.Sensor`1.DHI#Math#Expression#IVariable#Value">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.Sensor`1.DHI#Math#Expression#IExpression{T}#Evaluate">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.Sensor`1.DHI#Math#Expression#ITypedExpression#Evaluate">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.Sensor`1.DHI#Math#Expression#IExpressionAcceptor#Accept``1(System.Boolean,DHI.Math.Expression.IExpressionVisitor{``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.#ctor">
+            <summary>
+            Private constructor to support singleton pattern
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.Instance">
+            <summary>
+            Get the singleton license checker instance
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseChecker">
+            <summary>
+            Provides access to the DHI license system through LicManCliWrapper2004.dll
+            </summary>
+            <remarks>
+            This class is implemented as internal class in several modules that all require
+            license checking functionality. Please update all LicenseChecker classes simultaneously.
+            </remarks>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseChecker.SelectLicense(System.String)">
+            <summary>
+            Add a DHI license identifier to the list of license that will be requested.
+            </summary>
+            <param name="licenseType"></param>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseChecker.RequestLicense(System.Int32)">
+            <summary>
+            Request licenses. Calls DHI.Generic.MikeZero.License.LicenseWrapper.RequestLicenseWin()
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseChecker.GetMaxNodes">
+            <summary>
+            Get maximum number of nodes supported by the active license (returns MaxNode1).
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseChecker.ConfirmLicense">
+            <summary>
+            Confirm that all license are still valid.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseChecker.ReleaseLicense">
+            <summary>
+            Release all licenses.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseChecker.GetLicenseErrorDiagnosticsItem(System.Int32)">
+            <summary>
+            Convert a license error code to an error string
+            </summary>
+            <param name="rc"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseWrapperSimple">
+            <summary>
+            A wrapper for making procedure calls in the DHI license managment DLL.
+            This file is based on DHI.Generic.MIKEZero.LicenseWrapper.cs.
+            Compared to that file, the following has been changed:
+            1) Thread safety has been removed.
+            2) Chaching of license checkout has been removed 
+            3) Access to maximum node count information has been added
+            
+            The changes have been implemented in order to be able to check the same license 
+            multiple times (DHI.Generic.MIKEZero.LicenseWrapper.cs has a 1 minute window)
+            and point 3 above.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseWrapperSimple._ReleaseAllLicensesApp">
+            <summary>
+            Releases all licenses checked out by the process.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseWrapperSimple._ReleaseAllLicensesApp(System.String,System.String)">
+            <summary>
+            Releases specific licenses checked out by the process.
+            </summary>
+            <param name="moduleName">Module name.</param>
+            <param name="subModuleName">Submodule name.</param>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseWrapperSimple._RequestLicenseApp(System.Int32,System.String,System.String,System.Int32,System.Int32,System.Int32,System.Int32,System.String,System.String,System.Int32)">
+            <summary>
+            Requests licenses for the specific module and submodule.
+            </summary>
+            <param name="rndNum">Random number used for scrambling of data.</param>
+            <param name="moduleName">Module name.</param>
+            <param name="subModuleName">Submodule name.</param>
+            <param name="versionMajor">Major version number.</param>
+            <param name="versionMinor">Minor version number.</param>
+            <param name="maxNode1">Unspecified.</param>
+            <param name="maxNode2">Unspecified.</param>
+            <param name="maxNode3">Unspecified.</param>
+            <param name="maxNode4">Unspecified.</param>
+            <param name="startTimer">Non-zero, if wait-timer should be started.</param>
+            <returns>0, if the function succeeded, otherwise number indicating error.</returns>        
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseWrapperSimple.ConfirmAllLicensesWin">
+            <summary>
+            Verifies, whether all requested licenses are still avialable.
+            </summary>
+            <returns>0, if all the licenses are still avialable, otherwise number indicating
+            error.</returns>        
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseWrapperSimple.ReleaseAllLicensesWin">
+            <summary>
+            Releases all licenses checked out by the process.
+            </summary>        
+            <remarks>The method is thread safe.</remarks>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseWrapperSimple.ReleaseLicenseWin(System.String,System.String)">
+            <summary>
+            Releases specific licenses checked out by the process.
+            </summary>
+            <param name="moduleName">Module name.</param>
+            <param name="subModuleName">Submodule name.</param>   
+            <remarks>The method is thread safe.</remarks>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseWrapperSimple.RequestLicenseWin(System.Int32,System.String,System.String,System.Int64,System.Int64,System.Int64,System.Int64,System.String,System.String,System.Int32)">
+            <summary>
+            Requests licenses for the specific module and submodule.
+            </summary>
+            <param name="rndNum">Random number used for scrambling of data.</param>
+            <param name="moduleName">Module name.</param>
+            <param name="subModuleName">Submodule name.</param>
+            <param name="versionMajor">Major version number.</param>
+            <param name="versionMinor">Minor version number.</param>
+            <param name="maxNode1">Unspecified.</param>
+            <param name="maxNode2">Unspecified.</param>
+            <param name="maxNode3">Unspecified.</param>
+            <param name="maxNode4">Unspecified.</param>
+            <param name="startTimer">Non-zero, if wait-timer should be started.</param>
+            <returns>0, if the function succeeded, otherwise number indicating error.</returns>        
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.LicenseWrapperSimple.GetMaxNodesByModuleName(System.String,System.Int64@,System.Int64@,System.String@,System.String@)">
+            <summary>
+             Get maximum number of nodes for a specified license.
+            </summary>
+            <param name="moduleName"></param>
+            <param name="maxNode1"></param>
+            <param name="maxNode2"></param>
+            <param name="maxNode3"></param>
+            <param name="maxNode4"></param>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.LogicalCondition.Expression">
+            <summary>
+            Expression that is evaluated. Must return a boolean value.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.LogicalCondition.__expression">
+            <summary>
+            Serialization property
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.LogicalCondition.Evaluate(System.DateTime)">
+            <summary>
+            Evaluate the condition. In order for the condition to be true, all 
+            expression trees in the condition must evaluate to value larger than 0.0.
+            </summary>
+            <param name="time"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.State">
+            <summary>
+            State in <see cref="T:DHI.Mike1D.ControlModule.ControlStateMachine"/>.
+            <para>
+            Use <see cref="M:DHI.Mike1D.ControlModule.ControlStateMachine.CreateState(DHI.Mike1D.ControlModule.IAction)"/>
+            to create a new state and add it to the state matchine instance.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.State.#ctor(DHI.Mike1D.ControlModule.IAction,System.Int32,System.Int32)">
+            <summary>
+            Internal constructor. Use <see cref="M:DHI.Mike1D.ControlModule.ControlStateMachine.CreateState(DHI.Mike1D.ControlModule.IAction)"/>
+            to create a new instance.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.State.ControlDeserialized(DHI.Mike1D.ControlModule.ControlStateMachine)">
+            <summary>
+            Called when deserializing, to get action from action index
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.State.StateIndex">
+            <summary>
+            Index into <see cref="P:DHI.Mike1D.ControlModule.ControlStateMachine.States"/> of this state.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.State._actionIndex">
+            <summary>
+            Serializing field, index into <see cref="P:DHI.Mike1D.ControlModule.ControlStateMachine.Actions"/>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ControlModule.State._transitionTableIndex">
+            <summary>
+            Serializing field, index into <see cref="F:DHI.Mike1D.ControlModule.ControlStateMachine._transitionTables"/>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.State.StrategyId">
+            <summary>
+            Id of control strategy
+            <para>
+            This is handled to the controlled item when the state
+            is active, and can be reported in result files
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.State.Action">
+            <summary>
+            Action that state implements
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.State.TransitionTable">
+            <summary>
+            State transition table, list of state transitions defining
+            any state change.
+            <para>
+            Use <see cref="M:DHI.Mike1D.ControlModule.ControlStateMachine.SetStateTransitionTable(DHI.Mike1D.ControlModule.State,DHI.Mike1D.ControlModule.StateTransitionTable)"/>
+            to update.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.State.BlockTime">
+            <summary>
+            If > 0, then this state is active for at least BlockTime.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.State.UseBlockTimeStep">
+            <summary>
+            When true: After block-time has expired, if this state continues to be active,
+            a new period of blocking is initiated, so this state will be active for yet
+            another <see cref="P:DHI.Mike1D.ControlModule.State.BlockTime"/> period. State changes will only be evaluated
+            every BlockTime period. 
+            <para>
+            When false: After block time has expired, at any time can the
+            state change.
+            </para> 
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.State.ActivationTime">
+            <summary>
+            Activation time is the time when this action was activated. Reset when this action becomes active
+            AFTER another action (ie not reset if this action is re-activated after BlockTime expires.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.State.IsBlocked(System.DateTime)">
+            <summary>
+            Returns true if state is blocked.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.State.Activate(System.DateTime)">
+            <summary>
+            Active this state
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.State.Reset">
+            <summary>
+            Reset state. Reset when ControlStateMachine is reset
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.StateTransition">
+            <summary>
+            Holds a logical condition and a State.
+            <para>
+            The logical condition can be null, which evaluates to true.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.StateTransition.#ctor(DHI.Mike1D.ControlModule.LogicalCondition,System.Int32)">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.StateTransition.Evaluate(System.DateTime)">
+            <summary>
+            Return true if the logical condition is null or true.
+            </summary>
+            <param name="time"></param>
+            <returns></returns>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.StateTransition.StateIndex">
+            <summary>
+            State index, index in <see cref="P:DHI.Mike1D.ControlModule.ControlStateMachine.States"/>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.StateTransition.LogicalCondition">
+            <summary>
+            Logical condition. A null logical condition evaluates to true.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.StateTransitionTable">
+            <summary>
+            A list of state transition. NextState() return the State of the first StateTransition 
+            from the list with an active logical condition.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.StateTransitionTable.StateTransitions">
+            <summary>
+            List of state transitions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.StateTransitionTable.Add(DHI.Mike1D.ControlModule.LogicalCondition,DHI.Mike1D.ControlModule.State)">
+            <summary>
+            Add a StateTransition.
+            </summary>
+            <param name="logicalCondition">Logical condition. Can be null which evaluates to true</param>
+            <param name="state">State to transfer to</param>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.StateTransitionTable.NextState(System.DateTime,System.DateTime)">
+            <summary>
+            Get the State from the first active StateTransition with an active Logical Condition
+            </summary>
+            <returns>Index of next state, or -1 if no transition has been found.</returns>
+        </member>
+    </members>
+</doc>
