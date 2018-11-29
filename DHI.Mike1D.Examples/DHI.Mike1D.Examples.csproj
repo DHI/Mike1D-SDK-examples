@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DHI.Mike1D.Examples</RootNamespace>
     <AssemblyName>DHI.Mike1D.Examples</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -113,6 +113,8 @@
     <Compile Include="Scripts\AdditionalOutput.cs" />
     <Compile Include="Scripts\HonmaWeirCoefficient.cs" />
     <Compile Include="Scripts\InitialWaterLevel.cs" />
+    <Compile Include="Scripts\PowerPlantEnergyOutput.cs" />
+    <Compile Include="Scripts\StructureScripts.cs" />
     <Compile Include="UserDataExamples.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
