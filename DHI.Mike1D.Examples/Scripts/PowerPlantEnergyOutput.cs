@@ -159,7 +159,7 @@ namespace DHI.Mike1D.Examples.Scripts
     /// </summary>
     private void PostTimestep(DateTime time)
     {
-      // Water density
+      // Water density in kg/m3
       const double rho = 1000;
       // Time step in hours
       double dtHours = _controller.EngineNet.EngineTime.DtSpan.TotalHours;
@@ -172,10 +172,11 @@ namespace DHI.Mike1D.Examples.Scripts
         if (dh < 0 || Q < 0) continue; // invalid data
 
         double efficiency = _efficiencyTable.YFromX(dh, ExtrapolationTypes.Nearest);
-        double power      = dh * Q * efficiency * 9.81 * rho;
+        // Power in kWatt
+        double kpower      = 0.001 * dh * Q * efficiency * 9.81 * rho;
 
-        powerPlantData. PowerData[0]  = power;
-        powerPlantData.EnergyData[0] += power * dtHours;
+        powerPlantData. PowerData[0]  = kpower;
+        powerPlantData.EnergyData[0] += kpower * dtHours;
       }
     }
 
