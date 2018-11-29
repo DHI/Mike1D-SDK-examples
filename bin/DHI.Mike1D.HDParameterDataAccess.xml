@@ -9,11 +9,6 @@
             Specification of additional outputs that are saved to file.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.ADDataAccess.ADAdditionalOutput.GetAdditionalOutputQuantities(DHI.Mike1D.ADDataAccess.ADComponentData)">
-            <summary>
-            Create quantities for all additional outputs enabled.
-            </summary>
-        </member>
         <member name="P:DHI.Mike1D.ADDataAccess.ADAdditionalOutput.Transport">
             <summary>
             Transport between grid points
@@ -84,6 +79,11 @@
             Total amount of decay in system, accumulated
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADAdditionalOutput.GetAdditionalOutputQuantities(DHI.Mike1D.ADDataAccess.ADComponentData)">
+            <summary>
+            Create quantities for all additional outputs enabled.
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.ADDataAccess.ADComponent">
             <summary>
             Parameters for an AD component, including initial concentration, type and decay constant
@@ -122,7 +122,7 @@
         </member>
         <member name="P:DHI.Mike1D.ADDataAccess.ADComponent.InitialValues">
             <summary>
-            Inital local concentration
+            Initial local concentration
             </summary>
         </member>
         <member name="P:DHI.Mike1D.ADDataAccess.ADComponent.Scope">
@@ -147,32 +147,15 @@
         <member name="F:DHI.Mike1D.ADDataAccess.ADScope.Fixed">
             <summary> Component is fixed in space and is not advected/transported with the flow</summary>
         </member>
+        <member name="F:DHI.Mike1D.ADDataAccess.ADScope.NonCohesiveSediment">
+            <summary> Component is suspended non-cohesive sediment and is moved by ST Module</summary>
+        </member>
+        <member name="F:DHI.Mike1D.ADDataAccess.ADScope.CohesiveSediment">
+            <summary> Component is suspended cohesive sediment and is advected/transported with the flow </summary>
+        </member>
         <member name="T:DHI.Mike1D.ADDataAccess.ADComponentData">
             <summary>
             Advection Dispersion data
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentData.#ctor">
-            <summary>
-            Default constructor
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentData.GetComponentIndex(DHI.Mike1D.Generic.IQuantity)">
-            <summary>
-            Find index of component with the given quantity.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentData.GetComponentIndex(System.String)">
-            <summary>
-            Find index of component with the given component id.
-            <para>
-            If component was not found, -1 is returned.
-            </para>
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentData.Validate">
-            <summary>
-            Validate
             </summary>
         </member>
         <member name="P:DHI.Mike1D.ADDataAccess.ADComponentData.Components">
@@ -209,6 +192,24 @@
             Additional outputs
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentData.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentData.GetComponentIndex(DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            Find index of component with the given quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentData.GetComponentIndex(System.String)">
+            <summary>
+            Find index of component with the given component id.
+            <para>
+            If component was not found, -1 is returned.
+            </para>
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.ADDataAccess.ADComponentData.HotstartInfos">
             <summary>
             List of hotstart files, prioritized, the first one being
@@ -223,6 +224,11 @@
             files from each of the original setups can be added here.
             </para>
             </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentData.Validate">
+            <summary>
+            Validate
             </summary>
         </member>
         <member name="T:DHI.Mike1D.ADDataAccess.ADComponentQuantities">
@@ -334,19 +340,6 @@
             </para>
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.HDParameterDataAccess.BedResistance._zoneLevels">
-            New implementation
-        </member>
-        <member name="M:DHI.Mike1D.HDParameterDataAccess.BedResistance.GetBedResistanceValues(DHI.Mike1D.Generic.ILocation,System.Double,DHI.Mike1D.Generic.IDiagnostics)">
-            <summary>
-            Get a <see cref="T:DHI.Mike1D.HDParameterDataAccess.BedResistanceValueSet"/> for the given location. To convert from 
-            levels to depth, the bottom level is also required.
-            </summary>
-            <param name="location">Location to retrieve data from</param>
-            <param name="bottomLevel">Bottom level at the given location.</param>
-            <param name="diagnostics"> </param>
-            <returns>A new <see cref="T:DHI.Mike1D.HDParameterDataAccess.BedResistanceValueSet"/></returns>
-        </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.BedResistance.ResistanceFormulation">
             <summary>
             The global resistance formulation to apply for relative resistances.
@@ -356,6 +349,9 @@
             <summary>
             Zone approach, can specify a multi (triple) zone approach 
             </summary>
+        </member>
+        <member name="F:DHI.Mike1D.HDParameterDataAccess.BedResistance._zoneLevels">
+            New implementation
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.BedResistance.GlobalResistanceValue">
             <summary>
@@ -391,6 +387,16 @@
             <summary>
             Coefficients for the Colebrook-White resistance formulation
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.HDParameterDataAccess.BedResistance.GetBedResistanceValues(DHI.Mike1D.Generic.ILocation,System.Double,DHI.Mike1D.Generic.IDiagnostics)">
+            <summary>
+            Get a <see cref="T:DHI.Mike1D.HDParameterDataAccess.BedResistanceValueSet"/> for the given location. To convert from 
+            levels to depth, the bottom level is also required.
+            </summary>
+            <param name="location">Location to retrieve data from</param>
+            <param name="bottomLevel">Bottom level at the given location.</param>
+            <param name="diagnostics"> </param>
+            <returns>A new <see cref="T:DHI.Mike1D.HDParameterDataAccess.BedResistanceValueSet"/></returns>
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.BedResistance.ExtensionData">
             <summary>
@@ -521,332 +527,6 @@
               Looks up a localized string similar to  unknown..
             </summary>
         </member>
-        <member name="T:DHI.Mike1D.EcoLabDataAccess.IntegrationMethods">
-            <summary>
-            Integration method in EcoLab
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.EcoLabDataAccess.IntegrationMethods.Euler">
-            <summary>
-            First order Euler method
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.EcoLabDataAccess.IntegrationMethods.RK4">
-            <summary>
-            4th order RK method (often called RK4)
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.EcoLabDataAccess.IntegrationMethods.RK4QC">
-            <summary>
-            4th order RK method with quality control
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabData">
-            <summary>
-            EcoLab data contains information for each of the ECO Lab models that are used.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.EcoLabDataAccess.EcoLabData.Validate">
-            <summary>
-            Validate ECO Lab models
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabData.Models">
-            <summary>
-            List of active ecolab models
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabData.NetworkModel">
-            <summary>
-            Defines where in network the model is defined. The <see cref="P:DHI.Mike1D.Generic.NetworkData`1.GlobalValue"/>
-            must always be set.
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabModel">
-            <summary>
-            Container for one ECO Lab model, i.e. one template, 
-            specifying amongst others which AD component belongs to the current EcoLab template
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.#ctor">
-            <summary>
-            Create new ECO Lab model
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.EcoLabTemplateFilePath">
-            <summary>
-            File path to ECO Lab template
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.Validate">
-            <summary>
-            Validate
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.Id">
-            <summary>
-            Local Id of ecolab model, used in <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabData.NetworkModel"/>
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.LocalId">
-            <summary>
-            Local Id of ecolab model, used in <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabData.NetworkModel"/>
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.UpdatePerTimeStep">
-            <summary>
-            Type of updating taking place
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.UpdateTimeStepFrequency">
-            <summary>
-            Number of time steps between each ECO lab update time step. Used when <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.UpdatePerTimeStep"/> is true.
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.UpdateTimeSpan">
-            <summary>
-            Time between each ECO lab update time step. Used when <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.UpdatePerTimeStep"/> is false.
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.IntegrationMethod">
-            <summary>
-            Method used when integrating in time
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.Components">
-            <summary>
-            ECO Lab components
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.Constants">
-            <summary>
-            Constants are constant in time. A constant may vary in space, and may be provided by engine.
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.Forcings">
-            <summary>
-            Forcings vary in time. A forcing may also vary in space, though currently only supported by engine forcings
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.OutputProcesses">
-            <summary>
-            Output for processes
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.OutputAuxiliary">
-            <summary>
-            Auxiliary outputs
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.OutputDerived">
-            <summary>
-            Derived outputs
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabComponent">
-            <summary>
-            Class specyfing which AD component belongs to the current EcoLab template
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabComponent.EcoLabId">
-            <summary>
-            EcoLab ID, as defined in the template
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabComponent.ADComponentIndex">
-            <summary>
-            Index of AD component matching this EcoLab component
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabComponent.ConversionFactor">
-            <summary>
-            Factor for converting from AD component unit to ECO Lab unit
-            <code>
-              EL-value = AD-value * ConversionFactor + ConversionOffset
-            </code>
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabComponent.ConversionOffset">
-            <summary>
-            Offset for converting from AD component unit to ECO Lab unit
-            <code>
-              EL-value = AD-value * ConversionFactor + ConversionOffset
-            </code>
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant">
-            <summary>
-            Class for an EcoLab constant. An EcoLab constant is constant in time, 
-            but may vary in space.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.ToString">
-            <inheritdoc />
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.EcoLabId">
-            <summary>
-            EcoLab ID, as defined in the template
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.UserSpecified">
-            <summary>
-            Flag defining if the value is user specified. The flag must be set if
-            <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.BuildInId"/> is not defined. It can also be set if the
-            <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.BuildInId"/> is defined, then the user specified value
-            overrides the build in value.
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.BuildInId">
-            <summary>
-            BuildIn ID if an engine provided value
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.Description">
-            <summary>
-            General description of constant
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.IsGlobal">
-            <summary>
-            Flag specifying whether the constant is global in EcoLab terms,
-            if not, it must be set for all computational points. 
-            <para>
-            The constant may only be defined with one global value, but stil
-            have this set to false.
-            </para>
-            <para>
-            If this is set to true, only the global value in <see cref="F:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant._values"/>
-            is used.
-            </para>
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.Values">
-            <summary>
-            Values of constant.
-            <para>
-            If <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.IsGlobal"/> is set, only the
-            <see cref="P:DHI.Mike1D.Generic.INetworkData`1.GlobalValue"/> is used.
-            </para>
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.DefaultValue">
-            <summary>
-            default value
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing">
-            <summary>
-            Class for an EcoLab forcing. An EcoLab forcing may vary in time
-            and space.
-            <para>
-            The only forcings that vary in space, are the build-in ones. If the forcing
-            is user specified, it is either specified as a constant in <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.ConstantValue"/>
-            or as a time series file in <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TsFileName"/> and <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TsItemNumber"/>,
-            depending on <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Timetype"/>.
-            </para>
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.EcoLabId">
-            <summary>
-            EcoLab ID, as defined in the template
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.UserSpecified">
-            <summary>
-            Flag defining if the value is user specified. The flag must be set if
-            <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.BuildInId"/> is not defined. It can also be set if the
-            <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.BuildInId"/> is defined, then the user specified value
-            overrides the build in value.
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.BuildInId">
-            <summary>
-            builtinID if engine provided value
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Description">
-            <summary>
-            General description of forcing
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Timetype">
-            <summary>
-            Temporal variation. 
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.ConstantValue">
-            <summary>
-            Constant value, used if <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Timetype"/> is
-            <see cref="F:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TimeTypes.Constant"/>
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TsFileName">
-            <summary>
-            Time series file, used if <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Timetype"/> is
-            <see cref="F:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TimeTypes.TimeSeries"/>
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TsItemNumber">
-            <summary>
-            Item number in time series file, used if <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Timetype"/> is
-            <see cref="F:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TimeTypes.TimeSeries"/>
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.IsGlobal">
-            <summary>
-            Flag specifying whether the forcing is global in EcoLab terms,
-            if not, it must be set for all computational points. 
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Values">
-            <summary>
-            Constant, local values of Forcing.
-            <para>
-            If <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.IsGlobal"/> is set, only the
-            <see cref="P:DHI.Mike1D.Generic.INetworkData`1.GlobalValue"/> is used.
-            </para>
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TimeTypes">
-            <summary>
-            Type of temporal variation of forcing
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TimeTypes.Constant">
-            <summary>
-            Constant in time
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TimeTypes.TimeSeries">
-            <summary>
-            Time series
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabOutput">
-            <summary>
-            Class for defining special outputs, covering as well 
-            <list type="bullet">
-            <item>Auxiliary variables</item>
-            <item>Processes</item>
-            <item>Derived Outputs</item>
-            </list>
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.EcoLabDataAccess.EcoLabOutput.EcoLabId">
-            <summary>
-            EcoLab ID, as defined in the template
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.EcoLabDataAccess.EcoLabOutput.Description">
-            <summary>
-            General description of output
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.EcoLabDataAccess.EcoLabOutput.Select">
-            <summary>
-            Flag specifying whether it is selected for output
-            </summary>
-        </member>
         <member name="T:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput">
             <summary>
             Class handling the different additional outputs that can be saved to a file.
@@ -855,6 +535,16 @@
         <member name="F:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.OutputFilepath">
             <summary>
             File path used to store the additional output. If null, store in default HD result file.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.TimeStep">
+            <summary>
+            Time Step
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.DischargeHPoints">
+            <summary>
+            Discharge on all H-points.
             </summary>
         </member>
         <member name="F:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.VelocityHPoints">
@@ -870,42 +560,6 @@
         <member name="F:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.VelocityReach">
             <summary>
             Velocity in reach, calculating the velocity in each end of the reach, not on all intermidiate gridpoints.
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.ResistanceNumber">
-            <summary>
-            Resistance number.
-            Returns Manning M or Chezy number.
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.FroudeQPoints">
-            <summary>
-            Froude number. on all Q-points.
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.FroudeHPoints">
-            <summary>
-            Froude number. on all H-points.
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.FroudeReach">
-            <summary>
-            Froude number in reach, calculating the velocity in each end of the reach, not on all intermidiate gridpoints.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.GetAdditionalOutputQuantities(DHI.Mike1D.HDParameterDataAccess.HDParameterData)">
-            <summary>
-             Create a list of all additional output quantities
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.TimeStep">
-            <summary>
-            Time Step
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.DischargeHPoints">
-            <summary>
-            Discharge on all H-points.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.FlowArea">
@@ -936,6 +590,27 @@
         <member name="P:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.HydraulicRadius">
             <summary>
             Hydraulic radius.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.ResistanceNumber">
+            <summary>
+            Resistance number.
+            Returns Manning M or Chezy number.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.FroudeQPoints">
+            <summary>
+            Froude number. on all Q-points.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.FroudeHPoints">
+            <summary>
+            Froude number. on all H-points.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.FroudeReach">
+            <summary>
+            Froude number in reach, calculating the velocity in each end of the reach, not on all intermidiate gridpoints.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.VolumeInNodesAboveGround">
@@ -1015,7 +690,7 @@
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.BedShearStress">
             <summary>
-            Mass error absolute value accumulated over time and over the entire network
+            Bed shear stress.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.WaterLevelSlope">
@@ -1047,6 +722,11 @@
             <summary>
             Other, not predefined, output quantities that the additional HD output
             file should include.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutput.GetAdditionalOutputQuantities(DHI.Mike1D.HDParameterDataAccess.HDParameterData)">
+            <summary>
+             Create a list of all additional output quantities
             </summary>
         </member>
         <member name="T:DHI.Mike1D.HDParameterDataAccess.HDAdditionalOutputExtensions">
@@ -1119,6 +799,11 @@
             HD parameters
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.HDParameterData.Options">
+            <summary>
+            Options for HD calculations
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.HDParameterDataAccess.HDParameterData.SetMUOptions">
             <summary>
             Set parameters that are default for MIKE URBAN type applications
@@ -1132,22 +817,6 @@
         <member name="F:DHI.Mike1D.HDParameterDataAccess.HDParameterData.LCRV">
             <summary>
             LCRV
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.HDParameterDataAccess.HDParameterData.Validate">
-            <summary>
-            Validates the contents. Files are validated for existance. Large parts of the validations 
-            are delegted to the included data access modules.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.HDParameterDataAccess.HDParameterData.#ctor">
-            <summary>
-            Constructor
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.HDParameterDataAccess.HDParameterData.Options">
-            <summary>
-            Options for HD calculations
             </summary>
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.HDParameterData.HDDecoupled">
@@ -1221,6 +890,14 @@
             1) The "Nodes" table in the HTML summary file is extended with a "Flooding Duration" column
             2) The additional output file will contain result items for "Flood Flowrate" and "Flood Volume"
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.HDParameterDataAccess.HDParameterData.Validate(System.DateTime,System.DateTime)">
+            <summary>
+            Validates the contents. Files are validated for existance. Large parts of the validations 
+            are delegted to the included data access modules.
+            </summary>
+            <param name="simulationStart">Start time of simulation. Set to <c>DateTime.MinValue</c> if unknown</param>
+            <param name="simulationEnd">End time of simulation. Set to <c>DateTime.MinValue</c> if unknown</param>
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.HDParameterData.MinimumReachLength">
             <summary>
@@ -1354,6 +1031,11 @@
         <member name="P:DHI.Mike1D.HDParameterDataAccess.HDParameterData.ShowStatisticsNodeSelection">
             <summary>
             Nodes to show statistics for
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.HDParameterDataAccess.HDParameterData.#ctor">
+            <summary>
+            Constructor
             </summary>
         </member>
         <member name="T:DHI.Mike1D.HDParameterDataAccess.HDInitDischarge">
@@ -1705,11 +1387,6 @@
             Default constructor, setting default values
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.HDParameterDataAccess.InitialConditions.Validate">
-            <summary>
-            Validate
-            </summary>
-        </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.InitialConditions.EnforceNaturalFlow">
             <summary>
             Sets the discharge initial condition to the natural flow condition
@@ -1725,6 +1402,15 @@
             than the water level in each of its surrounding reaches.
             <para>
             Default is false.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.InitialConditions.InterpolateNodeValueInReach">
+            <summary>
+            When parameter values are set for nodes, the node values will be used for interpolating values 
+            in connecting reaches. 
+            <para>
+            Default is true.
             </para>
             </summary>
         </member>
@@ -1745,8 +1431,10 @@
         <member name="P:DHI.Mike1D.HDParameterDataAccess.InitialConditions.UseParameterSolution">
             <summary>
             Using the parameters specified here.
+            <para>
+            Parameters are currently alsways used, so this flag has currently no effect.
+            </para>
             </summary>
-            TODO: Parameter solution is always used, remove flag?
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.InitialConditions.FillUpDepressions">
             <summary>
@@ -1769,6 +1457,22 @@
             tried first.
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.HDParameterDataAccess.InitialConditions.Validate(System.DateTime)">
+            <summary>
+            Validate
+            </summary>
+            <param name="simulationStart">Start time of simulation. Set to <c>DateTime.MinValue</c> if unknown.</param>
+        </member>
+        <member name="M:DHI.Mike1D.HDParameterDataAccess.InitialConditions.ValidateHotstartTime(DHI.Mike1D.Generic.HotstartInfo,System.DateTime,DHI.Mike1D.Generic.Diagnostics)">
+            <summary>
+            Validate hotstart time
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.HDParameterDataAccess.InitialConditions.OnDeserializing(System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Set default values also before deserializing.
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.InitialConditions.ExtensionData">
             <summary>
             Holds data from an extended DataContract
@@ -1777,34 +1481,6 @@
         <member name="T:DHI.Mike1D.HDParameterDataAccess.FloodMap">
             <summary>
             Class containing data for automatic creation of flood map files.
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.HDParameterDataAccess.FloodMap.MapOutputFiles">
-            <summary>
-            List of flood map result files that will be created.
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.HDParameterDataAccess.FloodMap.DemData">
-            <summary>
-            List of DEM data files, that are used by all the map output files.
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.HDParameterDataAccess.FloodMap.GenerateMapOutput">
-            <summary>
-            Boolean indicating whether the Map Output Option is enabled
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.HDParameterDataAccess.FloodMap.ApplyDemDataRiverXS">
-            <summary>
-            Boolean indicating whether Dem data between river cross section are applied.
-            <para>
-            When false, Dem values outside cross section are not defined.
-            </para>
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.HDParameterDataAccess.FloodMap.ApplyDemInputGroundElevation">
-            <summary>
-            Boolean indicating whether Dem input Data fro ground elevation are applied
             </summary>
         </member>
         <member name="T:DHI.Mike1D.HDParameterDataAccess.FloodMap.OutputType">
@@ -1869,6 +1545,34 @@
             HPQ - water level and x and y fluxes.
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.FloodMap.MapOutputFiles">
+            <summary>
+            List of flood map result files that will be created.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.FloodMap.DemData">
+            <summary>
+            List of DEM data files, that are used by all the map output files.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.FloodMap.GenerateMapOutput">
+            <summary>
+            Boolean indicating whether the Map Output Option is enabled
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.FloodMap.ApplyDemDataRiverXS">
+            <summary>
+            Boolean indicating whether Dem data between river cross section are applied.
+            <para>
+            When false, Dem values outside cross section are not defined.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.FloodMap.ApplyDemInputGroundElevation">
+            <summary>
+            Boolean indicating whether Dem input Data fro ground elevation are applied
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.HDParameterDataAccess.DemData">
             <summary>
             External grid-files including DEM data
@@ -1907,6 +1611,36 @@
         <member name="M:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.#ctor(DHI.Mike1D.Generic.Spatial.Geometry.ICoordinate,System.Double,System.Double,System.Int32,System.Int32,DHI.Mike1D.Generic.FilePath,DHI.Mike1D.HDParameterDataAccess.FloodMap.OutputType,System.Int32,DHI.Mike1D.HDParameterDataAccess.MapOutputFile.StoringFrequencyUnitTypes,System.TimeSpan,DHI.Mike1D.HDParameterDataAccess.FloodMap.OutputItem,System.Int32,System.Boolean,System.DateTime,System.DateTime)">
             <summary>
             Setup flood map file
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.StoringFrequencyUnitTypes">
+            <summary>
+            The unit used when controlling when to store flood map results
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.StoringFrequencyUnitTypes.PerTimeStep">
+            <summary>
+            Storing frequence unit in timesteps
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.StoringFrequencyUnitTypes.Days">
+            <summary>
+            Storing frequence unit in days
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.StoringFrequencyUnitTypes.Hours">
+            <summary>
+            Storing frequence unit in hours
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.StoringFrequencyUnitTypes.Minutes">
+            <summary>
+            Storing frequence unit in minutes
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.StoringFrequencyUnitTypes.Seconds">
+            <summary>
+            Storing frequence unit in seconds
             </summary>
         </member>
         <member name="F:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.Id">
@@ -1987,36 +1721,6 @@
         <member name="F:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.MapEndTime">
             <summary>
             Map Output End Time - only for Dynamic maps and Default Period unchecked
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.StoringFrequencyUnitTypes">
-            <summary>
-            The unit used when controlling when to store flood map results
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.StoringFrequencyUnitTypes.PerTimeStep">
-            <summary>
-            Storing frequence unit in timesteps
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.StoringFrequencyUnitTypes.Days">
-            <summary>
-            Storing frequence unit in days
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.StoringFrequencyUnitTypes.Hours">
-            <summary>
-            Storing frequence unit in hours
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.StoringFrequencyUnitTypes.Minutes">
-            <summary>
-            Storing frequence unit in minutes
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.HDParameterDataAccess.MapOutputFile.StoringFrequencyUnitTypes.Seconds">
-            <summary>
-            Storing frequence unit in seconds
             </summary>
         </member>
         <member name="T:DHI.Mike1D.HDParameterDataAccess.RoutingMethod">
@@ -2166,42 +1870,6 @@
             Dictionary to infer top slot type from cross section type. Only used if TopSlotType == InferFromCrossSection
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.HDParameterDataAccess.SolverSettings.GetDelta(DHI.Mike1D.Generic.ILocation)">
-            <summary>
-            Time centering. Delta = 1 is fully implicit, i.e. x is estimated at n+1
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.HDParameterDataAccess.SolverSettings._headlossCentering">
-            <summary>
-            Head loss centering. For _headlossCentering = 1, the headloss is calculated. For _headlossCentering = 0, 
-            the headloss (actual headloss, ie diff in water level from node to link) from the previous time step is used exclusively.
-            Defaut value is 0.2
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.HDParameterDataAccess.SolverSettings.SolverDebugInterval">
-            <summary>
-            How often to output debug matrices from Reach and Node Solver
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.HDParameterDataAccess.SolverSettings.SolverDebugBaseFilePath">
-            <summary>
-            Filepath where to put the debut output
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.HDParameterDataAccess.SolverSettings.MinWaterDepthFromBottomOfSlot(System.Double)">
-            <summary>
-            The minimum amount of water in a slot. Used after each time step
-            to ensure that there is a minimum amount of water in the slot.
-            Default: 0.01*<paramref name="delh"/>
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.HDParameterDataAccess.SolverSettings.DepthOfSlot(System.Double)">
-            <summary>
-            Depth of slot.
-            Default: 5.0*<paramref name="delh"/>
-            </summary>
-            TODO: Use this when creating the slot
-        </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.SolverSettings.BottomSlotType">
             <summary>
             Artificial bottom slot. This is a small void introduced at the base of the section
@@ -2344,8 +2012,8 @@
             <summary>
             Flag specifying whether oscillation damping is enabled.
             <para>
-            Oscillations is often seen when the solution change is shifting sign from one time step ([n-1]-&gt;[n]) 
-            to the next time step ([n]-&gt;[n+1]), i.e. first decreasing and then increasing. The oscillation 
+            Oscillations is often seen when the solution change is shifting sign from one time step ([n-1]->[n]) 
+            to the next time step ([n]->[n+1]), i.e. first decreasing and then increasing. The oscillation 
             damping procedure will look for shifting in sign-change, but only apply actual damping when
             the two conditions in <see cref="P:DHI.Mike1D.HDParameterDataAccess.SolverSettings.OscillationHChangeLimit"/> or <see cref="P:DHI.Mike1D.HDParameterDataAccess.SolverSettings.OscillationQChangeLimit"/>
             is met.
@@ -2392,7 +2060,19 @@
             Time centering. Delta = 1 is fully implicit, i.e. x is estimated at n+1
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.HDParameterDataAccess.SolverSettings.GetDelta(DHI.Mike1D.Generic.ILocation)">
+            <summary>
+            Time centering. Delta = 1 is fully implicit, i.e. x is estimated at n+1
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.SolverSettings.HeadlossCentering">
+            <summary>
+            Head loss centering. For _headlossCentering = 1, the headloss is calculated. For _headlossCentering = 0, 
+            the headloss (actual headloss, ie diff in water level from node to link) from the previous time step is used exclusively.
+            Defaut value is 0.2
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.HDParameterDataAccess.SolverSettings._headlossCentering">
             <summary>
             Head loss centering. For _headlossCentering = 1, the headloss is calculated. For _headlossCentering = 0, 
             the headloss (actual headloss, ie diff in water level from node to link) from the previous time step is used exclusively.
@@ -2419,6 +2099,20 @@
             <summary>
             Dictionary to infer top slot type from cross section type. Only used if TopSlotType == InferFromCrossSection
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.HDParameterDataAccess.SolverSettings.MinWaterDepthFromBottomOfSlot(System.Double)">
+            <summary>
+            The minimum amount of water in a slot. Used after each time step
+            to ensure that there is a minimum amount of water in the slot.
+            Default: 0.01*<paramref name="delh"/>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.HDParameterDataAccess.SolverSettings.DepthOfSlot(System.Double)">
+            <summary>
+            Depth of slot.
+            Default: 5.0*<paramref name="delh"/>
+            </summary>
+            TODO: Use this when creating the slot
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.SolverSettings.StructureSetWaterLevelsAtTime">
             <summary>
@@ -2493,13 +2187,6 @@
             Class specifying how timestepping is taking place.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.HDParameterDataAccess.TimeStepping.OnDeserializing(System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Before adding values from stream to this object, set default values.
-            Necessary when new fields have been added since class was originally released.
-            </summary>
-            <param name="c"></param>
-        </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.Type">
             <summary>
             Type of time stepping taking place
@@ -2531,12 +2218,28 @@
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.DtMin">
             <summary>
-            Adaptive Time Stepping Range Minimum Value
+            Adaptive Time Stepping Minimum dt
             </summary>
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.DtMax">
             <summary>
-            Adaptive Time Stepping Range Maximum Value
+            Adaptive Time Stepping Maximum dt
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.DtFixed">
+            <summary>
+            Adaptive Time Stepping fixed dt. Also used for Tabulated time stepping.
+            <para>
+            For adaptive time stepping this defines a fixed overall timestep that
+            the adaptive time stepping procedure should hit exactly. It can e.g. be used to assure
+            if results are printed exactly every hour, that the model hits that hour exactly.
+            </para>
+            <para>
+            It must be larger than <see cref="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.DtMax"/>.
+            </para>
+            <para>
+            If not applicable, set to <see cref="F:System.TimeSpan.Zero"/>, which is the default.
+            </para>
             </summary>
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.AdaptiveSafeFactor">
@@ -2727,6 +2430,13 @@
             </para>.
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.HDParameterDataAccess.TimeStepping.OnDeserializing(System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Before adding values from stream to this object, set default values.
+            Necessary when new fields have been added since class was originally released.
+            </summary>
+            <param name="c"></param>
+        </member>
         <member name="T:DHI.Mike1D.HDParameterDataAccess.WaveApproximationType">
             <summary>
             Wave approximation types
@@ -2780,6 +2490,1377 @@
         <member name="M:DHI.Mike1D.HDParameterDataAccess.WaveApproximation.#ctor">
             <summary>
             Constructor
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.EcoLabDataAccess.IntegrationMethods">
+            <summary>
+            Integration method in EcoLab
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.EcoLabDataAccess.IntegrationMethods.Euler">
+            <summary>
+            First order Euler method
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.EcoLabDataAccess.IntegrationMethods.RK4">
+            <summary>
+            4th order RK method (often called RK4)
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.EcoLabDataAccess.IntegrationMethods.RK4QC">
+            <summary>
+            4th order RK method with quality control
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabData">
+            <summary>
+            EcoLab data contains information for each of the ECO Lab models that are used.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabData.Models">
+            <summary>
+            List of active ecolab models
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabData.NetworkModel">
+            <summary>
+            Defines where in network the model is defined. The <see cref="P:DHI.Mike1D.Generic.NetworkData`1.GlobalValue"/>
+            must always be set.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.EcoLabDataAccess.EcoLabData.Validate">
+            <summary>
+            Validate ECO Lab models
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabModel">
+            <summary>
+            Container for one ECO Lab model, i.e. one template, 
+            specifying amongst others which AD component belongs to the current EcoLab template
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.#ctor">
+            <summary>
+            Create new ECO Lab model
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.Id">
+            <summary>
+            Local Id of ecolab model, used in <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabData.NetworkModel"/>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.LocalId">
+            <summary>
+            Local Id of ecolab model, used in <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabData.NetworkModel"/>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.EcoLabTemplateFilePath">
+            <summary>
+            File path to ECO Lab template
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.UpdatePerTimeStep">
+            <summary>
+            Type of updating taking place
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.UpdateTimeStepFrequency">
+            <summary>
+            Number of time steps between each ECO lab update time step. Used when <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.UpdatePerTimeStep"/> is true.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.UpdateTimeSpan">
+            <summary>
+            Time between each ECO lab update time step. Used when <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.UpdatePerTimeStep"/> is false.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.IntegrationMethod">
+            <summary>
+            Method used when integrating in time
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.Components">
+            <summary>
+            ECO Lab components
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.Constants">
+            <summary>
+            Constants are constant in time. A constant may vary in space, and may be provided by engine.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.Forcings">
+            <summary>
+            Forcings vary in time. A forcing may also vary in space, though currently only supported by engine forcings
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.OutputProcesses">
+            <summary>
+            Output for processes
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.OutputAuxiliary">
+            <summary>
+            Auxiliary outputs
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.OutputDerived">
+            <summary>
+            Derived outputs
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.EcoLabDataAccess.EcoLabModel.Validate">
+            <summary>
+            Validate
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabComponent">
+            <summary>
+            Class specyfing which AD component belongs to the current EcoLab template
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabComponent.EcoLabId">
+            <summary>
+            EcoLab ID, as defined in the template
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabComponent.ADComponentIndex">
+            <summary>
+            Index of AD component matching this EcoLab component
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabComponent.ConversionFactor">
+            <summary>
+            Factor for converting from AD component unit to ECO Lab unit
+            <code>
+              EL-value = AD-value * ConversionFactor + ConversionOffset
+            </code>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabComponent.ConversionOffset">
+            <summary>
+            Offset for converting from AD component unit to ECO Lab unit
+            <code>
+              EL-value = AD-value * ConversionFactor + ConversionOffset
+            </code>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.EcoLabDataAccess.IEcoLabConstantForcingBase">
+            <summary>
+            Common interface for constants and forcings
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.IEcoLabConstantForcingBase.EcoLabId">
+            <summary>
+            EcoLab ID, as defined in the template
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.IEcoLabConstantForcingBase.UserSpecified">
+            <summary>
+            Flag defining if the value is user specified. The flag must be set if
+            <see cref="P:DHI.Mike1D.EcoLabDataAccess.IEcoLabConstantForcingBase.BuildInId"/> is not defined. It can also be set if the
+            <see cref="P:DHI.Mike1D.EcoLabDataAccess.IEcoLabConstantForcingBase.BuildInId"/> is defined, then the user specified value
+            overrides the build in value.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.IEcoLabConstantForcingBase.BuildInId">
+            <summary>
+            BuildIn ID if an engine provided value
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.IEcoLabConstantForcingBase.Description">
+            <summary>
+            General description of constant
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.IEcoLabConstantForcingBase.IsGlobal">
+            <summary>
+            Flag specifying whether the constant is global in EcoLab terms,
+            if not, it must be set for all computational points. 
+            <para>
+            The constant may only be defined with one global value, but stil
+            have this set to false.
+            </para>
+            <para>
+            If this is set to true, only the global value in <see cref="!:_values"/>
+            is used.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.IEcoLabConstantForcingBase.Values">
+            <summary>
+            Values of constant.
+            <para>
+            If <see cref="P:DHI.Mike1D.EcoLabDataAccess.IEcoLabConstantForcingBase.IsGlobal"/> is set, only the
+            <see cref="P:DHI.Mike1D.Generic.INetworkData`1.GlobalValue"/> is used.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant">
+            <summary>
+            Class for an EcoLab constant. An EcoLab constant is constant in time, 
+            but may vary in space.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.EcoLabId">
+            <summary>
+            EcoLab ID, as defined in the template
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.UserSpecified">
+            <summary>
+            Flag defining if the value is user specified. The flag must be set if
+            <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.BuildInId"/> is not defined. It can also be set if the
+            <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.BuildInId"/> is defined, then the user specified value
+            overrides the build in value.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.BuildInId">
+            <summary>
+            BuildIn ID if an engine provided value
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.Description">
+            <summary>
+            General description of constant
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.IsGlobal">
+            <summary>
+            Flag specifying whether the constant is global in EcoLab terms,
+            if not, it must be set for all computational points. 
+            <para>
+            The constant may only be defined with one global value, but stil
+            have this set to false.
+            </para>
+            <para>
+            If this is set to true, only the global value in <see cref="F:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant._values"/>
+            is used.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.Values">
+            <summary>
+            Values of constant.
+            <para>
+            If <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.IsGlobal"/> is set, only the
+            <see cref="P:DHI.Mike1D.Generic.INetworkData`1.GlobalValue"/> is used.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.DefaultValue">
+            <summary>
+            default value
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.EcoLabDataAccess.EcoLabConstant.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing">
+            <summary>
+            Class for an EcoLab forcing. An EcoLab forcing may vary in time
+            and space.
+            <para>
+            The only forcings that vary in space, are the build-in ones. If the forcing
+            is user specified, it is either specified as a constant in <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.ConstantValue"/>
+            or as a time series file in <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TsFileName"/> and <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TsItemNumber"/>,
+            depending on <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Timetype"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TimeTypes">
+            <summary>
+            Type of temporal variation of forcing
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TimeTypes.Constant">
+            <summary>
+            Constant in time
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TimeTypes.TimeSeries">
+            <summary>
+            Time series
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.EcoLabId">
+            <summary>
+            EcoLab ID, as defined in the template
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.UserSpecified">
+            <summary>
+            Flag defining if the value is user specified. The flag must be set if
+            <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.BuildInId"/> is not defined. It can also be set if the
+            <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.BuildInId"/> is defined, then the user specified value
+            overrides the build in value.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.BuildInId">
+            <summary>
+            builtinID if engine provided value
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Description">
+            <summary>
+            General description of forcing
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Timetype">
+            <summary>
+            Temporal variation. 
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.ConstantValue">
+            <summary>
+            Constant value, used if <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Timetype"/> is
+            <see cref="F:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TimeTypes.Constant"/>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TsFileName">
+            <summary>
+            Time series file, used if <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Timetype"/> is
+            <see cref="F:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TimeTypes.TimeSeries"/>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TsItemNumber">
+            <summary>
+            Item number in time series file, used if <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Timetype"/> is
+            <see cref="F:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.TimeTypes.TimeSeries"/>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.IsGlobal">
+            <summary>
+            Flag specifying whether the forcing is global in EcoLab terms,
+            if not, it must be set for all computational points. 
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.Values">
+            <summary>
+            Constant, local values of Forcing.
+            <para>
+            If <see cref="P:DHI.Mike1D.EcoLabDataAccess.EcoLabForcing.IsGlobal"/> is set, only the
+            <see cref="P:DHI.Mike1D.Generic.INetworkData`1.GlobalValue"/> is used.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.EcoLabDataAccess.EcoLabOutput">
+            <summary>
+            Class for defining special outputs, covering as well 
+            <list type="bullet">
+            <item>Auxiliary variables</item>
+            <item>Processes</item>
+            <item>Derived Outputs</item>
+            </list>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.EcoLabDataAccess.EcoLabOutput.EcoLabId">
+            <summary>
+            EcoLab ID, as defined in the template
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.EcoLabDataAccess.EcoLabOutput.Description">
+            <summary>
+            General description of output
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.EcoLabDataAccess.EcoLabOutput.Select">
+            <summary>
+            Flag specifying whether it is selected for output
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STActiveLayerDepthType">
+            <summary>
+            Type of depth definition for active layer
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STActiveLayerDepthType.Depth">
+            <summary>
+            Active layer depth based on absolute value
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STActiveLayerDepthType.FactorOnDepth">
+            <summary>
+            Active layer depth based on a factor of the water level depth
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STActiveLayerData">
+            <summary>
+            Parameters for an ST component, including initial concentration and type
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STActiveLayerData.DepthType">
+            <summary>
+            Type of active layer depth
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STActiveLayerData.FactorOnDepth">
+            <summary>
+            FactorOnDepth
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STActiveLayerData.Thickness">
+            <summary>
+            Thickness of active layer. If <see cref="P:DHI.Mike1D.STDataAccess.STActiveLayerData.DepthType"/> is <see cref="F:DHI.Mike1D.STDataAccess.STActiveLayerDepthType.FactorOnDepth"/>,
+            this is also the minimum value
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STActiveLayerData.MaxThickness">
+            <summary>
+            FactorOnDepth
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STActiveLayerData.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            Depthbased constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STActiveLayerData.#ctor(System.Double)">
+            <summary>
+            Specified active layer thichness constructor
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STActiveLayerDataInterpolatable">
+            <summary>
+            Class that handles interpolation between active layer data
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STActiveLayerDataInterpolatable.Interpolate(System.Double,DHI.Mike1D.STDataAccess.STActiveLayerData,DHI.Mike1D.STDataAccess.STActiveLayerData)">
+            <summary>
+            Interpolate Active layer data
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STBaseComponent">
+            <summary>
+            Parameters for a ST component
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STBaseComponent.RelativeDensity">
+            <summary>
+            Relative density
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STBaseComponent.Porosity">
+            <summary>
+            Sediment Porosity
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STBaseComponent.FallVelocityType">
+            <summary>
+            Sediment fall velocity or settling velocity type
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STBaseComponent.FallVelocity">
+            <summary>
+            Sediment fall velocity or settling velocity
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STBaseComponent.InitialActiveLayerFraction">
+            <summary>
+            Fraction value in active layer
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STBaseComponent.InitialPassiveLayerFraction">
+            <summary>
+            Fraction value passive layer
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STBaseComponent.Id">
+            <summary>
+            Component ID
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STBaseComponent.HasBedLoad">
+            <summary>
+            HasBedLoad, Cohesive components can not, NonCohesive component might.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STBaseComponent.HasSuspLoad">
+            <summary>
+            HasSuspLoad, Cohesive components has, NonCohesive component might.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STComponentQuantities">
+            <summary>
+            Providing methods for creating quantities.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.BedLevelChange">
+            <summary>
+            Returns bed level change since simulation start.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.GeometricMeanDiameter">
+            <summary>
+            Returns bed level change since simulation start.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.BedLoad(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns bed load transport quantity for a given ST component quantity, in [m3/s]
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.BedLoad(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns bed load transport quantity for a given ST component quantity, in [m3/s]
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.SuspLoad(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns suspended face transport quantity for a given component in [m3/s].
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.SuspLoad(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns suspended face transport quantity for a given component in [m3/s].
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.TotalLoad(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns face transport quantity for a given component.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.TotalLoad(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns face transport quantity for a given ST component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.ActiveLayerFraction(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns active layer fraction quantity for a given sand component.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.ActiveLayerFraction(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns active layer fraction quantity for a given ST component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.PassiveLayerFraction(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns passive layer fraction quantity for a given sand component.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.PassiveLayerFraction(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns passive layer fraction quantity for a given ST component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.MassError(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns face transport quantity for a given component.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.MassError(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns face transport quantity for a given AD component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.SkinFriction">
+            <summary>
+            Returns quantity skin friction
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.DimensionlessBedShearStress">
+            <summary>
+            Returns quantity Dimensionless bed shear stress
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.d50">
+            <summary>
+            Returns d50 grain size
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.d90">
+            <summary>
+            Returns d90 grain size
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.SedimentVolumeChange">
+            <summary>
+            Returns total sediment volume change
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.ActiveLayerThickness">
+            <summary>
+            Returns active layer thickness
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.BedLoadIOF">
+            <summary>
+            Returns face transport quantity integrated over components.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.SuspLoadIOF">
+            <summary>
+            Returns face transport quantity integrated over components.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.TotalLoadIOF">
+            <summary>
+            Returns face transport quantity integrated over components.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.ConcentrationIOF">
+            <summary>
+            Returns face transport quantity integrated over components.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalConcentrationQuantity">
+            <summary>
+            Quantity for suspended concentration for all ST components, in [g/m3]
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalConcentration(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns suspended concentration quantity for fraction, in unit [g/m3]
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.TotalLayerThicknessIOF">
+            <summary>
+            Returns total layer thickness Integrated over fractions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.ActiveLayerThicknessIOF">
+            <summary>
+            Returns active layer thickness Integrated over fractions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.PassiveLayerThicknessIOF">
+            <summary>
+            Returns passive layer thickness Integrated over fractions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalTotalLayerThickness(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns total layer thickness per NonCohesive fractions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalActiveLayerThickness(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns active layer thickness per NonCohesive fractions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalPassiveLayerThickness(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns passive layer thickness per NonCohesive fractions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalTotalLayerMass(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns total layer mass per NonCohesive fractions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalActiveLayerMass(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns active layer mass per NonCohesive fractions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalPassiveLayerMass(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns passive layer mass per NonCohesive fractions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalSurfaceDistribution(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns surface distribution per NonCohesive 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.MorphologicalUpdaterType">
+            <summary>
+            Type of morphological update
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.MorphologicalUpdaterType.PipeCanal">
+            1: Pipe/Canal
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.MorphologicalUpdaterType.Uniform">
+            4: Uniform across cross section, ie. entire cross section is moved up/down
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.MorphologicalUpdaterType.ProportionalToDepth">
+            5: Propertional to depth from banks (not actual water depth. Non-uniform update, processed data are updated.
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.BedLayerLayout">
+            <summary>
+            Layout of bed layer
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.BedLayerLayout.FullyAlluvial">
+            0: Fully alluvial mode
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.BedLayerLayout.Active">
+            1: Active layer only
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.BedLayerLayout.ActivePassive">
+            2: Active and passive layers
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STData">
+            <summary>
+            Sediment transport data
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.UnlimitedScouringLevel">
+            <summary>
+            Level for unlimited scouring
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STData.STCohesiveData">
+            <summary>
+            Cohesive Sediment Transport data access.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STData.STNonCohesiveData">
+            <summary>
+            Non-Cohesive Sediment Transport data access.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STData.#ctor">
+            <summary>
+            Data for sediment transport
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.MorphologicalUpdate">
+            <summary>
+            Morphological update method
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.InitialPassiveLayerThickness">
+            <summary>
+            Initial passive layer thickness.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.InitialActiveLayerThickness">
+            <summary>
+            Initial thickness of active layer.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.SedimentResistance">
+            <summary>
+            Sediment resistance used in MIKE Urban for Einstein decomposition
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.SedimentResistanceType">
+            <summary>
+            Sediment resistance computation type used in MIKE Urban for Einstein decomposition
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.BedLayerLayout">
+            <summary>
+            Number of layers in sediment layer model, can be 0, 1, or 2. Choice should be validated and overriden if not applicable
+            0: 1 non-cohesive sediment component, corresponds to unlimited sediment supply
+            1: 1 or several sediment components, corresponds to limited sediment availability
+            2: 2 or more sediment components, active layer and passive layer with interaction between them
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.SkinFrictionType">
+            <summary>
+            Use Van Rijn's method for calculating skin friction used in sediment transport formulas
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.NonScouringBedLevel">
+            <summary>
+            Non-scouring bedlevel
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.PassiveSTReaches">
+            <summary>
+            List of passive reaches
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.DoMorphologicalUpdate">
+            <summary>
+            Switch for morphological update. Only used for Urban setups at the moment. TODO ST: Enable usage from Mike11
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.RemovalStructures">
+            <summary>
+            List of removal structures for MU 
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.BasinRemovalCoefs">
+            <summary>
+            Basin removal coefficients
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.ActiveLayerEquilibrium">
+            <summary>
+            Active layer equilibrium thickness, also called active layer target thickness
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.MaxConcDueToErosion">
+            <summary>
+            Maximum concentration due to erosion
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STData.RatioD90D50">
+            <summary>
+            RatioD90D50
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STData.AdditionalOutput">
+            <summary>
+            RatioD90D50
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STData.Validate">
+            <summary>
+            Validate
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STData.HasSuspendedComponents">
+            <summary>
+            True if a non-cohesive component has suspended load or if there is at least one cohesive component.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STData.HasBedLoadComponents">
+            <summary>
+            True if a non-cohesive component has bed load.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STSkinFrictionType">
+            <summary>
+            Skin friction type
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STSkinFrictionType.TotalFriction">
+            <summary> TotalFriction </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STSkinFrictionType.LawWallFullDepth">
+            <summary> Law of the wall (full depth) / Van Rijn</summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STSkinFrictionType.LawWallSkinFriction">
+            <summary> Law of the wall (skin friction) </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STFallVelocityType">
+            <summary>
+            Type of fall velocity used
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STFallVelocityType.UserDefined">
+            <summary> User defined fall velocity </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STFallVelocityType.Rubey">
+            <summary> Use the Rubey formula </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STRemovalStructure">
+            <summary>
+            Class for ST Removal weirs
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STRemovalStructure.WeirType">
+            <summary>
+            Weir type
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STRemovalStructure.StructureReachID">
+            <summary>
+            Weir ID
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STRemovalStructure.ReductionFactor">
+            <summary>
+            Constant efficiency factor
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STRemovalStructure.EfficiencyTable">
+            <summary>
+            Efficiency function for weir
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STWeirFormulation">
+            <summary>
+            Removal weir methods
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STWeirFormulation.Constant">
+            <summary> Constant reduction of sediment transport through structure </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STWeirFormulation.DischargeDependent">
+            <summary> Reduction is function of discharge flowing into structure </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STResistanceType">
+            <summary>
+            Sediment resistance type for MU
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STResistanceType.Undefined">
+            <summary> Sediment resistance is computed from grain size </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STResistanceType.Computed">
+            <summary> Sediment resistance is computed from grain size </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STResistanceType.Specified">
+            <summary> Sediment resistance is constant </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STAdditionalOutput">
+            <summary>
+            Sediment resistance type for MU
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.SedimentVolumeChange">
+            <summary>
+            Sediment volume change pr. length.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.ActiveLayerFraction">
+            <summary>
+            Active layer Fraction.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.PassiveLayerFraction">
+            <summary>
+            Passive layer fraction.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.MassError">
+            <summary>
+            Mass error, NonCohesive components only.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.BedLevel">
+            <summary>
+            Bed level.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.BedLevelChange">
+            <summary>
+            Bed level change, accumulated from initial timestep.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.TotalShearStress">
+            <summary>
+            Total shear stress.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.SkinShearStress">
+            <summary>
+            Skin shear stress.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.D50">
+            <summary>
+            D50.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.D90">
+            <summary>
+            D90.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.DimensionlessBedShearStress">
+            <summary>
+            DimensionlessBedShearStress.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.GeometricMeanDiameter">
+            <summary>
+            Geometric mean diameter.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.BedLoadIOF">
+            <summary>
+            Bed load - Integrated over fractions.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.SuspendedLoadIOF">
+            <summary>
+            Suspended load - Integrated over fractions.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.TotalLoadIOF">
+            <summary>
+            Total load - Integrated over fractions.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.ConcentrationIOF">
+            <summary>
+            Concentration - Integrated over fractions.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.ActiveLayerThicknessIOF">
+            <summary>
+            Active layer thickness - Integrated over fractions.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.PassiveLayerThicknessIOF">
+            <summary>
+            Passive layer thickness - Integrated over fractions.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.TotalLayerThicknessIOF">
+            <summary>
+            Total layer thickness - Integrated over fractions.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.FractionalActiveLayerMass">
+            <summary>
+            Fractional activelayer mass.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.FractionalPassiveLayerMass">
+            <summary>
+            Fractional passivelayer mass.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.FractionalTotalLayerMass">
+            <summary>
+            Fractional active+passivelayer mass.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.FractionalActiveLayerThickness">
+            <summary>
+            Fractional activelayer thickness.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.FractionalPassiveLayerThickness">
+            <summary>
+            Fractional passivelayer thickness.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.FractionalTotalLayerThickness">
+            <summary>
+            Fractional active+passivelayer thickness.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.FractionalBedLoad">
+            <summary>
+            Fractional bed load.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.FractionalSuspendedLoad">
+            <summary>
+            Fractional suspended load.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.FractionalSedimentConcentration">
+            <summary>
+            Fractional sediment concentration.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STAdditionalOutput.FractionalTotalLoad">
+            <summary>
+            Fractional total load.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STAdditionalOutput.GetOutputQuantities(DHI.Mike1D.STDataAccess.STData)">
+            <summary>
+            Set additional outputs enabled.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STExtensions">
+            <summary>
+            Helper methods for ST data
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STExtensions.NumberOfComponents(DHI.Mike1D.STDataAccess.STData)">
+            <summary>
+            Total number of ST fractions/components
+            </summary>
+            <param name="stData"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STCohesiveComponent">
+            <summary>
+            Parameters for an ST component, including initial concentration and type
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STCohesiveComponent.GrainSize">
+            <summary>
+            Grain size in [m]
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STCohesiveComponent.CriticalShearDeposition">
+            <summary>
+            Critical shear stress/velocity for deposition
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STCohesiveComponent.CriticalShearErosion">
+            <summary>
+            Critical shear stress/velocity for erosion layers
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STCohesiveComponent.ErosionCoefficient">
+            <summary>
+            Erosion coefficients for erosion layers
+            Unit: [g/m2/s]
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STCohesiveComponent.ErosionExponent">
+            <summary>
+            Erosion exponents for erosion layers
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STCohesiveComponent.ErosionFactor">
+            <summary>
+            Unit conversion factor for erosion coefficient
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STCohesiveData">
+            <summary>
+            Sediment transport data
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STCohesiveData.Components">
+            <summary>
+            List of ST components
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STCohesiveData.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STCohesiveData.GetComponentIndex(System.String)">
+            <summary>
+            Find index of component with the given component id.
+            <para>
+            If component was not found, -1 is returned.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STCohesiveData.GetComponent(System.String)">
+            <summary>
+            Find component with the given component id.
+            <para>
+            If component was not found, null is returned.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel">
+            <summary>
+            Model type for non-cohesive bed load and suspended load
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.NoModel">
+            <summary> Not bed/suspended load  </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.PassingSerialized">
+            <sumary> Serialization needes enum 0 to avoid System.Runtime.Serialization.SerializationException</sumary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.EngelundFredsoe">
+            <summary> Engelund Fredsoe  </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.VanRijn">
+            <summary> Van Rijn </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.MeyerPeterMuller">
+            <summary> Meyer Peter Muller </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.SatoKikkawaAshida">
+            <summary> Sato Kikkawa Ashida </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.AshidaMichiue">
+            <summary> Ashida Michiue </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.LaneKalinske">
+            <summary> Lane Kalinske </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.ATM">
+            <summary> Ashida Takahashi Mizuyama </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.EngelundHansen">
+            <summary> Engelund-Hansen total load formula </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.AckersWhite">
+            <summary> Ackers and White </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.YangSand">
+            <summary> Yang sand </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.YangGravel">
+            <summary> Yang gravel </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.WilcockCrowe">
+            <summary> Wilcock and Crowe </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.SmartJaeggi">
+            <summary> Smart-Jaeggi </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.Parker">
+            <summary> Parker </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.NonCohesiveSTBedSuspModel.GarciaParker">
+            <summary> Garcia and Parker </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STNonCohesiveModel">
+            <summary>
+            Global model parameters for non-cohesive sediment transport
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STNonCohesiveModel.GlobalGrainSize">
+            <summary>
+            Global grain diameter in [m]
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STNonCohesiveModel.ThetaCritical">
+            <summary>
+            Critical Shields parameter
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STNonCohesiveModel.UseEgiazaroff">
+            <summary>
+            Use Egiazaroff hiding function for Shields parameter (only applicable with more than one non-cohesive components)
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STNonCohesiveData">
+            <summary>
+            Sediment transport data
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STNonCohesiveData.Components">
+            <summary>
+            List of ST components
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STNonCohesiveData.ModelParameters">
+            <summary>
+            Model parameters for non-cohesive sediment transport
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STNonCohesiveData.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STNonCohesiveData.GetComponentIndex(System.String)">
+            <summary>
+            Find index of component with the given component id.
+            <para>
+            If component was not found, -1 is returned.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STNonCohesiveData.GetComponent(System.String)">
+            <summary>
+            Find index of component with the given component id.
+            <para>
+            If component was not found, null is returned.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STNonCohesiveData.Validate">
+            <summary>
+            Validate components
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STSmartJaeggi">
+            <summary>
+            Parameters for the Adjustable Smart-Jaeggi transport model
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STSmartJaeggi.A">
+            <summary>
+            A1-A8 Smart-Jaeggi exponents
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STSmartJaeggi.D90D30">
+            <summary>
+            Uniformarity of sediment D90/D30
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STSmartJaeggi.AngleOfRepose">
+            <summary>
+            Angle of repose
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STSmartJaeggi.UseSkinFriction">
+            <summary>
+            Shield stress - Skin frictior or Total
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STSmartJaeggi.UseBedSlope">
+            <summary>
+            Slope dependency - bed or surface
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STSmartJaeggi.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.STDataAccess.STNonCohesiveComponent">
+            <summary>
+            Parameters for a ST sand component (non-cohesive)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.GrainDiameter">
+            <summary>
+            Global grain diameter
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.CriticalShield">
+            <summary>
+            Critical Shield's parameter
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.HasBedLoad">
+            <summary>
+            Has bed load model
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.HasSuspLoad">
+            <summary>
+            Has suspended load model
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.BedLoadSmartJaeggi">
+            <summary>
+            Coefficients for Smart-Jaeggi transport formula bed load:
+            a_1 - a_8, ratio d90/d30, angle of repose, use skin friction, use bed slope
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.SuspendedLoadSmartJaeggi">
+            <summary>
+            Coefficients for Smart-Jaeggi transport formula used for suspeded load:
+            a_1 - a_8, ratio d90/d30, angle of repose, use skin friction, use bed slope
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.STBedModel">
+            <summary>
+            Bed load model for sediment
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.BedFraction">
+            <summary>
+            Fraction used for total load models
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.STSuspModel">
+            <summary>
+            Suspended load model for sediment
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.SuspendedFraction">
+            <summary>
+            Fraction used for total load models
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.Validate">
+            <summary>
+            Validate component
             </summary>
         </member>
     </members>
