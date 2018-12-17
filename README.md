@@ -1,6 +1,6 @@
 # MIKE 1D SDK examples
 
-This repository contains a number of examples of Plugins and Scripts for MIKE 1D. 
+This repository contains a number of examples of Plugins and [Scripts](DHI.Mike1D.Examples/Scripts) for MIKE 1D. 
 
 Since MIKE 1D is an active code base, its API changes. The master branch contains 
 example code for the most recent release of MIKE software. Code for older releases 
