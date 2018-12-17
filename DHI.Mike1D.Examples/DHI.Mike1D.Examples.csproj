@@ -114,6 +114,7 @@
     <Compile Include="Scripts\HonmaWeirCoefficient.cs" />
     <Compile Include="Scripts\InitialWaterLevel.cs" />
     <Compile Include="Scripts\PowerPlantEnergyOutput.cs" />
+    <Compile Include="Scripts\ScriptParameters.cs" />
     <Compile Include="Scripts\SetupParameters.cs" />
     <Compile Include="Scripts\StructureScripts.cs" />
     <Compile Include="UserDataExamples.cs" />
