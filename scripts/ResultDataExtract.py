@@ -135,8 +135,13 @@ def PrintAllCatchments():
         print "%s"  % ("'%s'" % catchment.Id);
 #===========================================================
 
-#clr.AddReferenceToFileAndPath("C:\\Work\\main\\Products\\Source\\Mike1D\\src\\bin\\debug\\DHI.Mike1D.ResultDataAccess.dll");
-#clr.AddReferenceToFileAndPath("C:\\Work\\main\\Products\\Source\\Mike1D\\src\\bin\\debug\\DHI.Mike1D.Generic.dll");
+# The SetupLatest method will make your script find the MIKE assemblies at runtime.
+# This is required for MIKE Version 2019 (17.0) and onwards. For previous versions, the 
+# next three lines must be removed.
+clr.AddReference("DHI.Mike.Install");
+from DHI.Mike.Install import MikeImport, MikeProducts
+MikeImport.SetupLatest(MikeProducts.MikeCore)
+
 clr.AddReference("DHI.Mike1D.ResultDataAccess");
 clr.AddReference("DHI.Mike1D.Generic");
 clr.AddReference("DHI.Generic.MikeZero.DFS");
