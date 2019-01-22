@@ -2,7 +2,7 @@
 #   http://ironpython.net/download/
 #
 # Run from command line like (for the 2.7 version): 
-#   "c:\Program Files (x86)\IronPython 2.7\ipy.exe" ResultDataExtract.py
+#   "c:\Program Files (x86)\IronPython 2.7\ipy64.exe" ResultDataExtract.py
 # Then check which command line arguments are required (or check below)
 
 import sys
@@ -12,6 +12,45 @@ import array
 
 #===========================================================
 # Various helper functions
+
+# Print usage of tool.
+def PrintUsage():
+    usageStr = """
+Usage: Extracts data from network result files to text file
+    ipy.exe ResultDataExtract.py resultFile.res1d output.txt [extractPoints]*
+
+Where: ExtractPoints is one or more of:
+    node:WaterLevel:116
+        Extracts water level from node 116
+    reach:Discharge:113l1
+        Extracts discharge from all Q grid points of reach 113l1
+    reach:WaterLevel:102l1:123
+        Extracts water level from reach 102l1, H grid point closest to chanage 123
+    catchment:TotalRunoff:Catchment_2
+        Extracts total runoff from catchment Catchment_2
+
+Output file can have extensions:
+    txt : Write text file output
+    csv : Write text file output in csv format
+    dfs0: Write dfs0 file output
+
+Example:
+    ipy.exe ResultDataExtract.py DemoBase.res1d out.txt reach:WaterLevel:102l1:0 node:WaterLevel:116
+
+To check which nodes/reaches/catchments are available, leave out the rest
+    ipy.exe ResultDataExtract.py DemoBase.res1d out.txt reach
+
+To check which quantities are available on a node/reach/catchment, use '-' as quantity
+    ipy.exe ResultDataExtract.py DemoBase.res1d out.txt reach:-:VIDAA-NED
+
+The ResultDataExtract supports a variety of network and RR result files, i.e 
+    res1d         : MIKE 1D network/RR result files
+    res11         : MIKE 11 network/RR result files
+    prf, trf      : MOUSE network result files
+    crf, nrf, nof : MOUSE RR result files
+"""
+    print usageStr
+
 
 # Find a given quantity from an IRes1DDataSet
 def FindQuantity(dataSet, quantityId):
@@ -133,6 +172,7 @@ def PrintAllCatchments():
     for j in range (resultData.Catchments.Count):
         catchment = resultData.Catchments[j];
         print "%s"  % ("'%s'" % catchment.Id);
+
 #===========================================================
 
 # The SetupLatest method will make your script find the MIKE assemblies at runtime.
@@ -158,40 +198,8 @@ from DHI.Generic.MikeZero.DFS import *
 #System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
 if (len(sys.argv) <= 1):
-    print ""
-    print "Usage: Extracts data from network result files to text file"
-    print "    ipy.exe ResultDataExtract.py resultFile.res1d output.txt [extractPoints]*"
-    print ""
-    print "Where: ExtractPoints is one or more of:"
-    print "    node:WaterLevel:116"
-    print "        Extracts water level from node 116"
-    print "    reach:Discharge:113l1"
-    print "        Extracts discharge from all Q grid points of reach 113l1"
-    print "    reach:WaterLevel:102l1:123"
-    print "        Extracts water level from reach 102l1, H grid point closest to chanage 123"
-    print "    catchment:TotalRunoff:Catchment_2"
-    print "        Extracts total runoff from catchment Catchment_2"
-    print ""
-    print "Output file can have extensions:";
-    print "    txt : Write text file output";
-    print "    csv : Write text file output in csv format";
-    print "    dfs0: Write dfs0 file output";
-    print ""
-    print "Example:"
-    print "    ipy.exe ResultDataExtract.py DemoBase.res1d out.txt reach:WaterLevel:102l1:0 node:WaterLevel:116"
-    print ""
-    print "To check which nodes/reaches/catchments are available, leave out the rest"
-    print "    ipy.exe ResultDataExtract.py DemoBase.res1d out.txt reach"
-    print ""
-    print "To check which quantities are available on a node/reach/catchment, use '-' as quantity"
-    print "    ipy.exe ResultDataExtract.py DemoBase.res1d out.txt reach:-:VIDAA-NED"
-    print ""
-    print "The ResultDataExtract supports a variety of network and RR result files, i.e "
-    print "    res1d         : MIKE 1D network/RR result files"
-    print "    res11         : MIKE 11 network/RR result files"
-    print "    prf, trf      : MOUSE network result files"
-    print "    crf, nrf, nof : MOUSE RR result files"
-    sys.exit()
+    PrintUsage();
+    sys.exit();
 
 
 resfilename = sys.argv[1];
@@ -303,7 +311,7 @@ if (outFileType <= 1):
     dataFormat = "%15s";
     dataFormatcs = "{0,15:0.000000}";
     # Only differences between txt and csv are the format specifyers
-    if (outFileType == 1): # Change format specifyiers for csv output.
+    if (outFileType == 1): # Change format specifyers for csv output.
         header1Format = "%s;";
         header2Format = "%s;";
         #chainageFormat = "%.2f;";
@@ -359,6 +367,9 @@ if (outFileType <= 1):
 
     # Write data
     for i in range(numtimes):
+		    # If you want to only output every 60th time step, uncomment below two lines.
+        #if (i % 60 != 0):
+				#    continue;
         f.write(header1Format  % (resultData.TimesList[i].ToString("yyyy-MM-dd HH:mm:ss"))),
         for j in range (dataItems.Count):
             f.write(dataFormat % System.String.Format(dataFormatcs, dataItems[j].GetValue(i,elmtIndex[j]))),
@@ -405,6 +416,9 @@ else:
     # Write data to file
     val = Array.CreateInstance(System.Single, 1)
     for i in range(numtimes):
+		    # If you want to only output every 60th time step, uncomment below two lines.
+        #if (i % 60 != 0):
+				#    continue;
         time = resultData.TimesList[i].Subtract(resultData.StartTime).TotalSeconds;
         for j in range (dataItems.Count):
             val[0] = dataItems[j].GetValue(i,elmtIndex[j]);
