@@ -29,6 +29,11 @@ Where: ExtractPoints is one or more of:
     catchment:TotalRunoff:Catchment_2
         Extracts total runoff from catchment Catchment_2
 
+The delimiter in the [extractPoints] can be changed to another character, in case id's 
+contain semicolons, e.g. using questionmark ?
+    node?WaterLevel?hole:116
+        Extracts water level from node with id hole:116
+
 Output file can have extensions:
     txt : Write text file output
     csv : Write text file output in csv format
@@ -173,6 +178,13 @@ def PrintAllCatchments():
         catchment = resultData.Catchments[j];
         print "%s"  % ("'%s'" % catchment.Id);
 
+def is_float(value):
+  try:
+    float(value)
+    return True
+  except:
+    return False
+
 #===========================================================
 
 # The SetupLatest method will make your script find the MIKE assemblies at runtime.
@@ -226,63 +238,81 @@ elmtIndex = [];
 
 # Parse command line arguments
 for i in range(3,sys.argv.Count):
-    parts = sys.argv[i].split(":");
-    failed = True;
-    if (parts.Count > 0):
-        failed = False;
-        if (parts[0] == "reach"):
-            if (parts.Count < 3):
+    str = sys.argv[i];
+    failed = False;
+    if (str.lower().startswith("reach")):
+        partsCount = 0;
+        if (len(str) > 5):
+            splitChar = str[5];
+            parts = str.split(splitChar,4);
+            partsCount = parts.Count;
+        if (partsCount < 3):
+            PrintAllReaches();
+            sys.exit();
+        elif (partsCount == 3):
+            # All grid points in reach
+            quantityToFind = parts[1];
+            reachId        = parts[2];
+            if (reachId == '-'):
                 PrintAllReaches();
                 sys.exit();
-            elif (parts.Count == 3):
-                # All grid points in reach
-                quantityToFind = parts[1];
-                reachId        = parts[2];
-                if (reachId == '-'):
-                    PrintAllReaches();
-                    sys.exit();
-                FindReachQuantity(quantityToFind, reachId, -999);
-            elif (parts.Count == 4):
-                # Search for chainage
-                quantityToFind = parts[1];
-                reachId        = parts[2];
-                if (reachId == '-'):
-                    PrintAllReaches();
-                    sys.exit();
-                FindReachQuantity(quantityToFind, reachId, float(parts[3]));
-            else:
-                print "Reach argument must have 3 or 4 parts: Could not handle argument %i, %s" % (i,sys.argv[i]);
+            FindReachQuantity(quantityToFind, reachId, -999);
+        elif (partsCount == 4):
+            # Search for chainage
+            quantityToFind = parts[1];
+            reachId        = parts[2];
+            chainage = 0;
+            if (reachId == '-'):
+                PrintAllReaches();
                 sys.exit();
-        elif (parts[0] == "node"):
-            if (parts.Count < 3):
+            if (is_float(parts[3])):
+                FindReachQuantity(quantityToFind, reachId, float(parts[3]));
+            else: # could not parse chainage, so it is probably an id with a splitChar in it
+                reachId  = parts[2] + splitChar + parts[3];
+                FindReachQuantity(quantityToFind, reachId, -999);
+        else:
+            print "Reach argument must have 3 or 4 parts: Could not handle argument %i, %s" % (i,sys.argv[i]);
+            sys.exit();
+    elif (str.lower().startswith("node")):
+        partsCount = 0;
+        if (len(str) > 4):
+            splitChar = str[4];
+            parts = str.split(splitChar,3);
+            partsCount = parts.Count;
+        if (partsCount < 3):
+            PrintAllNodes();
+            sys.exit();
+        if (partsCount == 3):
+            quantityToFind = parts[1];
+            nodeId         = parts[2];
+            if (nodeId == "-"):
                 PrintAllNodes();
                 sys.exit();
-            if (parts.Count == 3):
-                quantityToFind = parts[1];
-                nodeId         = parts[2];
-                if (nodeId == "-"):
-                    PrintAllNodes();
-                    sys.exit();
-                FindNodeQuantity(quantityToFind, nodeId);
-            else:
-                print "Node argument must have 3 parts: Could not handle argument %i, %s" % (i,sys.argv[i]);
-                sys.exit();
-        elif (parts[0] == "catchment"):
-            if (parts.Count < 3):
+            FindNodeQuantity(quantityToFind, nodeId);
+        else:
+            print "Node argument must have 3 parts: Could not handle argument %i, %s" % (i,sys.argv[i]);
+            sys.exit();
+    elif (str.lower().startswith("catchment")):
+        partsCount = 0;
+        if (len(str) > 9):
+            splitChar = str[9];
+            parts = str.split(splitChar,3);
+            partsCount = parts.Count;
+        if (partsCount < 3):
+            PrintAllCatchments();
+            sys.exit();
+        if (partsCount == 3):
+            quantityToFind = parts[1];
+            catchId        = parts[2]
+            if (catchId == '-'):
                 PrintAllCatchments();
                 sys.exit();
-            if (parts.Count == 3):
-                quantityToFind = parts[1];
-                catchId        = parts[2]
-                if (catchId == '-'):
-                    PrintAllCatchments();
-                    sys.exit();
-                FindCatchmentQuantity(quantityToFind, catchId);
-            else:
-                print "Catchment argument must have 3 parts: Could not handle argument %i, %s" % (i,sys.argv[i]);
-                sys.exit();
+            FindCatchmentQuantity(quantityToFind, catchId);
         else:
-            failed = True;
+            print "Catchment argument must have 3 parts: Could not handle argument %i, %s" % (i,sys.argv[i]);
+            sys.exit();
+    else:
+        failed = True;
     if (failed):
         print "Could not handle argument %i, %s" % (i,sys.argv[i]);
         sys.exit();
