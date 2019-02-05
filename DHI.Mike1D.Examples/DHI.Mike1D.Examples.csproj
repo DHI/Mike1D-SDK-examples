@@ -39,6 +39,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\DHI.Generic.MikeZero.EUM.dll</HintPath>
     </Reference>
+    <Reference Include="DHI.Mike.Install, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\DHI.Mike.Install.dll</HintPath>
+    </Reference>
     <Reference Include="DHI.Mike1D.BoundaryModule, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\DHI.Mike1D.BoundaryModule.dll</HintPath>

@@ -15,6 +15,17 @@ namespace DHI.Mike1D.Examples
   public class RunExamples
   {
 
+    static RunExamples()
+    {
+      // The setup method will make your application find the MIKE assemblies at runtime.
+      // The first call of the setup method takes precedense. Any subsequent calls will be ignored.
+      // It must be called BEFORE any method using MIKE libraries is called, i.e. it is not sufficient
+      // to call it as the first thing in that method using the MIKE libraries. Often this can be achieved
+      // by having this code in the static constructor.
+      if (!DHI.Mike.Install.MikeImport.Setup(17, DHI.Mike.Install.MikeProducts.Mike1D))
+        throw new Exception("Could not find a MIKE installation");
+    }
+
     /// <summary>
     /// Using the SimulationWorker to run a simulation
     /// <para>
