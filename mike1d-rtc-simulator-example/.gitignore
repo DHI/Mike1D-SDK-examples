@@ -10,10 +10,12 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+*.pfs
+
 # Build results
+!Release/
 [Dd]ebug/
 [Dd]ebugPublic/
-[Rr]eleases/
 x64/
 x86/
 bld/
@@ -260,4 +262,3 @@ paket-files/
 __pycache__/
 *.pyc
 *.asv
-M1DSimulatorExample1_rha.m
