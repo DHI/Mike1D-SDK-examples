@@ -72,3 +72,12 @@ A ```diagnostics``` parameter can be added, and used for adding lines to the set
 The script method ```ModifySetup``` defines all the user defined parameters with a default value. In case the ```-scriptpars:``` is not used, or one of the parameters is not added to the ```-scriptpars:```, the default value is used. 
 
 An example script with user defined script parameters can be found in [ScriptParameters.cs](ScriptParameters.cs)
+
+## Debug a script
+It is possible to debug scripts. The ```-scriptdebug``` argument to the MIKE 1D application will build the script with debug information. 
+
+Start Visual Studio or a similar IDE. Open the script file in Visual Studio. Add the ```-scriptdebug``` argument and also the ```-wait``` to the command line, which will pause the simulation at the start and pop op a messagebox. That makes it possible in Visual Studio to attach the debugger to the ```DHI.Mike1D.Application.exe``` process. When the debugger is attached, add some breakpoints in the script, and press "OK" in the messagebox to continue, and your breakpoints should be hit. Example of command line for attaching the Visual Studio debugger:
+```
+   set m1d="c:\Program Files (x86)\DHI\2019\bin\x64\DHI.Mike1D.Application.exe"
+   %m1d% MySetup.m1dx -script=ScriptParameters.cs -scriptdebug -wait -gui -close
+```
