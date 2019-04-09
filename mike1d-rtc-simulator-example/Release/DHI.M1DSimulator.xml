@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DHI.M1DSimulator</name>
+    </assembly>
+    <members>
+        <member name="T:DHI.M1DSimulator.M1DRtcRules">
+            <summary>
+            Class that extracts information about the control rules in a M1D model.
+            </summary>
+        </member>
+        <member name="T:DHI.M1DSimulator.M1DSimulator">
+            <summary>
+            Class for simulating a MIKE 1D model and extracting variables during simulation.
+            Optimized for calling from outside .NET enabled script environments like Matlab or IronPython.
+            Read current simulator quantities, e.g. a discharge or a water level, by passing node ID or reach ID. 
+            The first call to a new node or reach quantity creates and stores an engine getter.
+            </summary>
+        </member>
+        <member name="M:DHI.M1DSimulator.M1DSimulator.#ctor(System.String)">
+            <inheritdoc />
+            <summary>
+            Class for simulating a MIKE 1D model and extracting engine variables during simulation.
+            </summary>
+            <param name="modelFilePath">M1D model as an m1dx modelfile.</param>
+        </member>
+        <member name="M:DHI.M1DSimulator.M1DSimulator.ReadReachHDPoints(System.String,System.Nullable{System.Boolean})">
+            <summary>
+            Get current quantity at reach HD point.
+            </summary>
+            <param name="reach"></param>
+            <param name="atFromNode"> 
+            atFromNode = null:  Returns values for all HD points in link.
+            atFromNode = true:  Returns values for the link HD point nearest its 'from' node.
+            atFromNode = false: Returns values for the link HD point nearest its 'to' node.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="T:DHI.M1DSimulator.M1DSimulatorExample">
+            <summary>
+            Example demonstrating how to run a M1D MU model and get/set engine variables.
+            </summary>
+        </member>
+        <member name="M:DHI.M1DSimulator.M1DSimulatorRtc.ReadSensor(System.String)">
+            <summary>
+            Read current measurement value from specific sensor.
+            </summary>
+            <param name="sensorId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.M1DSimulator.M1DSimulatorRtc.ReadSensors">
+            <summary>
+            Reads current values for all sensors.
+            </summary>
+        </member>
+        <member name="M:DHI.M1DSimulator.M1DSimulatorRtc.PrepareSetpointsPID(System.Collections.Generic.IEnumerable{System.String},System.Double)">
+            <summary>
+            Connect action to setpoint. The M1D action is added to and manipulable through the list '_setpoints'.
+            The setpoint is reset to 0 when connected. Use SetSetpoint to change setpoint value.
+            </summary>
+        </member>
+        <member name="M:DHI.M1DSimulator.M1DSimulatorRtc.SetSetpoint(System.String,System.Double)">
+            <summary>
+            Set setpoint related to a connected control action.
+            Use ConnectSetpointPID() to connect before setting setpoint.
+            </summary>
+            <param name="actionId"></param>
+            <param name="setpointValue"></param>
+        </member>
+        <member name="M:DHI.M1DSimulator.M1DSimulatorRunner.Finish">
+            <summary>
+            Stops the M1D simulator and writes .res1d result files and summary.
+            </summary>
+        </member>
+        <member name="M:DHI.M1DSimulator.M1DSimulatorRunner.#ctor(System.String)">
+            <summary>
+            Class for simulating a MIKE 1D model.
+            </summary>
+            <param name="modelFilePath">M1D model as an m1dx modelfile.</param>
+        </member>
+        <member name="M:DHI.M1DSimulator.M1DSimulatorRunner.PrepareCatchmentSimulationTime(System.DateTime,System.DateTime)">
+            <summary>
+            Update catchment start and end times to avoid catchments simulating from original start time.
+            Must run before prepare. Might not work in future versions of M1D.
+            </summary>
+            <param name="from"></param>
+            <param name="to"></param>
+        </member>
+        <member name="M:DHI.M1DSimulator.M1DSimulatorRunner.Run">
+            <summary>
+            Simulate M1D model with whole loaded event and write results.
+            </summary>
+        </member>
+        <member name="M:DHI.M1DSimulator.M1DSimulatorRunner.RunUntil(System.DateTime)">
+            <summary>
+            Simulate M1D model until time 'to'.
+            </summary>
+            <param name="to">Next simulation time.</param>
+        </member>
+        <member name="T:DHI.M1DSimulator.MusFile">
+            <summary>
+            Class for reading MIKE URBAN selection (mus) files.
+            </summary>
+        </member>
+        <member name="M:DHI.M1DSimulator.MusFile.ReadAllInDirectory(System.String)">
+            <summary>
+            Reads all .mus-files in directory into a dictionary.
+            </summary>
+            <param name="musDirectory"></param>
+            <returns>Dictionary[musFileName][category]</returns>
+        </member>
+        <member name="M:DHI.M1DSimulator.MusFile.ReadMusFile(System.String,System.String)">
+            <summary>
+            Reads mus-file [UTF8 encoding] and categorizes text lines depending on headline category.
+            </summary>
+            <param name="musFilePath">Filepath to .mus-file.</param>
+            <param name="typePrefix">Prefix in all .mus-file headlines separating categories, e.g. msm_links.</param>
+            <returns>Dictionary with structured .mus-file content.</returns>
+        </member>
+        <member name="M:DHI.M1DSimulator.MusFile.GetCategories(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.HashSet{System.String}},System.String[])">
+            <summary>
+            Combine lists from different categories.
+            </summary>
+            <param name="musContent"></param>
+            <param name="categories"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.M1DSimulator.MusFile.GetCategory(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.HashSet{System.String}},System.String,System.String)">
+            <summary>
+            Get list related to a specific category and add a prefix to all entries.
+            </summary>
+            <param name="musContent"></param>
+            <param name="category"></param>
+            <param name="prefix"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.M1DSimulator.MusFile.ReadAllInDirectoryToSelections(System.String)">
+            <summary>
+            Reads all .mus-files in directory into a dictionary of selections.
+            </summary>
+            <param name="musDirectory"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
