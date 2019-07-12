@@ -27,6 +27,12 @@ Enable through command line using the -script parameter:
 ```
    "c:\Program Files (x86)\DHI\2019\bin\x64\DHI.Mike1D.Application.exe" MySetup.m1dx -script=..\myscripts\AdditionalOutput.cs -gui -close
 ```
+#### Checking
+It is possible to check in the simulation log file whether a script has been loaded. When a script is being loaded, the logfile will contain a line on the form:
+```
+2019-05-20 15:00:00: Loading script file mySetupScript.cs ...
+```
+The line is also written to the log file when exporting a MIKE URBAN setup to MIKE 1D (.m1dx file).
 
 ## Define a script
 A script method needs the ```[Script]``` attribute. The name of the method is not important, however the method must have one of the following arguments.
