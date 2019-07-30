@@ -1,0 +1,1731 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DHI.Mike1D.NetworkDataAccess</name>
+    </assembly>
+    <members>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.CatchmentConnection">
+            <summary>
+            Class containing information on where a specific catchment
+            is connected in the network, and the area of the catchment
+            that goes into that part of the network.
+            <para>
+            The connection in the network is defined by a NodeID or ReachId
+            and and up- and down-stream chainage. If the two chainages are
+            the same, the connection is a point connection, otherwise
+            it is a span (distributed) connection.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection">
+            <summary>
+            Interface for information on where a specific catchment
+            is connected in the network, and the area of the catchment
+            that goes into that part of the network.
+            
+            The connection in the network is here defined by a ReachId
+            and and up- and down-stream chainage. If the two chainages are
+            the same, the connection is a point connection, otherwise
+            it is a span (distributed) connection.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection.CatchmentId">
+            <summary>
+            ID of catchment
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection.Area">
+            <summary>
+            Area of catchment that goes into this connection. 
+            Use either Area or Fraction. Set Fraction to 0 to use Area.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection.Fraction">
+            <summary>
+            Fraction of catchment discharge running into this connection. 
+            Use either Area or Fraction. Set Fraction to 0 to use Area.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection.ReachId">
+            <summary>
+            ID of reach/branch
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection.NodeId">
+            <summary>
+            ID of node
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection.StartChainage">
+            <summary>
+            Start chainage of reach/branch
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection.EndChainage">
+            <summary>
+            End chainage of reach/branch
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection.IsOverlappingRiverArea">
+            <summary>
+            Flag indicating if the catchment area is overlapping the river area,
+            and runoff is adjusted according to this.
+            <para>
+            It only has an effect for a connection span, not for connection nodes/locations.
+            </para>
+            <para>
+            M11 default is true.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.CatchmentConnection.CatchmentId">
+            <summary>
+            ID of catchment
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.CatchmentConnection.Area">
+            <summary>
+            Area of catchment that goes into this connection. 
+            Use either Area or Fraction. Set Fraction to 0 to use Area.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.CatchmentConnection.Fraction">
+            <summary>
+            Fraction of catchment discharge running into this connection. 
+            Use either Area or Fraction. Set Fraction to 0 to use Area.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.CatchmentConnection.ReachId">
+            <summary>
+            ID of reach that the catchment is connected to
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.CatchmentConnection.NodeId">
+            <summary>
+            ID of node that the catchment is connected to
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.CatchmentConnection.StartChainage">
+            <summary>
+            Start chainage of reach/branch (low chainage value)
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.CatchmentConnection.EndChainage">
+            <summary>
+            End chainage of reach/branch (high chainage value)
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.CatchmentConnection.IsOverlappingRiverArea">
+            <summary>
+            Flag indicating if the catchment area is overlapping the river area,
+            and runoff is adjusted according to this.
+            <para>
+            It only has an effect for a connection span, not for connection nodes/locations.
+            </para>
+            <para>
+            M11 default is true.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.CatchmentConnections">
+            <summary>
+            Class implementing a list of ICatchmentConnection's
+            Required for generic list COM interop
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.ICatchmentConnections">
+            <summary>
+            Interface for a list of <see cref="T:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection"/>'s
+            Required for generic list COM interop
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.ICatchmentConnections.Add(DHI.Mike1D.NetworkDataAccess.ICatchmentConnection)">
+            <summary>
+            Add a <see cref="T:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection"/> to the list
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.ICatchmentConnections.IndexOf(DHI.Mike1D.NetworkDataAccess.ICatchmentConnection)">
+            <summary>
+            Searches for the specified object and returns the zero-based index of the first occurrence within the entire List. 
+            </summary>
+            <param name="item">The object to locate in the List. The value can be a null reference (Nothing in Visual Basic) for reference types.</param>
+            <returns>The zero-based index of the first occurrence of item within the entire List, if found; otherwise, –1. </returns>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.ICatchmentConnections.Find(System.Predicate{DHI.Mike1D.NetworkDataAccess.ICatchmentConnection})">
+            <summary>
+            Searches for an element that matches the conditions defined by 
+            the specified predicate, and returns the first occurrence within 
+            the entire List. 
+            </summary>
+            <param name="match">The Predicate delegate that defines the conditions of the element to search for.</param>
+            <returns>The first element that matches the conditions defined by the specified predicate, if found; otherwise, the default value for type ICatchmentConnection. </returns>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.ICatchmentConnections.Remove(DHI.Mike1D.NetworkDataAccess.ICatchmentConnection)">
+            <summary>
+            Removes the first occurrence of a specific object from the List. 
+            </summary>
+            <param name="item">The object to remove from the List. The value can be a null reference (Nothing in Visual Basic) for reference types.</param>
+            <returns>true if item is successfully removed; otherwise, false. This method also returns false if item was not found in the List. </returns>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.ICatchmentConnections.RemoveAt(System.Int32)">
+            <summary>
+            Removes the element at the specified index of the List. 
+            </summary>
+            <param name="index">The zero-based index of the element to remove.</param>
+            <remarks>This method is an O(n) operation</remarks>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.ICatchmentConnections.Clear">
+            <summary>
+            Removes all elements from the List.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnections.Item(System.Int32)">
+            <summary>
+            Get or set the <see cref="T:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection"/> at the specified index in the list
+            </summary>
+            <param name="index">Index in list</param>
+            <returns><see cref="T:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection"/> at the index</returns>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnections.Count">
+            <summary>
+            The number of <see cref="T:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection"/>'s in the list
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.CatchmentConnections.#ctor">
+            <summary>
+            Initializes a new instance of the List class that is empty and has the default initial capacity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.CatchmentConnections.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the List class that is empty and has the specified initial capacity.
+            </summary>
+            <param name="capacity">The number of elements that the new list can initially store.</param>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.CatchmentConnections.#ctor(System.Collections.Generic.IEnumerable{DHI.Mike1D.NetworkDataAccess.ICatchmentConnection})">
+            <summary>
+            Initializes a new instance of the List class that contains elements copied from the specified collection and has sufficient capacity to accommodate the number of elements copied.
+            </summary>
+            <param name="collection">The collection whose elements are copied to the new list.</param>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.Cover">
+            <summary>
+            Base class for cover implementations.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.ICover">
+            <summary>
+            A cover can be put on top of a volume/sewer node, as e.g. a manhole, 
+            set at <see cref="P:DHI.Mike1D.NetworkDataAccess.ISewerNode.Cover"/>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ICover.WaterLevelStart">
+            <summary>
+            Water level where cover starts
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ICover.ExpansionCoefficient">
+            <summary>
+            The surface area of normal and spilling covers expand to this coefficient times the
+            area at the start of the cover.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Cover.WaterLevelStart">
+            <summary>
+            Water level where cover starts
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Cover.ExpansionCoefficient">
+            <summary>
+            The surface area of normal and spilling covers expand to this coefficient times the
+            area at the start of the cover.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.DigiPoint">
+            <summary>
+            A coordinate that can specify whether the chainage has been user specified (fixed)
+            or calculated.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.DigiPoint.FixedChainage">
+            <summary>
+            Digipoint is at a fixed chainage
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.DigiPoint.Create(System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Create digipoint
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.DigiPoint.Create(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Create digipoint
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.HeadLossParameterSet">
+            <summary>
+            Set of parameters that describes how and with what data the head loss calculations 
+            are performed. Parameters in this class covers the standard head loss calculations
+            that are performed and implemented in a sewer system.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.HeadLossParameterSet.ID">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.HeadLossParameterSet.HeadLossCalculationMethod">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.HeadLossParameterSet.LossCoefficientType">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.HeadLossParameterSet.LossCoefficient">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.HeadLossParameterSet.EffectiveFlowAreaEstimationType">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.IBasin">
+            <summary>
+            A Basin is a generalization of a <see cref="T:DHI.Mike1D.NetworkDataAccess.IManhole"/>, it can have any shape,
+            the geometry is defined through the <see cref="T:DHI.Mike1D.NetworkDataAccess.BasinGeometry"/>.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.ISewerNode">
+            <summary>
+            ISewerNode includes cover functionality to a Node
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.IVolumeNode">
+            <summary>
+            A volume node is a node with volume that has a physical interpretation
+            in the real world.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.INode">
+            <summary>
+            Interface that is implemented by all node types. That is all nodes has ID and coordinates.
+            <para>
+            The most basic node, the junction node used in river junctions, implements this interface.
+            </para>
+            <para>
+            Note that junction nodes are automatically created for reach connections that are based
+            on locations, so there will be more junction nodes than actual INodes defined here.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.INode.Validate">
+            <summary>
+            Validate the node
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.INode.Id">
+            <summary>
+            Node identification string 
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.INode.XCoordinate">
+            <summary>
+            X-coordinate of the node
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.INode.YCoordinate">
+            <summary>
+            Y-coordinate of the node
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.INode.HeadLossParameterSet">
+            <summary>
+            Head loss parameters. Can be null
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.INode.PressureReachNodeType">
+            <summary>
+            Type of pressure reach node, used for pressurized sections of the network. 
+            Default: None
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.INode.PressureReachTailCrestLevel">
+            <summary>
+            Minimum water level in the outflow from pressurized sections, and hence also minimum water level in the pressurized section
+            <para>
+            Only applicable when <see cref="P:DHI.Mike1D.NetworkDataAccess.INode.PressureReachNodeType"/> is <see cref="F:DHI.Mike1D.NetworkDataAccess.PressureReachNodeType.Tail"/>.
+            </para>
+            <para>
+            Unit: [m]
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IVolumeNode.GroundLevel">
+            <summary>
+            Level of ground at the node. 
+            Unit: [m]
+            Default: 0
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IVolumeNode.BottomLevel">
+            <summary>
+            Bottom level, which can differ from the levels of the connecting reaches.
+            Unit: [m]
+            Default: 0
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IVolumeNode.CriticalLevel">
+            <summary>
+            Used in result presentation. Passed directly to the result file.
+            Unit: [m]
+            Default: 0
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IVolumeNode.MaxInflowFromSurface">
+            <summary>
+            Maximum inflow from surface, i.e. rainfall runoff type inflows.
+            <para>
+            The node inflow from surface can be limited by the surface opening,
+            a sewer grate or similar.
+            </para>
+            <para>
+            Unit: [m3/s].
+            Default: Double.MaxValue
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ISewerNode.Cover">
+            <summary>
+            Reference to the cover of the manhole. The cover is of type INormalCover, 
+            ISealedCover or ISpillingCover that are all derived from ICover
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IBasin.IsClosed">
+            <summary>
+            <para>
+            Flag indicating if basin is closed.
+            </para>
+            <para>
+            If the basin is closed, then surface area is not restricted to
+            be monotonically increasing.
+            </para>
+            <para>
+            Open basins counts in flooded area.
+            </para>
+            <para>
+            Default is closed.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IBasin.Geometry">
+            <summary>
+            Geometry of basin.
+            <para>
+            Flow area is a cross-sectional area perpendicular to the 
+            main flow direction in the basin.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IBasin.InfiltrationParameters">
+            <summary>
+            Infiltration parameters.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.IManhole">
+            <summary>
+            A Manhole is a sewer node where network reaches join. 
+            It includes a diameter and a cover.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IManhole.Diameter">
+            <summary>
+            Inner diameter of the manhole
+            Unit: [m]
+            Default: 1
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.INetwork">
+            <summary>
+            Defines a 1D network, nodes and reaches.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.INetwork.Validate">
+            <summary>
+            Validate network
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.INetwork.Connection">
+            <summary>
+            Connection information for input/output file.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.INetwork.Nodes">
+            <summary>
+            List of nodes. Nodes are man holes, ...
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.INetwork.Reaches">
+            <summary>
+            List of sewer links
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.INetwork.StructureCollection">
+            <summary>
+            Provides access to the 
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.INetwork.CatchmentConnections">
+            <summary>
+            List of catchment connections.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.PressureReachNodeType">
+            <summary>
+            Node relation to pressurized parts of the network.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.PressureReachNodeType.None">
+            <summary>
+            Not part of a pressure reach section of the network
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.PressureReachNodeType.Tail">
+            <summary>
+            Outflow from a pressurized section must take place at a tail node,
+            i.e. it connects a pressurized section of the network with normal reaches.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.PressureReachNodeType.Internal">
+            <summary>
+            The node is an internal node in a preassurized section of the network
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.INodes">
+            <summary>
+            Interface for a list of <see cref="T:DHI.Mike1D.NetworkDataAccess.INode"/>'s
+            Required for generic list COM interop
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.INodes.Add(DHI.Mike1D.NetworkDataAccess.INode)">
+            <summary>
+            Add a <see cref="T:DHI.Mike1D.NetworkDataAccess.INode"/> to the list
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.INodes.IndexOf(DHI.Mike1D.NetworkDataAccess.INode)">
+            <summary>
+            Searches for the specified object and returns the zero-based index of the first occurrence within the entire List. 
+            </summary>
+            <param name="item">The object to locate in the List. The value can be a null reference (Nothing in Visual Basic) for reference types.</param>
+            <returns>The zero-based index of the first occurrence of item within the entire List, if found; otherwise, –1. </returns>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.INodes.Find(System.Predicate{DHI.Mike1D.NetworkDataAccess.INode})">
+            <summary>
+            Searches for an element that matches the conditions defined by 
+            the specified predicate, and returns the first occurrence within 
+            the entire List. 
+            </summary>
+            <param name="match">The Predicate delegate that defines the conditions of the element to search for.</param>
+            <returns>The first element that matches the conditions defined by the specified predicate, if found; otherwise, the default value for type INode. </returns>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.INodes.Remove(DHI.Mike1D.NetworkDataAccess.INode)">
+            <summary>
+            Removes the first occurrence of a specific object from the List. 
+            </summary>
+            <param name="item">The object to remove from the List. The value can be a null reference (Nothing in Visual Basic) for reference types.</param>
+            <returns>true if item is successfully removed; otherwise, false. This method also returns false if item was not found in the List. </returns>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.INodes.RemoveAt(System.Int32)">
+            <summary>
+            Removes the element at the specified index of the List. 
+            </summary>
+            <param name="index">The zero-based index of the element to remove.</param>
+            <remarks>This method is an O(n) operation</remarks>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.INodes.Clear">
+            <summary>
+            Removes all elements from the List.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.INodes.Item(System.Int32)">
+            <summary>
+            Get or set the <see cref="T:DHI.Mike1D.NetworkDataAccess.INode"/> at the specified index in the list
+            </summary>
+            <param name="index">Index in list</param>
+            <returns><see cref="T:DHI.Mike1D.NetworkDataAccess.INode"/> at the index</returns>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.INodes.Count">
+            <summary>
+            The number of <see cref="T:DHI.Mike1D.NetworkDataAccess.INode"/>'s in the list
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.INormalCover">
+            <summary>
+            Normal cover, see <see cref="T:DHI.Mike1D.NetworkDataAccess.NormalCover"/>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.IOutlet">
+            <summary>
+            An Outlet is a volume free node where water flows out of the system. 
+            <para>
+            An outlet is the only type of open boundary that does not need a boundary condition
+            </para>
+            <para>
+            An outlet can have a boundary condition (water level/QH), in which case the 
+            water can also flow into the system.
+            </para>
+            <para>
+            The IOutlet extends the <see cref="T:DHI.Mike1D.NetworkDataAccess.IVolumeNode"/>, though it can also be used
+            outside a sewer system, in which case the <see cref="P:DHI.Mike1D.NetworkDataAccess.IVolumeNode.GroundLevel"/>
+            is set to the <see cref="P:DHI.Mike1D.NetworkDataAccess.IVolumeNode.BottomLevel"/>. The rest of the
+            <see cref="T:DHI.Mike1D.NetworkDataAccess.IVolumeNode"/> properties are not valid for a non-sewer outlet.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IOutlet.GroundLevel">
+            <summary>
+            Level of ground at the node. 
+            Unit: [m]
+            Default: 0
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.IReach">
+            <summary>
+            A Reach is a generalization of the link and branch concepts from sewer and river models.
+            <para>
+            Specification of connection as 'start' and 'end' does not have any impact on 
+            the computations, apart that positive flow is considered from start to end. 
+            Therefore, it is recommended to specify the start-end in the direction of 
+            predominant flows, or to set the <see cref="P:DHI.Mike1D.NetworkDataAccess.IReach.ReverseDirection"/> flag.
+            </para>
+            <para>
+            The type of the reach is specified by the cross section for that reach. It may take 
+            the form of one of the 'standard' pipes (Circular, Rectangular, O Shaped, Egg-Shaped), 
+            or any closed or open cross section shape (CRS/Natural Channels). 
+            </para>
+            <para>
+            The <see cref="P:DHI.Mike1D.NetworkDataAccess.IReach.LocationSpan"/> defines the geographical position of the reach.
+            </para>
+            <para>
+            Typical types of reaches are the sewer link and the river branch.
+            </para>
+            <para>
+            A sewer link is featured by:
+            <list type="bullet">
+            <item>Connected in each end by specifying a node.</item>
+            <item>Constant cross-section geometry, and constant friction properties along the entire length.</item>
+            <item>It is specified as a conduit between two nodes. A link is considered as 
+                  either a straight line or a drawn polyline between two nodes. </item>
+            <item>Usually a link connects to the adjacent nodes at their bottom levels, but it may also
+                  connect above their bottom level. This is called the invert level. The start- and 
+                  the end- invert level must be specified in the first and last coordinates 
+                  of the <see cref="P:DHI.Mike1D.NetworkDataAccess.IReach.LocationSpan"/>. Specified levels below bottom level of the 
+                  connecting nodes is not valid.</item>
+            <item>A link is often characterised by material, which determines the Manning friction coefficient 
+                  (Manning) or the Colebrook White coefficient (Equivalent roughness). The material is is 
+                  as such not represented, though the friction formulation is specified in the cross section
+                  module. </item>
+            </list>
+            </para>
+            <para>
+            A river branch is featured by:
+            <list type="bullet">
+            <item>Connected to other reaches by specifying a location. Nodes usually are not specified 
+                  explicitly in the setup, but created on the fly when required (at all junctions).</item>
+            <item>Varying cross-section geometry, and varying friction properties along reach.</item>
+            <item>At connection points, river branches usually define cross section bottom levels that 
+                  equals. However, if "free outflow" properties from a tributary branch is desired, this
+                  can be achieved by specifying a higher cross section bottom level in the tributary
+                  connection end (at least 0.5 cm difference).</item>
+            </list>
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IReach.LocationSpan">
+            <summary>
+            The XYZ LocationSpan contains the reach ID, start and end chainages and digipoints in one structure.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IReach.StartConnection">
+            <summary>
+            Specifies where the reach is connected at its start point (low chainage). Must be null if
+            not connected.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IReach.EndConnection">
+            <summary>
+            Specifies where the reach is connected at its end point (high chainage). Must be null if
+            not connected.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IReach.Description">
+            <summary>
+            User's descriptive information related to the link
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IReach.TopoID">
+            <summary>
+            Id for the cross section topologi that is to be used for the Link / Branch
+            If TopoID is not used, set to empty string (null will be handled as the empty string).
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IReach.MaximumDx">
+            <summary>
+            The maximal allowed distance between two points of the same type?
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IReach.ReverseDirection">
+            <summary>
+            Reverse the positive flow direction of the reach. Default is false
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IReach.NonReturnReach">
+            <summary>
+            Restrict flow in the first q-grid point to be positive only. Default is false
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IReach.IsRegulatedReach">
+            <summary>
+            Regulate reach with a discharge structure on first q-grid point. This is
+            used for MU setups to limit Q to a QMax(H) og QMax(dH). QMax is set by a control 
+            in the control module
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IReach.IsPressureReach">
+            <summary>
+            True if the reach should always be pressurized (MU special reach with slope=0 and 
+            "weir" at transition to normal reach.)
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.IReaches">
+            <summary>
+            Interface for a list of <see cref="T:DHI.Mike1D.NetworkDataAccess.IReach"/>'s
+            Required for generic list COM interop
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.IReaches.Add(DHI.Mike1D.NetworkDataAccess.IReach)">
+            <summary>
+            Add a <see cref="T:DHI.Mike1D.NetworkDataAccess.IReach"/> to the list
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.IReaches.IndexOf(DHI.Mike1D.NetworkDataAccess.IReach)">
+            <summary>
+            Searches for the specified object and returns the zero-based index of the first occurrence within the entire List. 
+            </summary>
+            <param name="item">The object to locate in the List. The value can be a null reference (Nothing in Visual Basic) for reference types.</param>
+            <returns>The zero-based index of the first occurrence of item within the entire List, if found; otherwise, –1. </returns>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.IReaches.Find(System.Predicate{DHI.Mike1D.NetworkDataAccess.IReach})">
+            <summary>
+            Searches for an element that matches the conditions defined by 
+            the specified predicate, and returns the first occurrence within 
+            the entire List. 
+            </summary>
+            <param name="match">The Predicate delegate that defines the conditions of the element to search for.</param>
+            <returns>The first element that matches the conditions defined by the specified predicate, if found; otherwise, the default value for type IReach. </returns>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.IReaches.Remove(DHI.Mike1D.NetworkDataAccess.IReach)">
+            <summary>
+            Removes the first occurrence of a specific object from the List. 
+            </summary>
+            <param name="item">The object to remove from the List. The value can be a null reference (Nothing in Visual Basic) for reference types.</param>
+            <returns>true if item is successfully removed; otherwise, false. This method also returns false if item was not found in the List. </returns>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.IReaches.RemoveAt(System.Int32)">
+            <summary>
+            Removes the element at the specified index of the List. 
+            </summary>
+            <param name="index">The zero-based index of the element to remove.</param>
+            <remarks>This method is an O(n) operation</remarks>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.IReaches.Clear">
+            <summary>
+            Removes all elements from the List.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IReaches.Item(System.Int32)">
+            <summary>
+            Get or set the <see cref="T:DHI.Mike1D.NetworkDataAccess.IReach"/> at the specified index in the list
+            </summary>
+            <param name="index">Index in list</param>
+            <returns><see cref="T:DHI.Mike1D.NetworkDataAccess.IReach"/> at the index</returns>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IReaches.Count">
+            <summary>
+            The number of <see cref="T:DHI.Mike1D.NetworkDataAccess.IReach"/>'s in the list
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.IRoutingReach">
+            <summary>
+            A reach where water is routed through, using one or several <see cref="T:DHI.Mike1D.NetworkDataAccess.IRoutingElement"/>'s.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IRoutingReach.RoutingElements">
+            <summary>
+            Routing elements used in this reach
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.IRoutingElement">
+            <summary>
+            Routing element, from previous routing element to this routing element, 
+            this interface specifies what kind of routing is applied.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IRoutingElement.Location">
+            <summary>
+            Location of the routing element
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IRoutingElement.Description">
+            <summary>
+            User's descriptive information related to the routing element
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IRoutingElement.RoutingMethod">
+            <summary>
+            Method that is used when calculating the routing
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IRoutingElement.RoutingElevation">
+            <summary>
+            The method for calculation of elevation (water level) in the routing element.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IRoutingElement.MuskingumK">
+            <summary>
+            The Muskingum K coefficient.
+            <para>
+            Used when <see cref="P:DHI.Mike1D.NetworkDataAccess.IRoutingElement.RoutingMethod"/> is <see cref="F:DHI.Mike1D.HDParameterDataAccess.RoutingMethod.Muskingum"/>
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IRoutingElement.MuskingumX">
+            <summary>
+            The Muskingum x coefficient.
+            <para>
+            Used when <see cref="P:DHI.Mike1D.NetworkDataAccess.IRoutingElement.RoutingMethod"/> is <see cref="F:DHI.Mike1D.HDParameterDataAccess.RoutingMethod.Muskingum"/>
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IRoutingElement.QhTable">
+            <summary>
+            A q-h relation table, for calculating a water level based on a q value.
+            <para>
+            Used when <see cref="P:DHI.Mike1D.NetworkDataAccess.IRoutingElement.RoutingElevation"/> is <see cref="F:DHI.Mike1D.HDParameterDataAccess.RoutingElevationMethod.QhRelation"/>
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.ISealedCover">
+            <summary>
+            A sealed cover
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ISealedCover.CoverSlotWidth">
+            <summary>
+            Width of the slot that is created to handle water levels above the cover.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.ISpillingCover">
+            <summary>
+            A spilling cover, where water spills out of the network model.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ISpillingCover.SpillingWaterLevel">
+            <summary>
+            Water level where spilling starts. Usually ground level. Observe: Cover expansion starts at a different level
+            than spilling.
+            Unit: [m]
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ISpillingCover.SpillCoefficient">
+            <summary>
+            Linear scaling coefficient for the spill
+            Unit: []
+            Default: 1
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.IStructureReach">
+            <summary>
+            A structure reach is an "artificial" reach containing
+            one structure and no volume. It the reach has a length,
+            it is an "artificial" length.
+            <para>
+            A structure reach is used for two common scenarios: a structure in a node, and
+            a structure between the main river and the side river (link channel).
+            </para>
+            <para>
+            A structure in a node is modelled by defining two nodes with a structure reach in between.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.MSheCouplingDataSet">
+            <summary>
+            Data set for coupling MIKE SHE to MIKE 1D
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.MSheCouplingDataSet.#ctor(System.Int32)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.MSheCouplingDataSet.Item(System.Int32)">
+            <summary>
+            Get data for the i'th link.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.MSheCouplingData">
+            <summary>
+            Data for coupling MIKE SHE to MIKE 1D, defining a single link between the two.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.BranchName">
+            <summary>
+            Branch name of the MikeShe Link
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.UpstreamChainage">
+            <summary>
+            Upstrean chainage of the branch
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.DownStreamChainage">
+            <summary>
+             Downstrean chainage of the branch 
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.Conductance">
+            <summary>
+            Conductance: =1, "Aquifer only"; =2 "Aquifer + bed"; =3 "River bed only"
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.LeakageCoeff">
+            <summary>
+            double: Leakage coeff.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.FloodCode">
+            <summary>
+            Int: Flood code =-99999: no value
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.BedTopography">
+            <summary>
+            bed topography: =0 "Use cross Section" =1 "Use grid data"
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.BedLeakage">
+            <summary>
+             Bed leakage =0 "use grid data" =1 "Use River data"
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.WeirCoeff">
+            <summary>
+              Weir coeff
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.HeadExpon">
+            <summary>
+             Head exponent
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.MinUpHeight">
+            <summary>
+            Minimum upstream Height above bank  for full weir width
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.MinFlowArea">
+            <summary>
+             Minimum flow area for over bank spilling
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.AllowOverBankSpilling">
+            <summary>
+            Allow over bank spilling
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.FlowAreaOpt">
+            <summary>
+            Flow area option : =0 "no flooding" =1 "Manual" =2 "Automatic"
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.MSheCouplingData.LinearReservExchange">
+            <summary>
+            Linear reservoir exchange: =0 "Gaining reach"; =1 "Losing Reach"
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.NetworkDataXmlBridge">
+            <summary>
+            Bridge for storing and loading the network data object to/from xml.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.NetworkDataXmlBridge.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.NetworkDataXmlBridge.FilePath">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.NetworkExtensions">
+            <summary>
+            Extension methods related to NetworkData classes
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.NetworkExtensions.IsStructureReach(DHI.Mike1D.NetworkDataAccess.IReach)">
+            <summary>
+            Returns true when <paramref name="reach"/> is an <see cref="T:DHI.Mike1D.NetworkDataAccess.IStructureReach"/>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.NetworkExtensions.Sort(System.Collections.Generic.IList{DHI.Mike1D.NetworkDataAccess.IReach})">
+            <summary>
+            Sorts a list of reaches, first based on their ID, secondly on their start chainage value
+            </summary>
+            <param name="reaches">List of reaches to sort</param>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.NetworkExtensions.BinarySearch(System.Collections.Generic.IList{DHI.Mike1D.NetworkDataAccess.IReach},DHI.Mike1D.Generic.ILocation)">
+            <summary>
+            Find the reach that includes the given location. Assuming the reaches are sorted.
+            <para>
+            Location comparisons are case insensitive. 
+            </para>
+            </summary>
+            <param name="reaches">List of reaches to search in</param>
+            <param name="location">Location to find</param>
+            <returns>The zero-based index of item in the sorted <see cref="T:System.Collections.Generic.IList`1"/>, if item is found; 
+            otherwise, a negative number that is the bitwise complement 
+            of the index of the next element that is larger than item or, 
+            if there is no larger element, the bitwise complement of Count.</returns>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.NetworkExtensions.BinarySearch(System.Collections.Generic.IList{DHI.Mike1D.NetworkDataAccess.IReach},DHI.Mike1D.Generic.ILocation,System.Double)">
+            <summary>
+            Find the reach that includes the given location. Assuming the reaches are sorted.
+            <para>
+            Location comparisons are case insensitive, and chainage comparisons uses the <paramref name="tolerance"/>,
+            i.e., the location can be tolerance outside the span and still be accepted. <paramref name="tolerance"/> may
+            be negative (it location has to be somewhat inside span).
+            </para>
+            </summary>
+            <param name="reaches">List of reaches to search in</param>
+            <param name="location">Location to find</param>
+            <param name="tolerance">Tolerance when comparing chainages</param>
+            <returns>The zero-based index of item in the sorted <see cref="T:System.Collections.Generic.IList`1"/>, if item is found; 
+            otherwise, a negative number that is the bitwise complement 
+            of the index of the next element that is larger than item or, 
+            if there is no larger element, the bitwise complement of Count.</returns>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.NetworkFactory">
+            <summary>
+            Factory for creating different classes for the <see cref="N:DHI.Mike1D.NetworkDataAccess"/>
+            namespace.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.NetworkFactory.Instance">
+            <summary>
+            Statically available instance of the factory.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.NetworkFactory.CreateReachConnection(System.String)">
+            <summary>
+            Create a <see cref="T:DHI.Mike1D.Generic.INetworkLocation"/> from a nodeid
+            </summary>
+            <param name="nodeId">Id of node that reach connects to</param>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.NetworkFactory.CreateReachConnection(DHI.Mike1D.Generic.ILocation)">
+            <summary>
+            Create a <see cref="T:DHI.Mike1D.Generic.INetworkLocation"/> from a location
+            </summary>
+            <param name="location">Location that reach connects to</param>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.Nodes">
+            <summary>
+            Class implementing a list of INode's
+            Required for generic list COM interop
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Nodes.#ctor">
+            <summary>
+            Initializes a new instance of the List class that is empty and has the default initial capacity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Nodes.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the List class that is empty and has the specified initial capacity.
+            </summary>
+            <param name="capacity">The number of elements that the new list can initially store.</param>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Nodes.#ctor(System.Collections.Generic.IEnumerable{DHI.Mike1D.NetworkDataAccess.INode})">
+            <summary>
+            Initializes a new instance of the List class that contains elements copied from the specified collection and has sufficient capacity to accommodate the number of elements copied.
+            </summary>
+            <param name="collection">The collection whose elements are copied to the new list.</param>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.Reach">
+            <summary>
+            Base class for Link and Branch
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.Reach._locationSpan">
+            <summary>
+            Span of reach
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.Reach._startConnection">
+            <summary>
+            Start connection
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.Reach._endConnection">
+            <summary>
+            End connection
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Reach.ToString">
+            <summary>
+            For debug purposes
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Reach.LocationSpan">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Reach.StartConnection">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Reach.EndConnection">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Reach.TopoID">
+            <summary>
+            Id for the cross section topologi that is to be used for the Link / Branch.
+            
+            If TopoID is not used, set to empty string (null will be handled as the empty string).
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Reach.Description">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Reach.MaximumDx">
+            <summary>
+            The maximal allowed distance between two points of the same type?
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Reach.ReverseDirection">
+            <summary>
+            Reverse the positive flow direction of the reach. Default is false
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Reach.NonReturnReach">
+            <summary>
+            Restrict flow in the first q-grid point to be positive only. Default is false
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Reach.IsRegulatedReach">
+            <summary>
+            Regulate reach with a discharge structure on first q-grid point. This is
+            used for MU setups to limit Q to a QMax(H) og QMax(dH). QMax is set by a control 
+            in the control module
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Reach.IsPressureReach">
+            <summary>
+            True if the reach should always be pressurized (MU special reach with slope=0 and 
+            "weir" at transition to normal reach.)
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.InfiltrationTypes">
+            <summary>
+            Infiltration types, specifying how infiltration is calculated
+            in the node.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.InfiltrationTypes.NoInfiltration">
+            <summary>
+            No infiltration
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.InfiltrationTypes.BottomInfiltration">
+            <summary>
+            Infiltration through the bottom, assuming a reservoir with large area and not really any sides.
+            <para>
+            Only the <see cref="F:DHI.Mike1D.NetworkDataAccess.InfiltrationParameters.KfsBottom"/> is used, and a bottom area matching
+            the surface area is used.
+            </para>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.InfiltrationTypes.BoxInfiltration">
+            <summary>
+            Infiltration through the sides and the bottom, assuming a box-like reservoir with vertical or steep walls.
+            <para>
+            A side area is calculated and infiltration is based on the <see cref="F:DHI.Mike1D.NetworkDataAccess.InfiltrationParameters.KfsBottom"/>.
+            Bottom area is the surface area of an empty basin, i.e. in case of a V shaped geometry the bottom
+            area will be zero and no infiltration will take place.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.InfiltrationParameters">
+            <summary>
+            Infiltration parameters
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.InfiltrationParameters.InfiltrationType">
+            <summary>
+            Infiltration type
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.InfiltrationParameters.KfsSide">
+            <summary>
+            Infiltration coefficient on sides
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.InfiltrationParameters.KfsBottom">
+            <summary>
+            Infiltration coefficient on bottom
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.BasinGeometry">
+            <summary>
+            Geometry of a basin
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.BasinGeometry.#ctor(System.Int32)">
+            <summary>
+            Create geometry data structure with specified number of levels
+            </summary>
+            <param name="numberOfLevels"></param>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.BasinGeometry.#ctor(DHI.Mike1D.Generic.IXYZTable)">
+            <summary>
+            Create geometry data structure with specified number of levels
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.BasinGeometry.EstimateFlowAreas">
+            <summary>
+            Estimate flow areas from surface areas, assuming
+            the basin is circular
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.BasinGeometry.Levels">
+            <summary>
+            Levels
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.BasinGeometry.SurfaceAreas">
+            <summary>
+            Surface areas for each level
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.BasinGeometry.FlowAreas">
+            <summary>
+            Flow area, cross sectional area perpendicular to main flow direction
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.BasinGeometry.Porosity">
+            <summary>
+            Porosity. Valid values are in the range ]0;1], 1 being fully void (default value)
+            and zero having no void.
+            <para>
+            The values are step values, meaning that the porosity at 
+            position [i] is valid from level [i] to [i+1], no interpolation takes place.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.Basin">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.SewerNode">
+            <summary>
+            A SewerNode includes cover functionality to a Node
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.VolumeNode">
+            <summary>
+            A volume node is a node with volume that has a physical interpretation
+            in the real world.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.Node">
+            <summary>
+            Base class for river network nodes. 
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Node.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Node.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="id">textual identification</param>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Node.#ctor(System.String,System.Double,System.Double)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="id">textual identification</param>
+            <param name="xCoordinate">X-Coordinate ([m])</param>
+            <param name="yCoordinate">Y-Coordinate ([m])</param>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Node.Validate">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Node.CompareTo(DHI.Mike1D.NetworkDataAccess.INode)">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Node.Id">
+            <summary>
+            Node textual identification
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Node.XCoordinate">
+            <summary>
+            X-coordinate
+            Unit: [m]
+            Default: Constants.DOUBLE_DELETE_VALUE
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Node.YCoordinate">
+            <summary>
+            Y-coordinate
+            Unit: [m]
+            Default: Constants.DOUBLE_DELETE_VALUE
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Node.HeadLossParameterSet">
+            <summary>
+            Head loss parameters for this particular node.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Node.PressureReachNodeType">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Node.PressureReachTailCrestLevel">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.VolumeNode.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.VolumeNode.#ctor(System.String,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="id">textual identification</param>
+            <param name="xCoordinate">X-Coordinate ([m])</param>
+            <param name="yCoordinate">Y-Coordinate ([m])</param>
+            <param name="bottomLevel">bottom level ([m])</param>
+            <param name="groundLevel">ground level ([m])</param>
+            <param name="criticalLevel">critical level ([m])</param>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.VolumeNode.Validate">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.VolumeNode.GroundLevel">
+            <summary>
+            Level of ground at the node. 
+            Unit: [m]
+            Default: 0
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.VolumeNode.CriticalLevel">
+            <summary>
+            Used in result presentation. Passed directly to the result file.
+            Unit: [m]
+            Default: 0
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.VolumeNode.BottomLevel">
+            <summary>
+            Bottom level
+            Unit: [m]
+            Default: 0
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.VolumeNode.MaxInflowFromSurface">
+            <summary>
+            Maximum inflow from surface, i.e. rainfall runoff type inflows.
+            <para>
+            The node inflow from surface can be limited by the surface opening,
+            a sewer grate or similar.
+            </para>
+            <para>
+            Unit: [m3/s].
+            Default: Double.MaxValue
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.SewerNode.Cover">
+            <summary>
+            Reference to the cover of the manhole. The cover is of type INormalCover, 
+            ISealedCover or ISpillingCover that are all derived from ICover
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.Basin._isClosed">
+            <summary>
+            If the basin is closed, then surface area is not restricted to
+            be monotonically increasing.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Basin.Validate">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Basin.Geometry">
+            <summary>
+            Basin geometry, with water level, flow area, and surface area data
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Basin.IsClosed">
+            <summary>
+            <para>
+            Flag indicating if basin is closed.
+            </para>
+            <para>
+            If the basin is closed, then surface area is not restricted to
+            be monotonically increasing.
+            </para>
+            <para>
+            Open basins counts in flooded area.
+            </para>
+            <para>
+            Default is closed.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Basin.Porosity">
+            <summary>
+            The porosity is the ratio of empty air in that basin. 
+            Empty basins will have porosity = 1 (default)
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Basin.InfiltrationParameters">
+            <summary>
+            Infiltration parameters
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.DHI_Mike1D_NetworkDataAccess">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.DHI_Mike1D_NetworkDataAccess.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.DHI_Mike1D_NetworkDataAccess.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.DHI_Mike1D_NetworkDataAccess.Bridge">
+            <summary>
+              Looks up a localized string similar to Bridge: .
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.DHI_Mike1D_NetworkDataAccess.FilePathNotSpecified">
+            <summary>
+              Looks up a localized string similar to File path not specified.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.DHI_Mike1D_NetworkDataAccess.unknown">
+            <summary>
+              Looks up a localized string similar to  unknown.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.Manhole">
+            <summary>
+            A Manhole is a sewer node where network reaches join. 
+            It includes a diameter and a cover.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Manhole.Validate">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Manhole.Diameter">
+            <summary>
+            Inner diameter of the manhole
+            Unit: [m]
+            Default: 1
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.Network">
+            <summary>
+            Defines a 1D network, nodes and reaches.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Network.Validate">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Network.GetEndReaches">
+            <summary>
+            Returns all locations (reach id, chainage) that is an end reach, i.e.
+            end of the network. Those usually require a boundary condition. If
+            no boundary condition is giving, the engine assumes a closed/wall boundary (which
+            is usually not intended).
+            </summary>
+            <returns>Returns all locations (reach id, chainage), key'ed by reach id.</returns>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Network.Nodes">
+            <summary>
+            List of nodes. Nodes are man holes, ...
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Network.Reaches">
+            <summary>
+            List of sewer links
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Network.StructureCollection">
+            <summary>
+            Provides access to the structures
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Network.__dqTable">
+            <summary>
+            Serialization version, to handle the comparer of the dictionary.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Network.DQTable">
+            <summary>
+            Table of head loss parameter sets, used for Curb Inlets links to 2D overland.
+            <para>
+            Key is id of node, value is DQ table
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Network.HeadLossParameterTable">
+            <summary>
+            Table of possible referenceable head loss parameter sets.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Network.__headLossParameterTable">
+            <summary>
+            Serialization version, to handle the comparer of the dictionary.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Network.CatchmentConnections">
+            <summary>
+            List of catchment connections.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Network.DoReorderNodes">
+            <summary>
+            True if nodes are to be reordered, using a Reverse Cuthill-McKee approach
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.NormalCover">
+            <summary>
+            If the water level in a manhole or a basin reaches the ground level, an artificial 
+            “inundation” basin is inserted above the node. The surface area of this basin is 
+            gradually (over one meter) increased from the area in the manhole or the basin 
+            to a 1000 times larger area, thus simulating the surface inundation. The maximum 
+            level of inundation is 10 meter above the specified ground level. When the outflow 
+            from the node surmounts the inflow, the water stored in the inundation basin 
+            re-enters the system. When the water level in the node increases and is above 
+            ground level, the following is assumed:
+            During a time step the surface area in the basin is calculated using the water 
+            level from the start of the actual time step. A situation like this is shown in 
+            Figure 8.1. If the water level passes through the transition region between the 
+            actual manhole or structure and the artificial basin, this assumption leads to 
+            generation of water. In Figure 8.1 the shaded area illustrates the generated volume 
+            of water. Figure 8.1 Simulation of the surface flooding When the increase of the 
+            water level during a time step is relatively small, then the generated water volume is 
+            negligible. If the water level is changing rapidly, the generated volume of water 
+            is important and due to that an appropriate correction is built in the program to 
+            ensure no generation of water.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.Outlet">
+            <summary>
+            An Outlet is a volume free node where water flows out of the system. 
+            <para>
+            An outlet is the only type of open boundary that does not need a boundary condition
+            </para>
+            <para>
+            An outlet can have a boundary condition (water level/QH), in which case the 
+            water can also flow into the system.
+            </para>
+            <para>
+            The IOutlet extends the <see cref="T:DHI.Mike1D.NetworkDataAccess.IVolumeNode"/>, though it can also be used
+            outside a sewer system, in which case the <see cref="P:DHI.Mike1D.NetworkDataAccess.IVolumeNode.GroundLevel"/>
+            is set to the <see cref="P:DHI.Mike1D.NetworkDataAccess.IVolumeNode.BottomLevel"/>. The rest of the
+            <see cref="T:DHI.Mike1D.NetworkDataAccess.IVolumeNode"/> properties are not valid for a non-sewer outlet.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.Outlet.GroundLevel">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.OutletHeadLoss">
+            <summary>
+            Description of headloss from node outlets
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.OutletHeadLoss.ID">
+            <summary>
+            Textual identification of OutletHeadLoss
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.OutletHeadLoss.Method">
+            <summary>
+            Method for the actual head loss parameter set
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.OutletHeadLoss.UseLocalData">
+            <summary>
+            Switch for use of local head loss data
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.OutletHeadLoss.Coefficient">
+            <summary>
+            Locally defined interpretation of head-loss coefficient.
+            Km="shape coefficient", 
+            Cont. HLC= outlet contraction headloss coeff. (relative to velocityhead) ,
+            Total HLC = outlet total headloss (relative to velocity head)
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.Reaches">
+            <summary>
+            Class implementing a list of IReach's
+            Required for generic list COM interop
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Reaches.#ctor">
+            <summary>
+            Initializes a new instance of the List class that is empty and has the default initial capacity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Reaches.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the List class that is empty and has the specified initial capacity.
+            </summary>
+            <param name="capacity">The number of elements that the new list can initially store.</param>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.Reaches.#ctor(System.Collections.Generic.IEnumerable{DHI.Mike1D.NetworkDataAccess.IReach})">
+            <summary>
+            Initializes a new instance of the List class that contains elements copied from the specified collection and has sufficient capacity to accommodate the number of elements copied.
+            </summary>
+            <param name="collection">The collection whose elements are copied to the new list.</param>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.RoutingReach">
+            <summary>
+            A reach where water is routed through, using one or several <see cref="T:DHI.Mike1D.NetworkDataAccess.IRoutingElement"/>'s.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.RoutingReach.RoutingElements">
+            <summary>
+            Routing elements used in this reach
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.RoutingElement">
+            <summary>
+            Routing element, from previous routing element to this routing element, 
+            this interface specifies what kind of routing is applied.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.RoutingElement.ToString">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.RoutingElement.Location">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.RoutingElement.Description">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.RoutingElement.RoutingMethod">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.RoutingElement.RoutingElevation">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.RoutingElement.MuskingumK">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.RoutingElement.MuskingumX">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.RoutingElement.QhTable">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.SealedCover">
+            <summary>
+            Any manhole or basin can be defined as 'sealed'. If a node is defined as a
+            sealed node, then the maximum water level at a node is set to the ground
+            surface. In this case, the pressure will rise without any water on the ground
+            surface. The following relations are valid:
+            Hm=Pm for Pm SmallerOrEqual Htop   (8.1)
+            and 
+            Hm=HTop fopr 
+            where:
+            Hm is the water level in the node [m],
+            Pm is the pressure level in the node [m],
+            Htop is the ground level for the node [m].
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.SealedCover.CoverSlotWidth">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.SpillingCover">
+            <summary>
+            Any manhole or basin can be defined as 'spilling'. If the water level in a node 
+            defined as a spilling node reaches the ground level, the water will start spilling 
+            irreversibly out of the system. The flow will be computed using the free overflow 
+            formula, according to the following:
+            for Hm SmallerOrEqualTo Htop+deltaP                          (8.2)
+            Qspill = 0
+            for Hm LargerThan Htop+deltaP                          (8.2)
+            Qspill = Relative Weir Coefficient*0.63*B*sqrt(2g)*(Hm-(Htop+deltaP))^1.5
+            here:
+            Qspill= the spill discharge [m3/s],
+            B = a conceptual spill width [m],
+            Hm = the water level in the manhole [m],
+            Htop = the ground level in the manhole [m],
+            deltaP = the "Buffer Pressure Level" for the spill [m],
+            g = the acceleration of gravity [ms-2),
+            RelativeWeirCoefficient = the linear scaling coefficient for the spill.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.SpillingCover.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.SpillingCover.SpillingWaterLevel">
+            <summary>
+            Water level where spilling starts. Usually ground level. Observe: Cover expansion starts at a different level
+            than spilling.
+            Unit: [m]
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.SpillingCover.SpillCoefficient">
+            <summary>
+            Linear scaling coefficient for the spill
+            Unit: []
+            Default: 1
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.StructureReach">
+            <summary>
+            A structure reach is an "artificial" reach containing
+            one structure and no volume. It the reach has a length,
+            it is an "artificial" length.
+            <para>
+            A structure reach is used for two common scenarios: a structure in a node, and
+            a structure between the main river and the side river (link channel).
+            </para>
+            <para>
+            A structure in a node is modelled by defining two nodes with a structure reach in between.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.StructureReach.IsLinkChannel">
+            <summary>
+            A link channel is a MIKE 11 structure reach. This flag is needed
+            because link channels do not need to have a boundary created at the downstream end.
+            </summary>
+        </member>
+    </members>
+</doc>

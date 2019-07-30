@@ -27,6 +27,12 @@ Enable through command line using the -script parameter:
 ```
    "c:\Program Files (x86)\DHI\2019\bin\x64\DHI.Mike1D.Application.exe" MySetup.m1dx -script=..\myscripts\AdditionalOutput.cs -gui -close
 ```
+#### Checking
+It is possible to check in the simulation log file whether a script has been loaded. When a script is being loaded, the logfile will contain a line on the form:
+```
+2019-05-20 15:00:00: Loading script file mySetupScript.cs ...
+```
+The line is also written to the log file when exporting a MIKE URBAN setup to MIKE 1D (.m1dx file).
 
 ## Define a script
 A script method needs the ```[Script]``` attribute. The name of the method is not important, however the method must have one of the following arguments.
@@ -72,3 +78,12 @@ A ```diagnostics``` parameter can be added, and used for adding lines to the set
 The script method ```ModifySetup``` defines all the user defined parameters with a default value. In case the ```-scriptpars:``` is not used, or one of the parameters is not added to the ```-scriptpars:```, the default value is used. 
 
 An example script with user defined script parameters can be found in [ScriptParameters.cs](ScriptParameters.cs)
+
+## Debug a script
+It is possible to debug scripts. The ```-scriptdebug``` argument to the MIKE 1D application will build the script with debug information. 
+
+Start Visual Studio or a similar IDE. Open the script file in Visual Studio. Add the ```-scriptdebug``` argument and also the ```-wait``` to the command line, which will pause the simulation at the start and pop op a messagebox. That makes it possible in Visual Studio to attach the debugger to the ```DHI.Mike1D.Application.exe``` process. When the debugger is attached, add some breakpoints in the script, and press "OK" in the messagebox to continue, and your breakpoints should be hit. Example of command line for attaching the Visual Studio debugger:
+```
+   set m1d="c:\Program Files (x86)\DHI\2019\bin\x64\DHI.Mike1D.Application.exe"
+   %m1d% MySetup.m1dx -script=ScriptParameters.cs -scriptdebug -wait -gui -close
+```

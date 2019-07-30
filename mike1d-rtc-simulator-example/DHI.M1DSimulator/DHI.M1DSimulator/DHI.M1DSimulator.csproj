@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CCBFD3B9-23D8-47C5-B0DB-16EBF770F6EA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DHI.M1DSimulator</RootNamespace>
+    <AssemblyName>DHI.M1DSimulator</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\Release\DHI.M1DSimulator.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DHI.Math.Expression, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Math.Expression.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DHI.Mike1D.BoundaryModule, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.BoundaryModule.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DHI.Mike1D.ControlModule, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.ControlModule.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DHI.Mike1D.CrossSectionModule, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.CrossSectionModule.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DHI.Mike1D.Engine, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.Engine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DHI.Mike1D.Generic, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.Generic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DHI.Mike1D.HDParameterDataAccess, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.HDParameterDataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DHI.Mike1D.Mike1DDataAccess, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.Mike1DDataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DHI.Mike1D.NetworkDataAccess, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.NetworkDataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DHI.Mike1D.Optimization, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DHI.Mike1D.RainfallRunoffModule, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.RainfallRunoffModule.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DHI.Mike1D.ResultDataAccess, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.ResultDataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DHI.Mike1D.SimLauncher, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.SimLauncher.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DHI.Mike1D.StructureModule, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.StructureModule.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="M1DRtcComponents.cs" />
+    <Compile Include="M1DRtcRules.cs" />
+    <Compile Include="M1DSimulator.cs" />
+    <Compile Include="M1DSimulatorExample.cs" />
+    <Compile Include="M1DSimulatorRtc.cs" />
+    <Compile Include="M1DSimulatorRunner.cs" />
+    <Compile Include="MusFile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
