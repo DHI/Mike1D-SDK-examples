@@ -723,6 +723,11 @@
             Name and path of hot start file
             </summary>
         </member>
+        <member name="T:DHI.Mike1D.Mike1DDataAccess.LTSJobList">
+            <summary>
+            LTS joblist 
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.Mike1DDataAccess.LTSJobList.ReadFromFile(DHI.Mike1D.Generic.IFilePath,DHI.Mike1D.Generic.IDiagnostics)">
             <summary>
             Read job list file (PFS file with .MJL extension)
@@ -731,6 +736,58 @@
         <member name="M:DHI.Mike1D.Mike1DDataAccess.LTSJobList.WriteToFile(DHI.Mike1D.Generic.IFilePath)">
             <summary>
             Write job list file (PFS file with .MJL extension)
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Mike1DDataAccess.LTSJobListCreator">
+            <summary>
+            Class for creating an LTS job list.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Mike1DDataAccess.LTSJobListCreator.ResultDataBuffer">
+            <summary>
+            Result data buffer. Assign an existing one, to share a buffer already in use.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Mike1DDataAccess.LTSJobListCreator.CurrentTime">
+            <summary>
+            Current time in the job list generation.
+            </summary>
+        </member>
+        <member name="E:DHI.Mike1D.Mike1DDataAccess.LTSJobListCreator.PostTimeStepEvent">
+            <summary>
+            An event that is called after a time step.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Mike1DDataAccess.LTSJobListCreator._allNodes">
+            <summary> null correspond to all nodes </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Mike1DDataAccess.LTSJobListCreator.ConditionTimeSpanBox">
+            <summary>
+            A trivial boxed TimeSpan so that we can modify the TimeSpan in a dictionary
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.LTSJobListCreator.#ctor(DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS,DHI.Mike1D.Mike1DDataAccess.Mike1DData,DHI.Mike1D.Generic.Diagnostics)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.LTSJobListCreator.CreateJobList">
+            <summary>
+            Returns LTSJobList for given simulation parameters in mike1DData.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.LTSJobListCreator.CreateJobList(System.DateTime,System.DateTime,System.TimeSpan)">
+            <summary>
+            Returns LTSJobList for given simulation parameters.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.LTSJobListCreator.RainActive(System.DateTime)">
+            <summary>
+            Return true if any rain boundaries exceed _mike1DData.LongTermStatistics.EpsilonRain at time
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.LTSJobListCreator.GetTotalInflow(System.Collections.Generic.IList{DHI.Mike1D.Generic.Collections.ValueIdList.Item},System.Boolean)">
+            <summary>
+            Get inflow contributions from point source boundaries into nodes and catchment connections into nodes.
+            For includeOnlyStormRunoff=true only Storm Runoff contributions are included.
             </summary>
         </member>
         <member name="T:DHI.Mike1D.Mike1DDataAccess.LTSResultSpecification">
@@ -751,6 +808,13 @@
         <member name="M:DHI.Mike1D.Mike1DDataAccess.LTSResultSpecificationItem.#ctor">
             <summary>
             Initializer for LTSResultSpecificationItem.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Mike1DDataAccess.LTSResultSpecificationConverter">
+            <summary>
+            Class for converting the old LTSResultsSpecification to result specifications
+            used in Release 2019 and later.
+            After LTSResultsSpecification is completely removed this class can be deleted.
             </summary>
         </member>
         <member name="T:DHI.Mike1D.Mike1DDataAccess.Mike1DAdditionalBridge">
@@ -847,6 +911,11 @@
         <member name="P:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerFactory.DisableLogFile">
             <summary>
             Flag to disable log-file writing of the controller
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerFactory.KeepLogFileOpen">
+            <summary>
+            Flag to keep log-file open after simulation has finalized
             </summary>
         </member>
         <member name="P:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerFactory.LogFileWriter">
@@ -969,6 +1038,16 @@
             </summary>
             <param name="diagnosticsHandler"></param>
         </member>
+        <member name="P:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS.GenerateLTSJobList">
+            <summary>
+            Indicates if the simulation generates the job list only
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS.JobListCreator">
+            <summary>
+            LTS job list creator
+            </summary>
+        </member>
         <member name="E:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS.JobDoneEvent">
             <summary>
             An event that is called before the start of LTS job simulation
@@ -978,6 +1057,9 @@
             <summary>
             An event that is called when the LTS job simulation is done
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS.DoInitialize(DHI.Mike1D.Generic.IDiagnostics)">
+            <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS.DoValidate">
             <inheritdoc />
@@ -1001,31 +1083,9 @@
             Add a reach to the 'reaches' list
             </summary>
         </member>
-        <member name="T:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS.ConditionTimeSpanBox">
-            <summary>
-            A trivial boxed TimeSpan so that we can modify the TimeSpan in a dictionary
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS.RainActive(System.DateTime)">
-            <summary>
-            Return true if any rain boundaries exceed _mike1DData.LongTermStatistics.EpsilonRain at time
-            </summary>
-            <param name="time"></param>
-            <returns></returns>
-        </member>
-        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS.GetTotalInflow(System.DateTime,System.Collections.Generic.IList{DHI.Mike1D.Engine.EngineNode})">
-            <summary>
-            Get inflow contributions from point source boundaries into nodes and catchment connections into nodes.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS.GetTotalInflowWithoutDWF(System.DateTime,System.Collections.Generic.IList{DHI.Mike1D.Engine.EngineNode})">
-            <summary>
-            Get inflow contributions excluding dry weather flow from point source boundaries and catchment connections.
-            </summary>
-        </member>
         <member name="F:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS.RuntimeConditionState.Active">
             <summary>
-            Active true means that the runtime stop condition is fullfilled, and
+            Active true means that the runtime stop condition is fulfilled, and
             this condition allows the simulation to stop.
             </summary>
         </member>
@@ -1047,6 +1107,16 @@
         <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS.GetFillingDegree(System.Collections.Generic.IList{DHI.Mike1D.Engine.EngineNode},System.Collections.Generic.IList{DHI.Mike1D.Engine.EngineReach})">
             <summary>
             Get the maximal filling degree in nodes and in grid points of reaches.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS.GetDepth(System.Collections.Generic.IList{DHI.Mike1D.Engine.EngineNode})">
+            <summary>
+            Get the maximal depth in given nodes.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DControllerLTS.GetLocalFlow(System.Collections.Generic.IList{DHI.Mike1D.Engine.EngineReach})">
+            <summary>
+            Get local flow in nodes and in grid points of reaches.
             </summary>
         </member>
         <member name="T:DHI.Mike1D.Mike1DDataAccess.ControllerState">
@@ -1317,11 +1387,6 @@
             List of structures
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.Mike1DDataAccess.LTSJobStopCondition.Value">
-            <summary>
-            The simulation will be stopped if the total inflow descends below "Value" for at least "Time"
-            </summary>
-        </member>
         <member name="T:DHI.Mike1D.Mike1DDataAccess.LTSRuntimeStopConditionCollection">
             <summary>
             Holds a list of LTSRuntimeStopCondition's that must all be satisfied for a job to stop
@@ -1364,6 +1429,19 @@
         <member name="P:DHI.Mike1D.Mike1DDataAccess.LongTermStatisticsData.MinimumTimeBetweenRain">
             <summary>
             Combine two LTS events if they are less than MinimumTimeBetweenRain apart
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Mike1DDataAccess.LongTermStatisticsData.MaxCatchmentDelayTime">
+            <summary>
+            After that much time it is allowed to jump after a rain event in job list generation.
+            This values should be determined by the maximum delay time of the catchment.
+            Default value is zero.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Mike1DDataAccess.LongTermStatisticsData.JobListTimeStep">
+            <summary>
+            Time step for joblist generation.
+            Default value is 1 minute.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.Mike1DDataAccess.LongTermStatisticsData.DischargeThreshold">
@@ -1551,11 +1629,6 @@
             within the MIKE URBAN GUI.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.Mike1DDataAccess.IMike1DMUBridge.Open(DHI.Mike1D.Generic.WorkspaceContainer,DHI.Mike1D.Generic.IDiagnostics)">
-            <summary>
-            Create MIKE 1D data from the MIKE URBAN workspace specified in the <paramref name="workspaceContainer"/>
-            </summary>
-        </member>
         <member name="P:DHI.Mike1D.Mike1DDataAccess.IMike1DMUBridge.FlexibleLoad">
             <summary>
             If true, then the bridge will try to find input files even if the name is wrong.
@@ -1600,9 +1673,6 @@
         <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DBridge.Open(DHI.Mike1D.Generic.IConnection)">
             <inheritdoc />
         </member>
-        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DBridge.Open(DHI.Mike1D.Generic.WorkspaceContainer,DHI.Mike1D.Generic.IDiagnostics)">
-            <inheritdoc />
-        </member>
         <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DBridge.Open(DHI.Mike1D.Generic.IConnection,DHI.Mike1D.Generic.IDiagnostics)">
             <inheritdoc />
         </member>
@@ -1636,6 +1706,9 @@
         </member>
         <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DController.InitTimings">
             <inheritdoc />
+        </member>
+        <member name="F:DHI.Mike1D.Mike1DDataAccess.Mike1DController._timingsPrep">
+            <summary> Timings used during prepare </summary>
         </member>
         <member name="F:DHI.Mike1D.Mike1DDataAccess.Mike1DController._timingsRun">
             <summary> Timings used during runtime </summary>
@@ -1740,6 +1813,26 @@
         <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DController.DoPrepare">
             <summary>
             Prepare the engine. This is called just before run is called.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DController.DoPrepareDiagnostics">
+            <summary>
+            Prepares runtime diagnostics.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DController.DoPrepareResultFileFolder">
+            <summary>
+            Prepares result file folder.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DController.DoPrepareBoundaryData">
+            <summary>
+            Prepares boundary data.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DController.DoPrepareCatchmentResultFiles">
+            <summary>
+            Prepares catchment result files.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DController.ReadStartStates">
@@ -2096,6 +2189,23 @@
             for details.
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.Mike1DDataAccess.Mike1DData.UnitSystem">
+            <summary>
+            Unit system used when reporting
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Mike1DDataAccess.Mike1DData.UserUnitProvider">
+            <summary>
+            Unit provider used when <see cref="P:DHI.Mike1D.Mike1DDataAccess.Mike1DData.UnitSystem"/> is <see cref="F:DHI.Mike1D.Generic.UnitSystem.User"/>
+            <para>
+            You must also set the <see cref="P:DHI.Mike1D.Mike1DDataAccess.Mike1DData.UnitSystem"/> to <see cref="F:DHI.Mike1D.Generic.UnitSystem.User"/> in order to use
+            the specified unit provider.
+            </para>
+            <para>
+            The user unit provider must be set in-process, i.e. it is not stored to MIKE 1D setup file.
+            </para>
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.Mike1DDataAccess.Mike1DData.Network">
             <summary>
             Network data access. Provides access to input data that defines the network.
@@ -2350,6 +2460,30 @@
             Validate open boundaries, currently only for link-channels
             </summary>
         </member>
+        <member name="T:DHI.Mike1D.Mike1DDataAccess.Mike1DDataExtensions">
+            <summary>
+            Extension methods for the MIKE 1D Data object
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DDataExtensions.UseRRResults(DHI.Mike1D.Mike1DDataAccess.Mike1DData)">
+            <summary>
+            Bool indicating if RR results are active in the HD simulation.
+            <para>
+            RR results can contain Runoff or Catchment Discharge results, or both.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DDataExtensions.UnitProvider(DHI.Mike1D.Mike1DDataAccess.Mike1DData)">
+            <summary>
+            Get unit provider, matching the <see cref="P:DHI.Mike1D.Mike1DDataAccess.Mike1DData.UnitSystem"/>.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DDataExtensions.SetMUPRegressionTestCompatabilityMode(DHI.Mike1D.Mike1DDataAccess.Mike1DData)">
+            <summary>
+            Modifies MUP result specifications to better match the default MU result specifications.
+            </summary>
+            <param name="mike1DData"></param>
+        </member>
         <member name="T:DHI.Mike1D.Mike1DDataAccess.Mike1DDataXmlBridge">
             <summary>
             Bridge class for saving MIKE 1D data to XML, handling reading/writing the .m1dx file.
@@ -2449,6 +2583,41 @@
             Helper class for assembly version information
             </summary>
         </member>
+        <member name="F:DHI.Mike1D.Mike1DDataAccess.AssemblyVersionInfo.AssemblyName">
+            <summary> Name of assembly </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Mike1DDataAccess.AssemblyVersionInfo.MajorVersion">
+            <summary> Major version, updated with every major release </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Mike1DDataAccess.AssemblyVersionInfo.FileVersion">
+            <summary> File version. Includes updates and build version number </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Mike1DDataAccess.AssemblyVersionInfo.BuildDateTime">
+            <summary> Date and time that the assembly was build </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.AssemblyVersionInfo.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.AssemblyVersionInfo.GetAssemblyVersionInfo(System.Reflection.Assembly)">
+            <summary>
+            Create an <see cref="T:DHI.Mike1D.Mike1DDataAccess.AssemblyVersionInfo"/> from an Assembly instance.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Mike1DDataAccess.AssemblyVersionInfo._m1dAssemblyVersionInfos">
+            <summary>
+            List of all MIKE 1D assemblies
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.AssemblyVersionInfo.GetFirst">
+            <summary>
+            Returns the Mike1D assembly with the earliest build date/time
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.AssemblyVersionInfo.VersionToConsole">
+            <summary>
+            Report version to console, but only report once.
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory">
             <summary>
             Factory that sets up an <see cref="T:DHI.Mike1D.ResultDataAccess.IResultData"/>
@@ -2484,6 +2653,12 @@
         <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.CreateResultData(DHI.Mike1D.ResultDataAccess.ResultSpecification,DHI.Mike1D.Mike1DDataAccess.Mike1DData,DHI.Mike1D.Generic.IDiagnostics)">
             <summary>
             Create result data object from result specification
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.SetupTimings(DHI.Mike1D.Mike1DDataAccess.IMike1DController,DHI.Mike1D.ResultDataAccess.ResultData,System.Boolean)">
+            <summary>
+            Setup timings for <paramref name="resultData"/> object,
+            to report timings together with the post-time-step event timers.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.CreateResultDataLTS(DHI.Mike1D.ResultDataAccess.ResultSpecification,DHI.Mike1D.Mike1DDataAccess.Mike1DData,DHI.Mike1D.Generic.IDiagnostics)">
@@ -2535,7 +2710,7 @@
             <paramref name="results"/> object.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.SetupCatchments(DHI.Mike1D.ResultDataAccess.ResultData,DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData,DHI.Mike1D.ResultDataAccess.ResultSpecification,DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.CatchmentResultDataUpdaterPerTimestep)">
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.SetupCatchments(DHI.Mike1D.ResultDataAccess.ResultData,DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData,DHI.Mike1D.ResultDataAccess.ResultSpecification)">
             <summary>
             Sets up the ResultData for <see cref="T:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData"/>.
             </summary>
@@ -2578,52 +2753,6 @@
             </summary>
             <returns>IRes1DNode matching engine node type</returns>
         </member>
-        <member name="T:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.CatchmentRunController">
-            <summary>
-            A <see cref="T:DHI.Mike1D.RainfallRunoffModule.ICatchmentRunController"/> that makes sure that an update
-            event is raised at certain "check point" times, and whenever certain
-            catchments have performed an update. The times are handled by 
-            a "CheckPointProvider", which is a method that defines the next 
-            checkpoint in time where an update event must be raised.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.CatchmentRunController.AddCheckPointProvider(System.Func{System.DateTime})">
-            <summary>
-            Add a new check point provider. The check point provider must provide
-            the time of which it wants the next update, and it must be sure
-            to increment the time when the update event at that time is raised.
-            </summary>
-            <param name="checkPointProvider"></param>
-        </member>
-        <member name="T:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.CatchmentResultDataUpdaterPerTimestep">
-            <summary>
-            Helper class for result data updating when the results
-            are retrieved from catchments with potential different 
-            time steps, and not all catchments are included in all
-            result files.
-            <para>
-            This helper class is required since the catchments may update
-            asynchroniously and out-of-order from a time point of view, while
-            the results need to be written timewise in-order.
-            </para>
-            <para>
-            The <see cref="M:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.CatchmentResultDataUpdaterPerTimestep.SingleCatchmentPerformTimestepEvent(System.DateTime)"/> is
-            triggered everytime one of the catchments included in this
-            result data has taken a time step. It is in general triggered with 
-            time arguments in non-sorted order.
-            </para> 
-            <para>
-            The <see cref="M:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.CatchmentResultDataUpdaterPerTimestep.RrPerformTimestepEvent(System.DateTime)"/> is called every time
-            the rainfall runoff run-controller reaches a certain time. These are
-            triggered in sorted order, and also for times that are not relevant
-            for this result file.
-            </para>
-            <para>
-            Results will be updated in the <see cref="M:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.CatchmentResultDataUpdaterPerTimestep.RrPerformTimestepEvent(System.DateTime)"/>, but 
-            only if at least one of the catchments has been updated to that time.
-            </para>
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.CreateADOutputSpecification(System.String,DHI.Mike1D.ADDataAccess.ADComponentData,DHI.Mike1D.ResultDataAccess.ResultSpecification)">
             <summary>
             Create an AD output specification that matches the baseSpecss
@@ -2645,7 +2774,7 @@
             Create an ST-RR output specification that matches the baseSpecs
             </summary>
             <param name="id">ID of result specification</param>
-            <param name="adData">ST data specification</param>
+            <param name="stData">ST data specification</param>
             <param name="baseSpecs">Basic result specifications, usually the default HD result specifications</param>
         </member>
         <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DResultDataFactory.CreateAdditionalOutputSpecification(DHI.Mike1D.HDParameterDataAccess.HDParameterData,DHI.Mike1D.ResultDataAccess.ResultSpecification)">
@@ -2899,6 +3028,11 @@
             Timestamp of state
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.Mike1DDataAccess.Mike1DStateReader.Diagnostics">
+            <summary>
+            Diagnostics object for reporting erros and warnings
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.Mike1DDataAccess.Mike1DStateWriter">
             <summary>
             Class for writing current state of a MIKE 1D model to a state file.
@@ -2918,6 +3052,16 @@
             </para>
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DStateWriter.#ctor(DHI.Mike1D.Mike1DDataAccess.IMike1DController,DHI.Mike1D.Generic.IFilePath)">
+            <summary>
+            Create state writer class
+            </summary>
+            <param name="controller">MIKE 1D Controller</param>
+            <param name="templateFilePath">Template file path.
+              If containing a placeholder like <code>MyStateFileName_{0}.sta1d</code>,
+              it will be replaced with the time of the state
+            </param>
+        </member>
         <member name="P:DHI.Mike1D.Mike1DDataAccess.Mike1DStateWriter.FileTimeFormat">
             <summary>
             Format of time string in file name. Must not include characters that are not valid
@@ -2926,6 +3070,30 @@
             Default is "yyyyMMddTHHmmss" (ISO 8601 basic format)
             </para>
             </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Mike1DDataAccess.Mike1DStateWriter.StateTime">
+            <summary>
+            Last time the state was written.
+            This may be differ from time series
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DStateWriter.Prepare(System.DateTime)">
+            <summary>
+            Preparing state writing
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DStateWriter.PostTimeStep(System.DateTime)">
+            <summary>
+            This methods checks if it is now the time to write state,
+            and if so, writes it
+            </summary>
+            <param name="time">Time of simulation</param>
+        </member>
+        <member name="M:DHI.Mike1D.Mike1DDataAccess.Mike1DStateWriter.WriteState(System.DateTime)">
+            <summary>
+            Write state to state file
+            </summary>
+            <param name="stateTime">Time of state/simulation</param>
         </member>
         <member name="T:DHI.Mike1D.Mike1DDataAccess.StateWriteSpecification">
             <summary>
@@ -3297,6 +3465,14 @@
         <member name="P:DHI.Mike1D.Plugins.ScriptLoader.AdditionalDependencies">
             <summary>
             Additional dependencies, seperated by ; (semi-colon)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Plugins.ScriptLoader.SetCustomScriptParameters(System.String)">
+            <summary>
+            Script parameters on the form:
+            <code>
+            scriptParameters = "par1=value1;par2=value2;"
+            </code>
             </summary>
         </member>
         <member name="T:DHI.Mike1D.Plugins.UHMRescaleTimestep">

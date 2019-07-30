@@ -25,7 +25,7 @@
             True when window has been closed.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.#ctor(DHI.Mike1D.SimLauncher.SimulationWorker,System.String,System.Boolean,DHI.Mike1D.Generic.WorkspaceContainer)">
+        <member name="M:DHI.Mike1D.SimLauncher.Mike1DApplicationForm.#ctor(DHI.Mike1D.SimLauncher.SimulationWorker,System.String,System.Boolean)">
             <summary>
             Create a new form
             </summary>
@@ -563,12 +563,6 @@
         <member name="F:DHI.Mike1D.SimLauncher.SimulationLauncher._silent">
             <summary> Do not start a GUI </summary>
         </member>
-        <member name="F:DHI.Mike1D.SimLauncher.SimulationLauncher._storageAccess">
-            <summary> Pointer to storage with MU DB data, unmarshalled </summary>
-        </member>
-        <member name="F:DHI.Mike1D.SimLauncher.SimulationLauncher._storageContainer">
-            <summary> Pointer to storage with MU DB data, marshalled </summary>
-        </member>
         <member name="F:DHI.Mike1D.SimLauncher.SimulationLauncher._blockingMode">
             <summary>
             If _blockingMode is false, then the simulation runs in a background thread.
@@ -617,14 +611,6 @@
         <member name="P:DHI.Mike1D.SimLauncher.SimulationLauncher.InputFileName">
             <summary>
             File name of the simulation set up file (.mdb, .gdb or .sim11 file)
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.SimLauncher.SimulationLauncher.StorageAccess">
-            <summary>
-            Pointer to MU DB storage.
-            <para>
-            Used by MU GUI to reuse storage from MU in M1D without reloading it.
-            </para>
             </summary>
         </member>
         <member name="P:DHI.Mike1D.SimLauncher.SimulationLauncher.Silent">
@@ -827,9 +813,6 @@
         <member name="P:DHI.Mike1D.SimLauncher.SimulationWorker.Timer">
             <summary> Timer that is triggered once every 0.2 seconds. Used to update progress. </summary>
         </member>
-        <member name="F:DHI.Mike1D.SimLauncher.SimulationWorker.StorageContainer">
-            <summary> Pointer to storage with MU DB data, marshalled </summary>
-        </member>
         <member name="P:DHI.Mike1D.SimLauncher.SimulationWorker.SimulationParameters">
             <summary>
             Simulation parameters
@@ -982,6 +965,14 @@
             all boundaries having time series items with a constant item instead
             </summary>
             <param name="sim11FileName">Name of setup file (sim11)</param>
+        </member>
+        <member name="M:DHI.Mike1D.SimLauncher.SimLauncherUtil.StateTestRunMode(System.String,System.String,DHI.Mike1D.SimLauncher.SimulationParameters)">
+            <summary>
+            Internal method for testing state functionality
+            </summary>
+            <param name="inputFileName">Input file name</param>
+            <param name="stateRunTestOptions">Options string</param>
+            <param name="simParams">Simulation parameters</param>
         </member>
     </members>
 </doc>

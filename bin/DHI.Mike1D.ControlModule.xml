@@ -69,6 +69,16 @@
             a adjustment of the value of the controlled structure.
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionSetBase.Convert(System.Double)">
+            <summary>
+            Convert value from <see cref="P:DHI.Mike1D.ControlModule.ActionSetBase.Unit"/> to SI (engine) units
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ActionSetBase.Revert(System.Double)">
+            <summary>
+            Convert value from SI (engine) units to <see cref="P:DHI.Mike1D.ControlModule.ActionSetBase.Unit"/>
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.ControlModule.ActionUnchanged">
             <summary>
             Action that, when activated, will read the current control value (<see cref="P:DHI.Mike1D.ControlModule.ActionSetBase.CurrentControlValueGetter"/>)
@@ -244,7 +254,7 @@
         </member>
         <member name="T:DHI.Mike1D.ControlModule.ControlFunctionMin">
             <summary>
-            A control function that returns the maximum value throughout the simulation
+            A control function that returns the minimum value throughout the simulation
             </summary>
         </member>
         <member name="F:DHI.Mike1D.ControlModule.ControlFunctionMin._valueExpression">
@@ -395,6 +405,13 @@
             Flag specifying only to include time steps that are fully inside the
             time interval. This is the M11 implementation.
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTimeIntegrate.UpdateBuffers(System.DateTime)">
+            <summary>
+            Overrides fully the UpdateBuffers method from base class,
+            to handle the _applyExpression
+            </summary>
+            <param name="time"></param>
         </member>
         <member name="M:DHI.Mike1D.ControlModule.ControlFunctionTimeIntegrate.DequeueOldValues(System.DateTime)">
             <summary>
@@ -860,8 +877,8 @@
             This value is what the PID controller will try to get to match the
             setpoint expression value.
             The new control value is calculated so as to minimize the difference between
-            RegulatedExpressionValue() and InputExpressionValue(), where RegulatedExpressionValue() is the value
-            that changes in resopnse to the control.
+            RegulatedExpressionValue() and ReferenceExpressionValue(), where RegulatedExpressionValue() is the value
+            that changes in response to the control.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.ControlModule.ActionPID.__regulatedExpression">
@@ -1120,21 +1137,20 @@
             <summary>
             List of user defined variables.
             <para>
-            User defined variables are variables that are evalauted in every <see cref="M:DHI.Mike1D.ControlModule.ControlData.Update(System.DateTime,System.DateTime)"/>
+            User defined variables are variables that are evaluated in every <see cref="M:DHI.Mike1D.ControlModule.ControlData.Update(System.DateTime,System.DateTime)"/>
             and can be used in other expressions. 
             </para>
             <para>
-            The variables are evaluated in-order, if a variable "A" is used in the expresion of another variable "B",
+            The variables are evaluated in-order, if a variable "A" is used in the expression of another variable "B",
             then "A" must be defined before "B" in this list.
             </para>
             </summary>
         </member>
         <member name="P:DHI.Mike1D.ControlModule.ControlData.BuildInVariables">
             <summary>
-            List of build in predefined variables. 
+            List of build-in predefined variables. Contains variables like <code>dt</code>.
             <para>
-            Used during simulation. If a sensor or another variable 
-            is defined, variables in this list is ignored.
+            If a sensor or another variable is defined with the same name, variables in this list is ignored.
             </para>
             </summary>
         </member>
@@ -1304,6 +1320,11 @@
             <summary>
             Sensor description defines where the sensor
             gets its data from.
+            <para>
+            Use the unit of the <see cref="F:DHI.Mike1D.ControlModule.SensorDescription.Quantity"/>
+            to specify in which unit the sensor is supposed to return its value,
+            automatically converting the value from the engine units to this unit.
+            </para>
             </summary>
         </member>
         <member name="F:DHI.Mike1D.ControlModule.SensorDescription.LocationType">
@@ -1329,7 +1350,8 @@
         </member>
         <member name="F:DHI.Mike1D.ControlModule.SensorDescription.Quantity">
             <summary>
-            Quantity that sensor is returning
+            Quantity that sensor is returning. The unit in this quantity
+            is the unit that the user want the sensor to return values in.
             </summary>
         </member>
         <member name="T:DHI.Mike1D.ControlModule.ActionTargetGroupTypes">
@@ -1444,8 +1466,6 @@
             <summary>
             Implement action.
             </summary>
-            <param name="timeN"></param>
-            <param name="timeNp1"></param>
         </member>
         <member name="T:DHI.Mike1D.ControlModule.ActionNoOperation">
             <summary>
@@ -1488,26 +1508,6 @@
             Validate
             </summary>
             <returns></returns>
-        </member>
-        <member name="T:DHI.Mike1D.ControlModule.IControlFunctionTime">
-            <summary>
-            Interface for control functions that are aware of time
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.ControlModule.IControlFunctionTime.Prepare(System.DateTime,DHI.Mike1D.Generic.IDiagnostics)">
-            <summary>
-            Prepare, before simulation start
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.ControlModule.IControlFunctionTime.Update(System.DateTime,System.DateTime)">
-            <summary>
-            Update, during simulation
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.ControlModule.IControlFunctionTime.FinalizeTimeStep(System.DateTime)">
-            <summary>
-            Finalize Timestep, during simulation
-            </summary>
         </member>
         <member name="T:DHI.Mike1D.ControlModule.ControlUserFunctionFactory">
             <summary>
@@ -1765,6 +1765,33 @@
             An expression node that contains a variable double. 
             </summary>
         </member>
+        <member name="T:DHI.Mike1D.ControlModule.IControlFunctionTime">
+            <summary>
+            Interface for control functions that are aware of time or/and stores a
+            state which changes with time.
+            <para>
+            A "default control functions" that depends only on their parameters need not implement this interface.
+            </para>
+            <para>
+            A control function which has a state, needs to implement this interface and also <see cref="T:DHI.Mike1D.ModelState.IModelStateReadWrite"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.IControlFunctionTime.Prepare(System.DateTime,DHI.Mike1D.Generic.IDiagnostics)">
+            <summary>
+            Prepare, before simulation start
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.IControlFunctionTime.Update(System.DateTime,System.DateTime)">
+            <summary>
+            Update, during simulation
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.IControlFunctionTime.FinalizeTimeStep(System.DateTime)">
+            <summary>
+            Finalize Timestep, during simulation
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.ControlModule.ISensor">
             <summary>
             A sensor retrieves a value from the simulation
@@ -1780,11 +1807,6 @@
             Unique id
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.ControlModule.ISensor.TargetUnit">
-            <summary>
-            Target unit
-            </summary>
-        </member>
         <member name="T:DHI.Mike1D.ControlModule.ISensor`1">
             <summary>
             A sensor retrieves a value from the simulation
@@ -1794,6 +1816,51 @@
         <member name="P:DHI.Mike1D.ControlModule.ISensor`1.Getter">
             <summary>
             Getter used to extract the value of the sensor
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ControlModule.ISensorDouble">
+            <summary>
+            A sensor retrieves a value from the simulation
+            and acts as a variable in the control expressions.
+            <para>
+            This sensor returns a double and includes unit conversion.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ISensorDouble.TargetUnit">
+            <summary>
+            Target unit, unit in which the sensor is supposed to return its value.
+            <para>
+            Only available for sensors returning a double value
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ISensorDouble.ConversionFactor">
+            <summary>
+            Factor to convert from engine unit to sensor <see cref="P:DHI.Mike1D.ControlModule.ISensorDouble.TargetUnit"/>
+            <code>
+              sensorValue = engineValue*ConversionFactor + ConversionOffset
+            </code>
+            These factors are calculated based on the <see cref="P:DHI.Mike1D.ControlModule.ISensorDouble.TargetUnit"/>
+            automatically when the sensor is created,
+            and can be modified at a later point in time, if necessary.
+            <para>
+            Only available for sensors returning a double value
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.ISensorDouble.ConversionOffset">
+            <summary>
+            Factor to convert from engine unit to sensor <see cref="P:DHI.Mike1D.ControlModule.ISensorDouble.TargetUnit"/>
+            <code>
+              sensorValue = engineValue*ConversionFactor + ConversionOffset
+            </code>
+            These factors are calculated based on the <see cref="P:DHI.Mike1D.ControlModule.ISensorDouble.TargetUnit"/>
+            automatically when the sensor is created,
+            and can be modified at a later point in time, if necessary.
+            <para>
+            Only available for sensors returning a double value
+            </para>
             </summary>
         </member>
         <member name="T:DHI.Mike1D.ControlModule.Sensor`1">
@@ -1813,9 +1880,6 @@
         </member>
         <member name="P:DHI.Mike1D.ControlModule.Sensor`1.Id">
             <inheritdoc />
-        </member>
-        <member name="P:DHI.Mike1D.ControlModule.Sensor`1.TargetUnit">
-            <inheritdoc/>
         </member>
         <member name="P:DHI.Mike1D.ControlModule.Sensor`1.Getter">
             <inheritdoc />
@@ -1838,6 +1902,21 @@
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.ControlModule.Sensor`1.DHI#Math#Expression#IExpressionAcceptor#Accept``1(System.Boolean,DHI.Math.Expression.IExpressionVisitor{``0})">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.SensorDouble.TargetUnit">
+            <inheritdoc/>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.SensorDouble.ConversionFactor">
+            <inheritdoc/>
+        </member>
+        <member name="P:DHI.Mike1D.ControlModule.SensorDouble.ConversionOffset">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.SensorDouble.Evaluate">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ControlModule.SensorDouble.DHI#Math#Expression#ITypedExpression#Evaluate">
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.ControlModule.LicenseCheckerSingleton.#ctor">

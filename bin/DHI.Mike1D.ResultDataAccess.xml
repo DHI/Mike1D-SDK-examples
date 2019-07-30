@@ -426,6 +426,11 @@
             </para>
             </summary>
         </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.DataReaderLazy._timestepsLoadedIndex">
+            <summary>
+            For each time step, index 
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.ResultDataAccess.DataReaderLazy.BufferSize">
             <summary>
             Size of lazy buffer, maximum number of time steps in memory
@@ -458,11 +463,6 @@
             Data is stored in a dictionary, key'ed by the time step index
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepVectorDataLazyList.RemoveAt(System.Int32)">
-            <summary>
-            Not supported for lazy reading
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepVectorDataLazyList.Clear">
             <summary>
             Not supported for lazy reading
@@ -473,6 +473,42 @@
             Lazy list of data item values, where data is stored as a list of doubles
             Data is stored in a dictionary, key'ed by the time step index
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepSingleDataLazyList.CreateDefault">
+            <inheritdoc/>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepSingleDataLazyList.NumberOfElements">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepSingleDataLazyList.GetValue(System.Int32)">
+            <summary>
+            Get value for the speficied time step and element
+            </summary>
+            <param name="timestepIndex">Index of time step</param>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepSingleDataLazyList.DHI#Mike1D#Generic#INumericArray#GetValue(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepSingleDataLazyList.GetValue(System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepSingleDataLazyList.SetValue(System.Int32,System.Double)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepSingleDataLazyList.SetValue(System.Int32,System.Int32,System.Single)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepSingleDataLazyList.SetValues(System.Int32,System.Single[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepSingleDataLazyList.GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepSingleDataLazyList.Count">
+            <summary>Gets the number of elements in the collection.</summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepSingleDataLazyList.Item(System.Int32)">
+            <inheritdoc/>
         </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.DataReaderLazy.TimeStepDataLazyList`1">
             <summary>
@@ -553,6 +589,11 @@
             Default constructor
             </summary>
             <param name="list">List to enumerate</param>
+        </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.IRes1DSewerJunction">
+            <summary>
+            Interface for a Res1D sewer junction.
+            </summary>
         </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.IRes1DStructure">
             <summary>
@@ -804,6 +845,21 @@
         <member name="F:DHI.Mike1D.ResultDataAccess.LTSResultTypes.IntegratedMonthly">
             <summary> Monthly integretad value </summary>
         </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.LTSCalculatorTypes">
+            <summary> LTS calculator types </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.LTSCalculatorTypes.Standard">
+            <summary> Standard calculator </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.LTSCalculatorTypes.Total">
+            <summary> Calculator which sums up all outflows for specified parts of network </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.LTSCalculatorTypes.AllAD">
+            <summary> Calculator which includes all AD components </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.LTSCalculatorTypes.TotalAllAD">
+            <summary> Total calculator which includes all AD components </summary>
+        </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.EventSortType">
             <summary>
             LTS sort type, when writing results to PFS file, whether to sort on time or on value.
@@ -823,6 +879,9 @@
         <member name="P:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.ResultType">
             <summary> Result type. </summary>
         </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.CalculatorType">
+            <summary> Calculator type. </summary>
+        </member>
         <member name="P:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.EventLimit">
             <summary> Maximum number of events to consider. </summary>
         </member>
@@ -838,6 +897,21 @@
         <member name="P:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.QuantityForProxy">
             <summary> Quantity used to get result from proxy system. </summary>
         </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.PredefinedQuantityForProxyAD">
+            <summary> Predefined AD quantity used by LTSCalculatorFromProxyAD. </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.PredefinedQuantityLTS">
+            <summary> PredefinedQuantityLTS from which LTSResultQuantity was derived. </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.QuantityTime">
+            <summary> Time quantity </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.QuantityCount">
+            <summary> Event count quantity (number of events) </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.QuantityDuration">
+            <summary> Duration of events quantity (number of events) </summary>
+        </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.#ctor">
             <inheritdoc />
         </member>
@@ -847,23 +921,37 @@
         <member name="M:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.#ctor(DHI.Mike1D.ResultDataAccess.LTSResultQuantity)">
             <inheritdoc />
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.#ctor(DHI.Mike1D.Generic.Quantity,DHI.Mike1D.Generic.Quantity,DHI.Mike1D.ResultDataAccess.LTSResultTypes)">
-            <inheritdoc />
+        <member name="M:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.TransferProperties(DHI.Mike1D.ResultDataAccess.LTSResultQuantity,DHI.Mike1D.ResultDataAccess.LTSResultQuantity)">
+            <summary>
+            Transfer all the LTSResultQuantity related properties from quantityFrom to quantityTo.
+            </summary>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.Create(DHI.Mike1D.Generic.Quantity,DHI.Mike1D.ResultDataAccess.LTSResultQuantity)">
+        <member name="M:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.Create(DHI.Mike1D.Generic.PredefinedQuantity,DHI.Mike1D.ResultDataAccess.LTSResultTypes,System.String)">
+            <summary> Factory method to create LTSResultQuantity from PredefinedQuantity. </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.Create(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.PredefinedQuantityAD,DHI.Mike1D.ResultDataAccess.LTSResultTypes,System.String)">
+            <summary> Factory method to create LTSResultQuantity from PredefinedQuantity. </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.Create(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.ResultDataAccess.LTSResultQuantity,System.String)">
             <summary> Factory method to create LTSResultQuantity. </summary>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.Create(DHI.Mike1D.Generic.Quantity,DHI.Mike1D.ResultDataAccess.LTSResultTypes)">
+        <member name="M:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.Create(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.ResultDataAccess.LTSResultTypes,System.String)">
             <summary> Factory method to create LTSResultQuantity. </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.Create(DHI.Mike1D.Generic.IQuantity,System.String,DHI.Generic.MikeZero.eumItem)">
+            <summary>
+            Create a quantity with "extra" string added to Id and description.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.Create(DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS,DHI.Mike1D.ResultDataAccess.LTSResultTypes)">
+            <summary> Factory method to create LTSResultQuantity from PredefinedQuantityLTS. </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.LTSResultQuantity.Create(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS,DHI.Mike1D.ResultDataAccess.LTSResultTypes)">
+            <summary> Factory method to create LTSResultQuantity from PredefinedQuantityLTS for given AD component quantity. </summary>
         </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.LTSQuantities">
             <summary>
             Default quantities and result quantities used by LTS module.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.LTSQuantities.CreateQuantity(DHI.Mike1D.Generic.IQuantity,System.String)">
-            <summary>
-            Create a quantity with "extra" string added to Id and description.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.LTSQuantities.CreateResultSpecificationForLTS(System.String,System.String,DHI.Mike1D.ResultDataAccess.ResultTypes,System.String,System.String)">
@@ -1307,6 +1395,9 @@
         <member name="F:DHI.Mike1D.ResultDataAccess.M11FfBridgeBase._resultData">
             <summary> Result data </summary>
         </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.M11FfBridgeBase._unitProvider">
+            <summary> Unit provider, null if not enabled </summary>
+        </member>
         <member name="F:DHI.Mike1D.ResultDataAccess.M11FfBridgeBase._timeChannelIndex">
             <summary> Index of time channel </summary>
         </member>
@@ -1330,6 +1421,15 @@
             List as long as the number of channels in the prf file. For each
             channel it specifies which data item and index that the channel
             values should be stored in. Null if channel is to be disregarded.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.M11FfBridgeBase.UnitConversionFactors.Default">
+            <summary>  Default (no conversion ) factors </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.M11FfBridgeBase._channelUnitConversion">
+            <summary>
+            List as long as the number of channels in the prf file.
+            Unit conversion factors for each of them
             </summary>
         </member>
         <member name="P:DHI.Mike1D.ResultDataAccess.M11FfBridgeBase.Connection">
@@ -1375,7 +1475,7 @@
         <member name="M:DHI.Mike1D.ResultDataAccess.M11FfBridgeBase.Finish">
             <inheritdoc />
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.M11FfBridgeBase.HandleGlobalUnknownChannel(DHI.Mike1D.ResultDataAccess.M11FfBlockReader.ChannelDescriptor,DHI.Mike1D.Generic.IQuantity,System.Int32)">
+        <member name="M:DHI.Mike1D.ResultDataAccess.M11FfBridgeBase.HandleGlobalUnknownChannel(DHI.Mike1D.ResultDataAccess.M11FfBlockReader.ChannelDescriptor,DHI.Mike1D.Generic.IQuantity,System.Int32,DHI.Mike1D.ResultDataAccess.M11FfBridgeBase.UnitConversionFactors)">
             <summary>
             Handle a global unknown type of channel in a generic way
             </summary>
@@ -1479,6 +1579,9 @@
         <member name="F:DHI.Mike1D.ResultDataAccess.M11FfBridgeBase.ItemTypeData.GeometryType">
             <summary> Type of geometry </summary>
         </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.M11FfBridgeBase.ItemTypeData.UnitConversionFactors">
+            <summary> Type of geometry </summary>
+        </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.M11FfBridgeBase.DataItemIndex">
             <summary>
             For a channel, holds the data item and the index where to store channel values.
@@ -1489,6 +1592,99 @@
         </member>
         <member name="F:DHI.Mike1D.ResultDataAccess.M11FfBridgeBase.DataItemIndex.Index">
             <summary> Index in data item </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS">
+            <summary>
+            Enumeration of predefined quantities for LTS module.
+            </summary>
+            <remarks>
+            Remember to add an entry to the <see cref="T:DHI.Mike1D.ResultDataAccess.PredefinedQuantityTableLTS"/> whenever
+            a new <see cref="T:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS"/> is created.
+            </remarks>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS.Undefined">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS.TotalOutflow">
+            <summary>
+            Total water outflow out of the system
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS.TotalEmission">
+            <summary>
+            Total emission out of the system
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS.OutletsOutflow">
+            <summary>
+            Total water outflow out of the system through outlets
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS.PumpsOutflow">
+            <summary>
+            Total water outflow out of the system through pumps
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS.WeirsOutflow">
+            <summary>
+            Total water outflow out of the system through weirs
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS.OrificesOutflow">
+            <summary>
+            Total water outflow out of the system through orifices
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS.ValvesOutflow">
+            <summary>
+            Total water outflow out of the system through valves
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS.SpillOutflow">
+            <summary>
+            Total water outflow out of the system through spilling nodes
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.PredefinedQuantityTableLTS">
+            <summary>
+            Dictionary from <see cref="T:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTS"/> to PredefinedQuantityLTSProperties used by LTSResultQuantity.Create()
+            to create various Quantities for LTS module.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.PredefinedQuantityTableLTS.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTSProperties">
+            <summary>
+            Properties for PredefinedQuantityLTS.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTSProperties.Extra">
+            <summary> Extra string added to the end of the quantity id and description </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTSProperties.PredefinedQuantity">
+            <summary> Extra string added to the end of the quantity id and description </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTSProperties.PredefinedQuantityAD">
+            <summary> Extra string added to the end of the quantity id and description </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTSProperties.CalculatorType">
+            <summary> LTS calculator type to use. </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.PredefinedQuantityLTSProperties.#ctor(System.String,DHI.Mike1D.Generic.PredefinedQuantity,DHI.Mike1D.Generic.PredefinedQuantityAD,DHI.Mike1D.ResultDataAccess.LTSCalculatorTypes)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.PredefinedQuantityDataLTS">
+            <summary>
+            Static class containing the <see cref="T:DHI.Mike1D.ResultDataAccess.PredefinedQuantityTableLTS"/>.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.PredefinedQuantityDataLTS.Table">
+            <summary>
+            Instance of <see cref="T:DHI.Mike1D.ResultDataAccess.PredefinedQuantityTableLTS"/>
+            </summary>
         </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.PrfBridge">
             <summary>
@@ -2102,6 +2298,118 @@
             </summary>
             <param name="collection">The collection whose elements are copied to the new list.</param>
         </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.ResultDataExtensions">
+            <summary>
+            Extension class with various extension methods
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.SaveHD(DHI.Mike1D.ResultDataAccess.ResultSpecification)">
+            <summary>
+            Returns true if result is HD type
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.SaveRR(DHI.Mike1D.ResultDataAccess.ResultSpecification)">
+            <summary>
+            Returns true if result is rainfall-runoff type
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.HasVolume(DHI.Mike1D.ResultDataAccess.IRes1DNode)">
+            <summary>
+            Returns true if node has volume
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.Quantities(DHI.Mike1D.ResultDataAccess.IResultData,System.Boolean)">
+            <summary>
+            Extract all quantities of a result data object.
+            </summary>
+            <param name="resultData">Result data object</param>
+            <param name="descriptionUnique">True if quantities are unique when description differs, or false if they are alike when description differs.</param>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.Quantities(DHI.Mike1D.ResultDataAccess.IResultData,System.Boolean,DHI.Mike1D.Generic.IQuantities)">
+            <summary>
+            Extract all quantities of a result data object.
+            </summary>
+            <param name="resultData">Result data object</param>
+            <param name="descriptionUnique">True if quantities are unique when description differs, or false if they are alike when description differs.</param>
+            <param name="quantities">List to add to</param>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.Quantities(DHI.Mike1D.ResultDataAccess.IResultData,System.Collections.Generic.IEqualityComparer{DHI.Mike1D.Generic.IQuantity},DHI.Mike1D.Generic.IQuantities)">
+            <summary>
+            Extract all quantities of a result data object.
+            </summary>
+            <param name="resultData">Result data object</param>
+            <param name="comparer">Comparer defining when quantities differs</param>
+            <param name="quantities">List to add to</param>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.QuantityDataItems(DHI.Mike1D.ResultDataAccess.IResultData)">
+            <summary>
+            Extract all quantities and dataitems of a result data object, grouped by their quantity
+            </summary>
+            <param name="resultData">Result data object</param>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.RemoveTimestep(DHI.Mike1D.ResultDataAccess.IResultData,System.Int32)">
+            <summary>
+            Extract all quantities of a result data object.
+            </summary>
+            <param name="resultData">Result data object</param>
+            <param name="timestepIndex">Index of timestep to remove</param>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.GetValue(DHI.Mike1D.ResultDataAccess.ITimeData,System.Int32,System.Double,System.Int32)">
+            <summary>
+            Interplate a value in <paramref name="interval"/>, with <paramref name="fraction"/>,
+            for the specified <paramref name="elementIndex"/>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.GetUnitProvider(DHI.Mike1D.ResultDataAccess.IResultDataParameters,DHI.Mike1D.Generic.UnitSystem)">
+            <summary>
+            Create unit provider from <paramref name="resultDataParameters"/>, using
+            <paramref name="automaticUnitSystem"/> if <see cref="P:DHI.Mike1D.ResultDataAccess.ResultDataParameters.UnitSystem"/>
+            is set to <see cref="F:DHI.Mike1D.Generic.UnitSystem.Automatic"/>.
+            </summary>
+            <returns>Unit provider, or null if not relevant.</returns>
+        </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.TimeDataValueGetter">
+            <summary>
+            Class providing temporal interpolation of values in an <see cref="T:DHI.Mike1D.ResultDataAccess.ITimeData"/>,
+            using an <see cref="T:DHI.Mike1D.ResultDataAccess.ResultDataTimeInterpolator"/> for doing the interpolation.
+            <para>
+            The <see cref="T:DHI.Mike1D.ResultDataAccess.ResultDataTimeInterpolator"/> can be used by several instances of this
+            class, in case temporal interpolation is required by more than one data item at
+            the same times.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataValueGetter.#ctor(DHI.Mike1D.ResultDataAccess.ResultDataTimeInterpolator,DHI.Mike1D.ResultDataAccess.ITimeData)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataValueGetter.GetValue(System.DateTime)">
+            <summary>
+            Interpolate a value in time.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DDataSetTimeProxy">
+            <summary>
+            Class wrapping an <see cref="T:DHI.Mike1D.ResultDataAccess.IRes1DDataSet"/> into the <see cref="T:DHI.Mike1D.Generic.IDoubleTimeProxy"/>.
+            It requires a <see cref="T:DHI.Mike1D.ResultDataAccess.ResultDataTimeInterpolator"/> for doing temporal interplation.
+            <para>
+            When <see cref="M:DHI.Mike1D.ResultDataAccess.Res1DDataSetTimeProxy.TimeValueGetter(System.Int32)"/> is called,
+            a <see cref="T:DHI.Mike1D.ResultDataAccess.TimeDataValueGetter"/> is returned.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DDataSetTimeProxy.#ctor(DHI.Mike1D.ResultDataAccess.ResultDataTimeInterpolator,DHI.Mike1D.ResultDataAccess.IRes1DDataSet)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DDataSetTimeProxy.TimeOffers">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DDataSetTimeProxy.TimeValueGetter(System.Int32)">
+            <inheritdoc/>
+        </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.ResultDataHelper">
             <summary>
              Helper class that extend the functionality of ResultData
@@ -2246,6 +2554,13 @@
             <param name="nodeId">Id of node</param>
             <returns>Node, null if not found</returns>
         </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataSearch.FindNodeIndex(System.String)">
+            <summary>
+            Find index of node with the provided id
+            </summary>
+            <param name="nodeId">Id of node</param>
+            <returns>Node, -1 if not found</returns>
+        </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataSearch.FindReaches(System.String)">
             <summary>
             Find all reaches with the provided name
@@ -2288,84 +2603,84 @@
             <param name="catchmentName">Name of catchment</param>
             <returns>Catchment, null if not found</returns>
         </member>
-        <member name="T:DHI.Mike1D.ResultDataAccess.UfsSimpleType">
-            <summary>
-            DHI enum for file control tags and data types. From ufs.h. Also superset
-            of TSobject, TimeSeries.idl (see comments on enum members)
-            </summary>
-            TODO : To be deleted
-        </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.UfsSimpleType.UFS_BAD">
-            <summary>
-            file control tag: bad
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.UfsSimpleType.UFS_MIN_VALUE">
-            <summary>
-            file control tag: For internal use only
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.UfsSimpleType.UFS_BLOCK">
-            <summary>
-            file control tag: For internal use only
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.UfsSimpleType.UFS_TERMINATOR">
-            <summary>
-            file control tag: For internal use only
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.UfsSimpleType.UFS_EOF">
-            <summary>
-            file control tag: end-of-file
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.UfsSimpleType.UFS_FLOAT">
-            <summary>
-            data type: float, in TSObject: Type_Float
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.UfsSimpleType.UFS_DOUBLE">
-            <summary>
-            data type: double, in TSObject: Type_Double
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.UfsSimpleType.UFS_CHAR">
-            <summary>
-            data type: char, in TSObject: Type_Char
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.UfsSimpleType.UFS_INT">
-            <summary>
-            data type: int, in TSObject: Type_Int
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.UfsSimpleType.UFS_UNSIGNED">
-            <summary>
-            data type: uint, in TSObject: Type_Unsigned
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.UfsSimpleType.UFS_SHORT">
-            <summary>
-            data type: short, in TSObject: Type_Short
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.UfsSimpleType.UFS_USHORT">
-            <summary>
-            data type: ushort, in TSObject: Type_Unsigned_Short
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.UfsSimpleType.UFS_MAX_VALUE">
-            <summary>
-            For internal use only
-            </summary>
-        </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld">
             <summary>
             Old bridge, for reading result files before Release 2012.
             This is only included in order to read old regression test 
             results. When all regression tests have been updated to use
             latest res1d file format, this can be deleted.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType">
+            <summary>
+            DHI enum for file control tags and data types. From ufs.h. Also superset
+            of TSobject, TimeSeries.idl (see comments on enum members)
+            </summary>
+            TODO : To be deleted
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType.UFS_BAD">
+            <summary>
+            file control tag: bad
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType.UFS_MIN_VALUE">
+            <summary>
+            file control tag: For internal use only
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType.UFS_BLOCK">
+            <summary>
+            file control tag: For internal use only
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType.UFS_TERMINATOR">
+            <summary>
+            file control tag: For internal use only
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType.UFS_EOF">
+            <summary>
+            file control tag: end-of-file
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType.UFS_FLOAT">
+            <summary>
+            data type: float, in TSObject: Type_Float
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType.UFS_DOUBLE">
+            <summary>
+            data type: double, in TSObject: Type_Double
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType.UFS_CHAR">
+            <summary>
+            data type: char, in TSObject: Type_Char
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType.UFS_INT">
+            <summary>
+            data type: int, in TSObject: Type_Int
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType.UFS_UNSIGNED">
+            <summary>
+            data type: uint, in TSObject: Type_Unsigned
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType.UFS_SHORT">
+            <summary>
+            data type: short, in TSObject: Type_Short
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType.UFS_USHORT">
+            <summary>
+            data type: ushort, in TSObject: Type_Unsigned_Short
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType.UFS_MAX_VALUE">
+            <summary>
+            For internal use only
             </summary>
         </member>
         <member name="P:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Connection">
@@ -2448,7 +2763,7 @@
             Release file memory 
             </summary>
         </member>
-        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType">
+        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType">
             <summary>
             Enums of static data types used in the static items of the DFS file.
             </summary>
@@ -2457,217 +2772,217 @@
             casted into integers which are then persisted in the res1d file
             </remarks>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.MajorVersion">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.MajorVersion">
             <summary>
             
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.MinorVersion">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.MinorVersion">
             <summary>
             
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.NumberOfUserMarkers">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.NumberOfUserMarkers">
             <summary>
             
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.UserMarkTitle">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.UserMarkTitle">
             <summary>
             
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.NumberOfNodes">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.NumberOfNodes">
             <summary>
             
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.NodeType">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.NodeType">
             <summary>
             Node Type. Data follows the values of the NodeTypes enum
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.NodeID">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.NodeID">
             <summary>
             Node identification string
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.NodeX">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.NodeX">
             <summary>
             Node x-coordinate
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.NodeY">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.NodeY">
             <summary>
             Node y-coordinate
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.BottomLevel">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.BottomLevel">
             <summary>
             Bottom level of Manhole, Basin or outlet
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.CriticalLevel">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.CriticalLevel">
             <summary>
             Critical level of Manhole, Basin or outlet
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.GroundLevel">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.GroundLevel">
             <summary>
             Ground level of Manhole, Basin or outlet
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.ManholeDiameter">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.ManholeDiameter">
             <summary>
             Manhole diameter
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.NumberOfReaches">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.NumberOfReaches">
             <summary>
             Number of nodes included in the setup
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.ReachName">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.ReachName">
             <summary>
             Name of the reach
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.TopoID">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.TopoID">
             <summary>
             Topology specifier
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.StartNodeNumber">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.StartNodeNumber">
             <summary>
             Number of the start node. 
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.EndNodeNumber">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.EndNodeNumber">
             <summary>
             Number of the end node
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.Direction">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.Direction">
             <summary>
             Direction indicator. 1 is positive -1 is negative 
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.NumberOfDigiPoints">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.NumberOfDigiPoints">
             <summary>
             Nymber of Digipoints in a given branch
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.DigiPointChainage">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.DigiPointChainage">
             <summary>
             Chainage in the digi point
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.DigiPointXCoordinate">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.DigiPointXCoordinate">
             <summary>
             X-coordinate for the digi point
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.DigiPointYCoordinate">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.DigiPointYCoordinate">
             <summary>
             Y_coordinate for the digi point
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.NumberOfGridPoints">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.NumberOfGridPoints">
             <summary>
             Number of grid points within the reach
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.PointType">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.PointType">
             <summary>
             Grid point type, i.e. H-Point, Q-Point or ...
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.Chainage">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.Chainage">
             <summary>
             Chainage of the point within the reach
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.GridPointX">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.GridPointX">
             <summary>
             Gridpoint x-coordinate
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.GridPointY">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.GridPointY">
             <summary>
             Gridpoint y-coordinate
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.GridPointZ">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.GridPointZ">
             <summary>
             Gridpoint z-coordinate
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.UserMarkerArray">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.UserMarkerArray">
             <summary>
             Values for each of the defined user markers
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.CrossSectionID">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.CrossSectionID">
             <summary>
             Cross section identification string
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.CrossSectionType">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.CrossSectionType">
             <summary>
             Cross section type (Open, Circular ... int number referes to CrossSectionTypes enum)
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.CrossSectionMarkerArray">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.CrossSectionMarkerArray">
             <summary>
             Open cross sections have marker values (int array of dim 8)
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.CrossSectionXArray">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.CrossSectionXArray">
             <summary>
             X values for tabulated cross section
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.CrossSectionZArray">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.CrossSectionZArray">
             <summary>
             Z values for tabulated cross section
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.CrossSectionCenterLevel">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.CrossSectionCenterLevel">
             <summary>
             Center level for circular cross section
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.CrossSectionDiameter">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.CrossSectionDiameter">
             <summary>
             Diameter for circular cross section
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.CrossSectionHeightWidth">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.CrossSectionHeightWidth">
             <summary>
             Height and width for rectangular cross section
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.NumberOfCatchments">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.NumberOfCatchments">
             <summary>
             Number of catchments included in the setup
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.CatchmentArea">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.CatchmentArea">
             <summary>
             Catchment area
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataType.CatchmentID">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType.CatchmentID">
             <summary>
             Catchment ID
             </summary>
         </member>
-        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DStaticDataTypeRecord">
+        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataTypeRecord">
             <summary>
             
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DStaticDataTypeRecord.#ctor(System.String,DHI.Generic.MikeZero.eumItem,DHI.Mike1D.ResultDataAccess.UfsSimpleType)">
+        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataTypeRecord.#ctor(System.String,DHI.Generic.MikeZero.eumItem,DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.UfsSimpleType)">
             <summary>
             
             </summary>
@@ -2675,49 +2990,49 @@
             <param name="eumItemKey"></param>
             <param name="ufsSimpleType"></param>
         </member>
-        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DStaticDataTypeRecord.Description">
+        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataTypeRecord.Description">
             <summary>
             
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DStaticDataTypeRecord.EumItemKey">
+        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataTypeRecord.EumItemKey">
             <summary>
             
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DStaticDataTypeRecord.UfsSimpleType">
+        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataTypeRecord.UfsSimpleType">
             <summary>
             
             </summary>
         </member>
-        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DStaticDataTypeTable">
+        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataTypeTable">
             <summary>
             
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DStaticDataTypeTable.#ctor">
+        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataTypeTable.#ctor">
             <summary>
             
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DStaticDataTypeTable.Count">
+        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataTypeTable.Count">
             <summary>
             Return number of data types defined
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DStaticDataTypeTable.Item(DHI.Mike1D.ResultDataAccess.Res1DStaticDataType)">
+        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataTypeTable.Item(DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataType)">
             <summary>
             Get a data rcord from the type
             </summary>
             <param name="Res1DStaticDataType"></param>
             <returns></returns>
         </member>
-        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DStaticDataTypeRecordMap">
+        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataTypeRecordMap">
             <summary>
             
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DStaticDataTypeRecordMap.Table">
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridgeOld.Res1DStaticDataTypeRecordMap.Table">
             <summary>
             
             </summary>
@@ -2737,7 +3052,7 @@
         </member>
         <member name="F:DHI.Mike1D.ResultDataAccess.Res1DBridge._lastReadItem">
             <summary>
-            Used when <see cref="M:DHI.Mike1D.ResultDataAccess.Res1DBridge.ReadStaticItemNext(System.String,DHI.Mike1D.Generic.IDiagnostics)"/> is to store the last read item
+            Used when <see cref="M:DHI.Mike1D.ResultDataAccess.Res1DBridge.ReadStaticItemNext(System.String,DHI.Mike1D.Generic.IDiagnostics,System.Boolean)"/> is to store the last read item
             and use it again next time called.
             </summary>
         </member>
@@ -2751,7 +3066,7 @@
             Peak the next static item.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DBridge.ReadStaticItemNext(System.String,DHI.Mike1D.Generic.IDiagnostics)">
+        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DBridge.ReadStaticItemNext(System.String,DHI.Mike1D.Generic.IDiagnostics,System.Boolean)">
             <summary>
             Reads the next static item, depending on the <see cref="F:DHI.Mike1D.ResultDataAccess.Res1DBridge._readMode"/>.
             </summary>
@@ -2964,6 +3279,9 @@
         <member name="M:DHI.Mike1D.ResultDataAccess.Res1DBridge.IDynamicItem.AddData(System.Int32,System.Single[])">
             <summary> Add data to ResultData at the specified time step, overwrite if existing </summary>
         </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DBridge.IDynamicItem.UserUnit">
+            <summary> User unit of DFS dynamic item. </summary>
+        </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.Res1DBridge.DataItemInstance">
             <summary>
             Class where one dynamic item corresponds to one data item
@@ -3151,7 +3469,25 @@
             <summary>
             Flag specifying whether to load data in UBG (Unit Base Group) units. or
             in stored unit (SI for res1d, misc for res11).
-            If <see cref="P:DHI.Mike1D.ResultDataAccess.IResultDataParameters.UseSIUnits"/> is set, it takes presedense
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.IResultDataParameters.UnitSystem">
+            <summary>
+            Unit system to use when loading the file
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.IResultDataParameters.UnitProvider">
+            <summary>
+            User defined unit provider
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.IResultDataParameters.ConvertGeometry">
+            <summary>
+            Flag specifying whether to convert planar geometry
+            values, i.e. those that goes on a map, being x, y and chainage values.
+            <para>
+            Z values (height) are always converted
+            </para>
             </summary>
         </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.ResultDataParameters">
@@ -3174,7 +3510,29 @@
             <summary>
             Flag specifying whether to load data in UBG (Unit Base Group) units. or
             in stored unit (SI for res1d, misc for res11).
-            If <see cref="P:DHI.Mike1D.ResultDataAccess.IResultDataParameters.UseSIUnits"/> is set, it takes presedense
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.ResultDataParameters.UnitSystem">
+            <summary>
+            Unit system to use when loading the file.
+            <para>
+            This will not update the value of the <see cref="P:DHI.Mike1D.ResultDataAccess.IResultData.UnitSystem"/>,
+            when a result data object is loaded from storage.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.ResultDataParameters.UnitProvider">
+            <summary>
+            User defined unit provider
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.ResultDataParameters.ConvertGeometry">
+            <summary>
+            Flag specifying whether to convert planar geometry
+            values, i.e. those that goes on a map, being x, y and chainage values.
+            <para>
+            Z values (height) are always converted
+            </para>
             </summary>
         </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.Res1DExtensions">
@@ -3190,6 +3548,11 @@
             <returns></returns>
         </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.Res1DExtensions.StartChaiange(DHI.Mike1D.ResultDataAccess.IRes1DReach)">
+            <summary>
+             Extension method return the start chainage of a reach
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DExtensions.StartChainage(DHI.Mike1D.ResultDataAccess.IRes1DReach)">
             <summary>
              Extension method return the start chainage of a reach
             </summary>
@@ -3515,6 +3878,12 @@
              </summary>
             <returns>An empty IRes1DSewerNode</returns>
         </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.IRes1DFactory.CreateRes1DSewerJunction">
+             <summary>
+             Create a new IRes1DSewerJunction (Res1DSewerJunction)
+             </summary>
+            <returns>An empty IRes1DSewerJunction</returns>
+        </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.IRes1DFactory.CreateResultData">
              <summary>
              Create a new IResultData (ResultData)
@@ -3766,10 +4135,14 @@
             <returns>An empty IRes1DOpenCrossSection</returns>
         </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.Res1DFactory.CreateRes1DOutlet">
-             <summary>
-             Create a new IRes1DOutlet (Res1DOutlet)
-             </summary>
-            <returns>An empty IRes1DOpenCrossSection</returns>
+            <summary>
+            Create a new IRes1DOutlet (Res1DOutlet)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DFactory.CreateRes1DSewerJunction">
+            <summary>
+            Create a new IRes1DOutlet (Res1DOutlet)
+            </summary>
         </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.Res1DFactory.CreateRes1DQGridPoint">
              <summary>
@@ -3806,6 +4179,13 @@
             Network value set for a Res1D file
             The <see cref="T:DHI.Mike1D.ResultDataAccess.Res1DNetworkDataTimeSetWrapper"/> provides temporal
             and spatial interpolation of data from a <see cref="T:DHI.Mike1D.ResultDataAccess.IResultData"/>.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DNetworkDataTimeSetWrapper.ExtrapolationDistance">
+            <summary>
+            Distance from gridpoint where extrapolation takes place, i.e., if location chainage
+            is outside the network value chainage span, but less than <see cref="P:DHI.Mike1D.ResultDataAccess.Res1DNetworkDataTimeSetWrapper.ExtrapolationDistance"/> from the span,
+            then the nearest value is extrapolated. Set to 0 to disable. Default is <see cref="F:DHI.Mike1D.Generic.Constants.LOCATION_EQUAL_TOLERANCE"/>. Can not be negative.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.Res1DNetworkDataTimeSetWrapper.Create(DHI.Mike1D.ResultDataAccess.IResultData)">
@@ -3856,6 +4236,13 @@
             </para>
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DNetworkDataSetWrapper.ExtrapolationDistance">
+            <summary>
+            Distance from gridpoint where extrapolation takes place, i.e., if location chainage
+            is outside the network value chainage span, but less than <see cref="P:DHI.Mike1D.ResultDataAccess.Res1DNetworkDataSetWrapper.ExtrapolationDistance"/> from the span,
+            then the nearest value is extrapolated. Set to 0 to disable. Default is <see cref="F:DHI.Mike1D.Generic.Constants.LOCATION_EQUAL_TOLERANCE"/>. Can not be negative.
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.Res1DNetworkDataSetWrapper.Create(DHI.Mike1D.ResultDataAccess.IResultData,System.DateTime)">
             <summary>
             Create a <see cref="T:DHI.Mike1D.ResultDataAccess.Res1DNetworkDataSetWrapper"/> based on the <paramref name="results"/>
@@ -3881,6 +4268,13 @@
             <summary>
             A <see cref="T:DHI.Mike1D.Generic.INetworkDataInterpolator`1"/> for a given <see cref="T:DHI.Mike1D.Generic.IQuantity"/>, 
             that extracts data from an <see cref="T:DHI.Mike1D.ResultDataAccess.IResultData"/> at a given time.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DNetworkDataInterpolatorWrapper.ExtrapolationDistance">
+            <summary>
+            Distance from gridpoint where extrapolation takes place, i.e., if location chainage
+            is outside the network value chainage span, but less than <see cref="P:DHI.Mike1D.ResultDataAccess.Res1DNetworkDataInterpolatorWrapper.ExtrapolationDistance"/> from the span,
+            then the nearest value is extrapolated. Set to 0 to disable. Default is <see cref="F:DHI.Mike1D.Generic.Constants.LOCATION_EQUAL_TOLERANCE"/>. Can not be negative.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.Res1DNetworkDataInterpolatorWrapper.#ctor(DHI.Mike1D.ResultDataAccess.IResultData,DHI.Mike1D.Generic.IQuantity,System.Int32,System.Double)">
@@ -3940,7 +4334,7 @@
             An <see cref="T:DHI.Mike1D.Generic.IReachDataInterpolator`1"/> that spans a single reach.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DNetworkSingleReachValue.#ctor(DHI.Mike1D.ResultDataAccess.IDataItem,DHI.Mike1D.ResultDataAccess.IRes1DReach,System.Int32,System.Double)">
+        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DNetworkSingleReachValue.#ctor(DHI.Mike1D.ResultDataAccess.IDataItem,DHI.Mike1D.ResultDataAccess.IRes1DReach,System.Int32,System.Double,DHI.Mike1D.ResultDataAccess.Res1DNetworkDataInterpolatorWrapper)">
             <summary>
             Constructor
             </summary>
@@ -3948,6 +4342,7 @@
             <param name="reach"></param>
             <param name="timeInterval">Used for time interpolation</param>
             <param name="timeFraction">USed for time interpolation</param>
+            <param name="res1DNetworkDataInterpolatorWrapper"></param>
         </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.Res1DNetworkSingleReachValue.IndexListSearcher">
             Helper class for using MathUtil for interpolating in chainages using the indexList
@@ -4239,9 +4634,21 @@
             Unit: [m]
             </summary>
         </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DStructureOutlet">
+            <summary>
+            Special kind of outlet: When a structure is discharging directly out
+            of the system, and no outlet has been explicitly specified,
+            the engine will put in a StuctureOutlet downstream of the structure. 
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.Res1DBasin">
             <summary>
             Basin node
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DSewerJunction">
+            <summary>
+            Sewer Junction node
             </summary>
         </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.Res1DStructureReach">
@@ -5593,6 +6000,16 @@
             Y-coordinate of the node
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.IRes1DNode.Reaches">
+            <summary>
+            Reaches connected to node.
+            </summary>
+            <remarks>
+            When creating a new <see cref="T:DHI.Mike1D.ResultDataAccess.ResultData"/> object, or modifying an existing,
+            this is not automatically updated.
+            Calling <see cref="M:DHI.Mike1D.ResultDataAccess.ResultData.ReconnectNetwork"/> to have it updated.
+            </remarks>
+        </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.IRes1DNodes">
             <summary>
             Interface for a list of <see cref="T:DHI.Mike1D.ResultDataAccess.IRes1DNode"/>'s
@@ -5669,6 +6086,14 @@
             Unit: [m]
             </summary>
         </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.IRes1DStructureOutlet">
+            <summary>
+            Interface for a Res1D structure outlet which is a pecial kind of outlet:
+            When a structure is discharging directly out
+            of the system, and no outlet has been explicitly specified,
+            the engine will put in a StuctureOutlet downstream of the structure. 
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.IRes1DSewerNode">
             <summary>
             Interface for a Res1D sewer node. This is usually specialized further.
@@ -5717,6 +6142,23 @@
             for details.
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.IResultData.UnitSystem">
+            <summary>
+            Unit system of the simulation that produced the result data object.
+            <para>
+            When creating a result data object and storing:
+            Properties of ResultData objects (coordinates, bottom levels etc.) must always be set in SI units. 
+            </para>
+            <para>
+            When loading a result data object from storage:
+            The <see cref="P:DHI.Mike1D.ResultDataAccess.IResultDataParameters.UnitSystem"/>
+            and <see cref="P:DHI.Mike1D.ResultDataAccess.IResultDataParameters.ConvertGeometry"/>
+            can be used to change units of data and properties in the Result Data object.
+            This property will maintain the original value and will not be changed by
+            updating the <see cref="T:DHI.Mike1D.ResultDataAccess.IResultDataParameters"/>
+            </para>
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.ResultDataAccess.IResultData.StartTime">
             <summary>
             Data coverage start
@@ -5747,6 +6189,11 @@
         <member name="P:DHI.Mike1D.ResultDataAccess.IResultData.Quantities">
             <summary>
             List of the contained quantities
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.IResultData.ResultType">
+            <summary>
+            Result type
             </summary>
         </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.IResultData.GetNumberOfDataItems">
@@ -5798,6 +6245,14 @@
             Static data on the network.
             <para>
             Also used for user defined markers from MIKE 11
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.IResultData.NetworkDatas">
+            <summary>
+            Static data on the network.
+            <para>
+            Used for user defined markers from MIKE 11 and Critical Levels in MU.
             </para>
             </summary>
         </member>
@@ -6295,6 +6750,37 @@
             </summary>
             <param name="collection">The collection whose elements are copied to the new list.</param>
         </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DReachEnd">
+            <summary>
+            Enumeration specifying an end of the reach.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DReachEnd.Start">
+            <summary>
+            Start of reach (low chainage end)
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res1DReachEnd.End">
+            <summary>
+            End of reach (high chainage end)
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ResultDataAccess.Res1DReachConnection">
+            <summary>
+            Structure containing reach and which end that it is 
+            connected to (start or end)
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DReachConnection.ReachEnd">
+            <summary>
+            End of reach
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DReachConnection.Reach">
+            <summary>
+            Reach
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.Res1DNode">
             <summary>
              Provides access to node data via Res1D data access.  
@@ -6309,6 +6795,22 @@
             <summary>
             Y coordinate of node
             </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DNode.ID">
+            <inheritdoc/>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.Res1DNode.Reaches">
+            <summary>
+            List of reaches connected to this node.
+            </summary>
+            <remarks>
+            When creating a new <see cref="T:DHI.Mike1D.ResultDataAccess.ResultData"/> object, or modifying an existing,
+            this is not automatically updated.
+            Calling <see cref="M:DHI.Mike1D.ResultDataAccess.ResultData.ReconnectNetwork"/> to have it updated.
+            </remarks>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.Res1DNode.ToString">
+            <inheritdoc />
         </member>
         <member name="T:DHI.Mike1D.ResultDataAccess.Res1DNodes">
             <summary>
@@ -6502,7 +7004,7 @@
         </member>
         <member name="F:DHI.Mike1D.ResultDataAccess.ResultSpecification.ResultType">
             <summary>
-            If true, then HD data is saved in ResultData
+            Result type
             </summary>
         </member>
         <member name="P:DHI.Mike1D.ResultDataAccess.ResultSpecification.__saveHD">
@@ -6649,10 +7151,16 @@
         <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataValue.Add(System.Single[])">
             <inheritdoc />
         </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataValue.GetValue(System.Int32)">
+            <inheritdoc />
+        </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataValue.GetValue(System.Int32,System.Int32)">
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataValue.GetValues(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataValue.SetValue(System.Int32,System.Double)">
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataValue.SetValue(System.Int32,System.Int32,System.Single)">
@@ -6689,11 +7197,17 @@
         <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataCircularValue.Add(System.Single[])">
             <inheritdoc />
         </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataCircularValue.GetValue(System.Int32)">
+            <inheritdoc/>
+        </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataCircularValue.GetValue(System.Int32,System.Int32)">
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataCircularValue.GetValues(System.Int32)">
             <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataCircularValue.SetValue(System.Int32,System.Double)">
+            <inheritdoc/>
         </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.TimeDataCircularValue.SetValue(System.Int32,System.Int32,System.Single)">
             <inheritdoc />
@@ -7007,7 +7521,6 @@
             <summary>
             
             </summary>
-            <returns></returns>
         </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.Res1DReach.GetDigiPointCoords">
             <summary>
@@ -7179,7 +7692,7 @@
             <param name="sourceReachIndices">List of reaches, used to stop recursion</param>
             <returns>Index of node</returns>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.Res11Bridge.ReadStaticDataArrayNext(System.Int32,System.Type,DHI.Generic.MikeZero.eumItem,DHI.Generic.MikeZero.eumUnit)">
+        <member name="M:DHI.Mike1D.ResultDataAccess.Res11Bridge.ReadStaticDataArrayNext(System.Int32,System.Type,DHI.Generic.MikeZero.eumItem,DHI.Generic.MikeZero.eumUnit,System.Boolean)">
             <summary>
             Utility: Return an array of static data for the current position of the file
             pointer. Exception if failure.
@@ -7216,6 +7729,12 @@
             <summary>
             List matching the number of dynamic items in the file.
             false if data item is not loaded (disregarded by filter during LoadHeader or LoadData).
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.ResultDataAccess.Res11Bridge._userUnit">
+            <summary>
+            List matching the number of dynamic items in the file.
+            <see cref="F:DHI.Generic.MikeZero.eumUnit.eumUUnitUndefined"/> if no unit conversion for this item.
             </summary>
         </member>
         <member name="F:DHI.Mike1D.ResultDataAccess.Res11Bridge._predefItemData">
@@ -7422,6 +7941,23 @@
             A WKT string for a spatial reference system.
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.ResultData.UnitSystem">
+            <summary>
+            Unit system of the simulation that produced the result data object.
+            <para>
+            When creating a result data object and storing:
+            Properties of ResultData objects (coordinates, bottom levels etc.) must always be set in SI units. 
+            </para>
+            <para>
+            When loading a result data object from storage:
+            The <see cref="P:DHI.Mike1D.ResultDataAccess.IResultDataParameters.UnitSystem"/>
+            and <see cref="P:DHI.Mike1D.ResultDataAccess.IResultDataParameters.ConvertGeometry"/>
+            can be used to change units of data and properties in the Result Data object.
+            This property will maintain the original value and will not be changed by
+            updating the <see cref="T:DHI.Mike1D.ResultDataAccess.IResultDataParameters"/>
+            </para>
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.ResultDataAccess.ResultData.StartTime">
             <summary>
             Data coverage start
@@ -7441,6 +7977,9 @@
             <summary>
             Time axis for the data. 
             </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.ResultData.ResultType">
+            <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.ResultDataAccess.ResultData.GetNumberOfDataItems">
             <summary>
@@ -7478,6 +8017,12 @@
             Generate derived properties
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultData.ReconnectNetwork">
+            <summary>
+            If network is changed (node/reach moved or reconnected), this
+            will regenerate the network attributes in the ResultData object.
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.ResultDataAccess.ResultData.DataItems">
             <summary>
             Get an iterator that iterates over all data items
@@ -7506,6 +8051,14 @@
         <member name="P:DHI.Mike1D.ResultDataAccess.ResultData.GlobalData">
             <summary>
             Global data. Valid for entire network
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ResultDataAccess.ResultData.NetworkDatas">
+            <summary>
+            Static data on the network.
+            <para>
+            Used for user defined markers from MIKE 11 and Critical Levels in MU.
+            </para>
             </summary>
         </member>
         <member name="P:DHI.Mike1D.ResultDataAccess.ResultData.NetworkDataSet">
@@ -7751,61 +8304,46 @@
         <member name="F:DHI.Mike1D.ResultDataAccess.DataReaderRandom._headerKeepFileOpen">
             <summary> Flag indicating if file was kept open from header call </summary>
         </member>
-        <member name="T:DHI.Mike1D.ResultDataAccess.ResultDataExtensions">
+        <member name="T:DHI.Mike1D.ResultDataAccess.ResultDataTimeInterpolator">
             <summary>
-            Extension class with various extension methods
+            Class for interpolating ResultData values in time.
+            <para>
+            This class has some buffer functionality such that results for the same inputs
+            are returned immediately, without a need for searching. 
+            </para>
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.SaveHD(DHI.Mike1D.ResultDataAccess.ResultSpecification)">
+        <member name="F:DHI.Mike1D.ResultDataAccess.ResultDataTimeInterpolator._times">
+            <summary> Times from ResultData object </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataTimeInterpolator.#ctor(DHI.Mike1D.ResultDataAccess.IResultData)">
             <summary>
-            Returns true if result is HD type
+            Constructor
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.SaveRR(DHI.Mike1D.ResultDataAccess.ResultSpecification)">
+        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataTimeInterpolator.GetInterval(System.DateTime,System.Double@)">
             <summary>
-            Returns true if result is rainfall-runoff type
+            Calculate interval and fraction for the time.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.HasVolume(DHI.Mike1D.ResultDataAccess.IRes1DNode)">
+        <member name="T:DHI.Mike1D.ResultDataAccess.DataItemValueTimeInterpolator">
             <summary>
-            Returns true if node has volume
+            Class for interpolating data item values in time, for a data
+            item with just a single value.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.Quantities(DHI.Mike1D.ResultDataAccess.IResultData,System.Boolean)">
-            <summary>
-            Extract all quantities of a result data object.
-            </summary>
-            <param name="resultData">Result data object</param>
-            <param name="descriptionUnique">True if quantities are unique when description differs, or false if they are alike when description differs.</param>
+        <member name="F:DHI.Mike1D.ResultDataAccess.DataItemValueTimeInterpolator._interpolator">
+            <summary> ResultDataTimeInterpolator is a seperate class, to be reused by more than one data item.</summary>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.Quantities(DHI.Mike1D.ResultDataAccess.IResultData,System.Boolean,DHI.Mike1D.Generic.IQuantities)">
+        <member name="M:DHI.Mike1D.ResultDataAccess.DataItemValueTimeInterpolator.#ctor(DHI.Mike1D.ResultDataAccess.ResultDataTimeInterpolator,System.Collections.Generic.IReadOnlyList{System.Double})">
             <summary>
-            Extract all quantities of a result data object.
+            Constructor
             </summary>
-            <param name="resultData">Result data object</param>
-            <param name="descriptionUnique">True if quantities are unique when description differs, or false if they are alike when description differs.</param>
-            <param name="quantities">List to add to</param>
         </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.Quantities(DHI.Mike1D.ResultDataAccess.IResultData,System.Collections.Generic.IEqualityComparer{DHI.Mike1D.Generic.IQuantity},DHI.Mike1D.Generic.IQuantities)">
+        <member name="M:DHI.Mike1D.ResultDataAccess.DataItemValueTimeInterpolator.GetValue(System.DateTime)">
             <summary>
-            Extract all quantities of a result data object.
+            Get value at specified time
             </summary>
-            <param name="resultData">Result data object</param>
-            <param name="comparer">Comparer defining when quantities differs</param>
-            <param name="quantities">List to add to</param>
-        </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.QuantityDataItems(DHI.Mike1D.ResultDataAccess.IResultData)">
-            <summary>
-            Extract all quantities and dataitems of a result data object, grouped by their quantity
-            </summary>
-            <param name="resultData">Result data object</param>
-        </member>
-        <member name="M:DHI.Mike1D.ResultDataAccess.ResultDataExtensions.RemoveTimestep(DHI.Mike1D.ResultDataAccess.IResultData,System.Int32)">
-            <summary>
-            Extract all quantities of a result data object.
-            </summary>
-            <param name="resultData">Result data object</param>
-            <param name="timestepIndex">Index of timestep to remove</param>
         </member>
     </members>
 </doc>

@@ -231,9 +231,34 @@
             Validate
             </summary>
         </member>
+        <member name="T:DHI.Mike1D.ADDataAccess.ADDataExtensions">
+            <summary>
+            Class with extension methods for the AD Data Access
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADDataExtensions.InitialValuesExtrapolationDistance(DHI.Mike1D.ADDataAccess.ADComponentData,System.Double)">
+            <summary>
+            Set extrapolation distance for initial values for all components
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.ADDataAccess.ADComponentQuantities">
             <summary>
             Providing methods for creating quantities.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.Create(DHI.Mike1D.ADDataAccess.ADComponent,DHI.Mike1D.Generic.PredefinedQuantityAD)">
+            <summary>
+            Returns an AD quantity from predefined quantity for a given component.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.Create(DHI.Mike1D.ADDataAccess.ADComponent,DHI.Mike1D.Generic.PredefinedQuantityAD,DHI.Mike1D.Generic.ComponentResultType)">
+            <summary>
+            Returns an AD quantity from predefined quantity for a given component.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.Create(DHI.Mike1D.ADDataAccess.ADComponent,System.String)">
+            <summary>
+            Returns an AD quantity with extra string added for a given component.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.FaceTransport(DHI.Mike1D.ADDataAccess.ADComponent,System.String)">
@@ -241,24 +266,9 @@
             Returns face transport quantity for a given component.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.FaceTransport(DHI.Mike1D.Generic.IQuantity)">
-            <summary>
-            Returns face transport quantity for a given AD component quantity.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.FaceTransport(DHI.Mike1D.Generic.IQuantity,System.String)">
-            <summary>
-            Returns face transport quantity for a given AD component quantity.
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.FaceTransportAccumulated(DHI.Mike1D.ADDataAccess.ADComponent)">
             <summary>
             Returns face transport accumulated (mass) quantity for a given component.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.MassQuantity(DHI.Mike1D.ADDataAccess.ADComponent)">
-            <summary>
-            Returns mass quantity for a given component.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.MassQuantity(DHI.Mike1D.ADDataAccess.ADComponent,System.String)">
@@ -284,6 +294,51 @@
         <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.DecayAccQuantity(DHI.Mike1D.ADDataAccess.ADComponent,System.String)">
             <summary>
             Returns decay accumulated quantity for component.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.CatchmentDischargeTransport(DHI.Mike1D.ADDataAccess.ADComponent)">
+            <summary>
+            Returns cathcment discharge transport quantity for a given component.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.FaceTransport(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns face transport quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.FaceTransportAccumulated(DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            Returns face transport accumulated (mass) quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.MassQuantity(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns mass quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.MassErrorQuantity(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns mass quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.MassPerTimeQuantity(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Create a mass-per-time quantity from the component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.DecayQuantity(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns decay quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.DecayAccQuantity(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns decay accumulated quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ADDataAccess.ADComponentQuantities.CatchmentDischargeTransport(DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            Returns cathcment discharge transport quantity for a given component quantity.
             </summary>
         </member>
         <member name="T:DHI.Mike1D.ADDataAccess.ADDispersionParameters">
@@ -319,6 +374,24 @@
         <member name="M:DHI.Mike1D.ADDataAccess.ADDispersionParametersInterpolatable.Interpolate(System.Double,DHI.Mike1D.ADDataAccess.ADDispersionParameters,DHI.Mike1D.ADDataAccess.ADDispersionParameters)">
             <summary>
             Interpolate dispersion parameters.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.ADDataAccess.IComponent">
+            <summary>
+            Common interface for AD and ST components.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ADDataAccess.IComponent.Id">
+            <summary>
+            Id of component
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ADDataAccess.IComponent.Scope">
+            <summary>
+            Specifies where in the model the component belongs. 
+            <para>
+            Only <see cref="F:DHI.Mike1D.ADDataAccess.ADScope.Water"/> follows the flow.
+            </para>
             </summary>
         </member>
         <member name="T:DHI.Mike1D.HDParameterDataAccess.BedResistance">
@@ -856,7 +929,15 @@
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.HDParameterData.UserDefinedLocations">
             <summary>
-            Simple implementation of UserDefinedMarkers that do not interpolate
+            User defined locations, locations that the user wants to keep track of.
+            <para>
+            Different types of locations are identified by a string, being the id in the dictionary.
+            For each string, a list of locations are stored. 
+            </para>
+            <para>
+            Node locations can be specified with a chainage value of <see cref="F:System.Double.MinValue"/>.
+            </para>
+            A Z value can be specified together with the locations.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.HDParameterData.__userDefinedLocations">
@@ -864,9 +945,24 @@
             Serialization version, to handle the comparer of the dictionary.
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.HDParameterData.UserDefinedNetworkDatas">
+            <summary>
+            User defined data in the network.
+            <para>
+            Each type of data is identified by a string, being the id of the data type.
+            </para>
+            <para>
+            UserDefinedMarkers from MIKE 11 is added here.
+            </para>
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.HDParameterData.UserDefinedLevels">
             <summary>
-            Simple implementation of UserDefinedMarkers that do interpolate
+            Same as <see cref="P:DHI.Mike1D.HDParameterDataAccess.HDParameterData.UserDefinedNetworkDatas"/>.
+            <para>
+            This is the old name, but since more than levels can be stored here,
+            it has been renamed.
+            </para>
             </summary>
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.HDParameterData.__userDefinedLevels">
@@ -2206,10 +2302,18 @@
             Unit: [sec]
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.TabulatedTSFile">
+            <summary>
+            Tabulated time step Filename
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.TabulatedTSFilename">
             <summary>
             Tabulated time step Filename
             </summary>
+        </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.__tabulatedTSFilename">
+            <summary> Backwards compatible serialization property </summary>
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.ItemNo">
             <summary>
@@ -2258,7 +2362,13 @@
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.PerformBoundaryCheck">
             <summary>
-            Id true, then check boundaries during Adaptive Time Stepping
+            If true, then check boundaries during Adaptive Time Stepping
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.PerformRunoffCheck">
+            <summary>
+            If true, then check runoff inflow during Adaptive Time Stepping.
+            It is using the same limits as the <see cref="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.PerformBoundaryCheck"/>.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.HDParameterDataAccess.TimeStepping.BoundaryMaxRelativeChange">
@@ -2970,6 +3080,9 @@
             Component ID
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STBaseComponent.Scope">
+            <inheritdoc/>
+        </member>
         <member name="P:DHI.Mike1D.STDataAccess.STBaseComponent.HasBedLoad">
             <summary>
             HasBedLoad, Cohesive components can not, NonCohesive component might.
@@ -2985,22 +3098,17 @@
             Providing methods for creating quantities.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.BedLevelChange">
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.Create(DHI.Mike1D.STDataAccess.STBaseComponent,DHI.Mike1D.Generic.PredefinedQuantityST)">
             <summary>
-            Returns bed level change since simulation start.
+            Returns a ST quantity from predefined quantity for a given component.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.GeometricMeanDiameter">
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.Create(DHI.Mike1D.STDataAccess.STBaseComponent,DHI.Mike1D.Generic.PredefinedQuantityST,DHI.Mike1D.Generic.ComponentResultType)">
             <summary>
-            Returns bed level change since simulation start.
+            Returns a ST quantity from predefined quantity for a given component.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.BedLoad(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
-            <summary>
-            Returns bed load transport quantity for a given ST component quantity, in [m3/s]
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.BedLoad(DHI.Mike1D.Generic.IQuantity,System.String)">
             <summary>
             Returns bed load transport quantity for a given ST component quantity, in [m3/s]
             </summary>
@@ -3010,19 +3118,14 @@
             Returns suspended face transport quantity for a given component in [m3/s].
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.SuspLoad(DHI.Mike1D.Generic.IQuantity,System.String)">
-            <summary>
-            Returns suspended face transport quantity for a given component in [m3/s].
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.TotalLoad(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
             <summary>
             Returns face transport quantity for a given component.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.TotalLoad(DHI.Mike1D.Generic.IQuantity,System.String)">
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.TotalLoadAccumulated(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
             <summary>
-            Returns face transport quantity for a given ST component quantity.
+            Returns accumulated transport quantity.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.ActiveLayerFraction(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
@@ -3030,14 +3133,89 @@
             Returns active layer fraction quantity for a given sand component.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.ActiveLayerFraction(DHI.Mike1D.Generic.IQuantity,System.String)">
-            <summary>
-            Returns active layer fraction quantity for a given ST component quantity.
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.PassiveLayerFraction(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
             <summary>
             Returns passive layer fraction quantity for a given sand component.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.MassError(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns mass error quantity for a given component.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalConcentration(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns suspended concentration quantity for fraction, in unit [g/m3]
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalTotalLayerThickness(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns total layer thickness per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalActiveLayerThickness(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns active layer thickness per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalPassiveLayerThickness(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns passive layer thickness per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalTotalLayerMass(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns total layer mass per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalActiveLayerMass(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns active layer mass per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalPassiveLayerMass(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns passive layer mass per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalSurfaceDistribution(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns surface distribution per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.MassOnCatchment(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns mass of sediment fraction on catchment (per fraction)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.MassTransport(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns total sediment mass transport (per fraction)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.MassTransportAccumulated(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+            <summary>
+            Returns total routed mass of sediment fraction in SWQ simulation (per fraction)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.BedLoad(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns bed load transport quantity for a given ST component quantity, in [m3/s]
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.SuspLoad(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns suspended face transport quantity for a given component in [m3/s].
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.TotalLoad(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns face transport quantity for a given ST component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.ActiveLayerFraction(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns active layer fraction quantity for a given ST component quantity.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.PassiveLayerFraction(DHI.Mike1D.Generic.IQuantity,System.String)">
@@ -3045,14 +3223,19 @@
             Returns passive layer fraction quantity for a given ST component quantity.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.MassError(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
-            <summary>
-            Returns face transport quantity for a given component.
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.MassError(DHI.Mike1D.Generic.IQuantity,System.String)">
             <summary>
-            Returns face transport quantity for a given AD component quantity.
+            Returns mass error quantity for a given ST component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.BedLevelChange">
+            <summary>
+            Returns bed level change since simulation start.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.GeometricMeanDiameter">
+            <summary>
+            Returns geometric mean diameter.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.SkinFriction">
@@ -3108,18 +3291,7 @@
         </member>
         <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.ConcentrationIOF">
             <summary>
-            Returns face transport quantity integrated over components.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalConcentrationQuantity">
-            <summary>
-            Quantity for suspended concentration for all ST components, in [g/m3]
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalConcentration(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
-            <summary>
-            Returns suspended concentration quantity for fraction, in unit [g/m3]
+            Returns concentration integrated over components.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.TotalLayerThicknessIOF">
@@ -3140,47 +3312,10 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalTotalLayerThickness(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
+        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalConcentrationQuantity">
             <summary>
-            Returns total layer thickness per NonCohesive fractions
+            Quantity for suspended concentration for all ST components, in [g/m3]
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalActiveLayerThickness(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
-            <summary>
-            Returns active layer thickness per NonCohesive fractions
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalPassiveLayerThickness(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
-            <summary>
-            Returns passive layer thickness per NonCohesive fractions
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalTotalLayerMass(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
-            <summary>
-            Returns total layer mass per NonCohesive fractions
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalActiveLayerMass(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
-            <summary>
-            Returns active layer mass per NonCohesive fractions
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalPassiveLayerMass(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
-            <summary>
-            Returns passive layer mass per NonCohesive fractions
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:DHI.Mike1D.STDataAccess.STComponentQuantities.FractionalSurfaceDistribution(DHI.Mike1D.STDataAccess.STBaseComponent,System.String)">
-            <summary>
-            Returns surface distribution per NonCohesive 
-            </summary>
-            <returns></returns>
         </member>
         <member name="T:DHI.Mike1D.STDataAccess.MorphologicalUpdaterType">
             <summary>
@@ -3577,10 +3712,18 @@
             <param name="stData"></param>
             <returns></returns>
         </member>
+        <member name="M:DHI.Mike1D.STDataAccess.STExtensions.GetComponent(DHI.Mike1D.STDataAccess.STData,System.String)">
+            <summary>
+            Get component with specified <paramref name="componentId"/>, or null if not found.
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.STDataAccess.STCohesiveComponent">
             <summary>
             Parameters for an ST component, including initial concentration and type
             </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STCohesiveComponent.Scope">
+            <inheritdoc/>
         </member>
         <member name="P:DHI.Mike1D.STDataAccess.STCohesiveComponent.GrainSize">
             <summary>
@@ -3800,6 +3943,9 @@
             <summary>
             Parameters for a ST sand component (non-cohesive)
             </summary>
+        </member>
+        <member name="P:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.Scope">
+            <inheritdoc/>
         </member>
         <member name="M:DHI.Mike1D.STDataAccess.STNonCohesiveComponent.#ctor">
             <summary>

@@ -4,6 +4,26 @@
         <name>DHI.Mike1D.NetworkDataAccess</name>
     </assembly>
     <members>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.CatchmentConnectionFlowTypes">
+            <summary>
+            The types of flows being handled by a <see cref="T:DHI.Mike1D.NetworkDataAccess.CatchmentConnection"/>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.CatchmentConnectionFlowTypes.All">
+            <summary>
+            All flows are handled by this connection
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.CatchmentConnectionFlowTypes.Runoff">
+            <summary>
+            Runoff flows are handled by this connection
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.NetworkDataAccess.CatchmentConnectionFlowTypes.CatchmentDischarge">
+            <summary>
+            Catchment Discharges are handled by this connnection
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.NetworkDataAccess.CatchmentConnection">
             <summary>
             Class containing information on where a specific catchment
@@ -19,7 +39,7 @@
         </member>
         <member name="P:DHI.Mike1D.NetworkDataAccess.CatchmentConnection.CatchmentId">
             <summary>
-            ID of catchment
+            Model Id of catchment
             </summary>
         </member>
         <member name="P:DHI.Mike1D.NetworkDataAccess.CatchmentConnection.Area">
@@ -32,6 +52,11 @@
             <summary>
             Fraction of catchment discharge running into this connection. 
             Use either Area or Fraction. Set Fraction to 0 to use Area.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.CatchmentConnection.FlowType">
+            <summary>
+            Type of flow that this catchment connection handles
             </summary>
         </member>
         <member name="P:DHI.Mike1D.NetworkDataAccess.CatchmentConnection.ReachId">
@@ -199,7 +224,7 @@
         </member>
         <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection.CatchmentId">
             <summary>
-            ID of catchment
+            FlowType Id of catchment
             </summary>
         </member>
         <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection.Area">
@@ -212,6 +237,11 @@
             <summary>
             Fraction of catchment discharge running into this connection. 
             Use either Area or Fraction. Set Fraction to 0 to use Area.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection.FlowType">
+            <summary>
+            Type of flow that this catchment connection handles
             </summary>
         </member>
         <member name="P:DHI.Mike1D.NetworkDataAccess.ICatchmentConnection.ReachId">
@@ -242,7 +272,7 @@
             It only has an effect for a connection span, not for connection nodes/locations.
             </para>
             <para>
-            M11 default is true.
+            Default is false, M11/MH sets this to true. Should only be set to true for connections to open cross sections.
             </para>
             </summary>
         </member>
@@ -872,6 +902,31 @@
             Width of the slot that is created to handle water levels above the cover.
             </summary>
         </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.IUndergroundNode">
+            <summary>
+            Interface for a node being underground
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IUndergroundNode.GroundLevel">
+            <summary>
+            Level of ground at the node. 
+            Unit: [m]
+            Default: 0
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.IUndergroundNode.MaxInflowFromSurface">
+            <summary>
+            Maximum inflow from surface, i.e. rainfall runoff type inflows.
+            <para>
+            The node inflow from surface can be limited by the surface opening,
+            a sewer grate or similar.
+            </para>
+            <para>
+            Unit: [m3/s].
+            Default: Double.MaxValue
+            </para>
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.NetworkDataAccess.ISewerNode">
             <summary>
             ISewerNode includes cover functionality to a Node
@@ -1034,6 +1089,26 @@
         <member name="M:DHI.Mike1D.NetworkDataAccess.NetworkExtensions.IsStructureReach(DHI.Mike1D.NetworkDataAccess.IReach)">
             <summary>
             Returns true when <paramref name="reach"/> is an <see cref="T:DHI.Mike1D.NetworkDataAccess.IStructureReach"/>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.NetworkExtensions.IsPointConnection(DHI.Mike1D.NetworkDataAccess.ICatchmentConnection)">
+            <summary>
+            Retruns true if the <paramref name="connection"/> is a point connection
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.NetworkExtensions.HasRunoff(DHI.Mike1D.NetworkDataAccess.CatchmentConnectionFlowTypes)">
+            <summary>
+            Retruns true if the <paramref name="flowType"/> includes runoff
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.NetworkExtensions.HasCatchmentDischarge(DHI.Mike1D.NetworkDataAccess.CatchmentConnectionFlowTypes)">
+            <summary>
+            Retruns true if the <paramref name="flowType"/> includes runoff
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.NetworkDataAccess.NetworkExtensions.BuildReachSearcher(DHI.Mike1D.NetworkDataAccess.Network)">
+            <summary>
+            <see cref="T:DHI.Mike1D.Generic.ReachSearcher`1"/> containing all reaches in the network.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.NetworkDataAccess.NetworkExtensions.Sort(System.Collections.Generic.IList{DHI.Mike1D.NetworkDataAccess.IReach})">
@@ -1646,6 +1721,13 @@
         <member name="P:DHI.Mike1D.NetworkDataAccess.Outlet.GroundLevel">
             <inheritdoc />
         </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.StructureOutlet">
+            <summary>
+            Special kind of outlet: When a structure is discharging directly out
+            of the system, and no outlet has been explicitly specified,
+            the engine will put in a StuctureOutlet downstream of the structure. 
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.NetworkDataAccess.OutletHeadLoss">
             <summary>
             Description of headloss from node outlets
@@ -1736,6 +1818,32 @@
         </member>
         <member name="M:DHI.Mike1D.NetworkDataAccess.RoutingElement.ToString">
             <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.ISewerJunction">
+            <summary>
+            A sewer junction is connecting to two or more sewer links
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.NetworkDataAccess.SewerJunction">
+            <summary>
+            A sewer junction is connecting to two or more sewer links
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.SewerJunction.GroundLevel">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.NetworkDataAccess.SewerJunction.MaxInflowFromSurface">
+            <summary>
+            Maximum inflow from surface, i.e. rainfall runoff type inflows.
+            <para>
+            The node inflow from surface can be limited by the surface opening,
+            a sewer grate or similar.
+            </para>
+            <para>
+            Unit: [m3/s].
+            Default: Double.MaxValue
+            </para>
+            </summary>
         </member>
         <member name="T:DHI.Mike1D.NetworkDataAccess.SewerNode">
             <summary>

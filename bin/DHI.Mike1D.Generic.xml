@@ -523,8 +523,12 @@
             <para>
             Compared to the standard generic Queue, this queue allows access to
             queue elements throught the <see cref="P:Item(int)"/> property of the IList{T}
-            interface. It implements the IList{T} interface, supporint in-queue 
+            interface. It implements the IList{T} interface, supporting in-queue 
             modifications, i.e. methods like Remove and Insert.
+            </para>
+            <para>
+            The next element to be dequeued is the first element in the IList{T}, <code>this[0]</code>.
+            New elements are added in the end of the list.
             </para>
             </summary>
             <remarks>
@@ -613,6 +617,16 @@
         <member name="M:DHI.Mike1D.Generic.Collections.FifoQueue`1.Add(`0)">
             <summary>
             Adds an object to the end of the FifoQueue{T}, same as <see cref="M:DHI.Mike1D.Generic.Collections.FifoQueue`1.Enqueue(`0)"/>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Collections.FifoQueue`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Adds an object to the end of the FifoQueue{T}, same as <see cref="M:DHI.Mike1D.Generic.Collections.FifoQueue`1.Enqueue(`0)"/>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Collections.FifoQueue`1.AddRotate(`0)">
+            <summary>
+            Adds an object to the end of the FifoQueue{T}, dequeuing the first item if queue is full (capacity is met).
             </summary>
         </member>
         <member name="M:DHI.Mike1D.Generic.Collections.FifoQueue`1.ResizeArray(System.Int32)">
@@ -791,6 +805,28 @@
         </member>
         <member name="P:DHI.Mike1D.Generic.Collections.SingleEnumerator`1.Current">
             <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Collections.ValueIdList.GetItem(System.Int32)">
+            <summary>
+            Get item at index
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Collections.ValueIdList.GetItem(System.String)">
+            <summary>
+            Get item. Create if not already there.
+            </summary>
+        </member>
+        <member name="E:DHI.Mike1D.Generic.Collections.NetworkValueIdList.ApplyExternalSourcesEvent">
+            <summary>
+            An event that is called everytime external sources are to be applied
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Collections.NetworkValueIdList.TriggerApplyExternalSourcesEvent(System.DateTime,System.DateTime)">
+            <summary>
+             
+            </summary>
+            <param name="timeN">Time at start of time step</param>
+            <param name="timeNp1">Time at end of time step</param>
         </member>
         <member name="T:DHI.Mike1D.Generic.DiagnosticsException">
             <summary>
@@ -1599,6 +1635,19 @@
             vertex indices.
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.Generic.Graph.TopologicalSort.NumberOfCycles">
+            <summary>
+            Returns the number of cycles identified in the graph.
+            <para>
+            NumberOfCycles > 0 means that topological sort failed.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.Graph.TopologicalSort.FirstCircularReferenceVertex">
+            <summary>
+            First vertex which was found to have a circular reference.
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.Generic.Graph.TopologicalSort.Sort">
             <summary>
             Perform the topological sort.
@@ -1931,17 +1980,177 @@
         <member name="P:DHI.Mike1D.Generic.INetworkCatchment.ID">
             <summary> Catchment ID. </summary>
         </member>
-        <member name="T:DHI.Mike1D.Generic.IUserUnitProvider">
+        <member name="T:DHI.Mike1D.Generic.UnitSystem">
+            <summary>
+            Unit systems available in the MIKE 1D system
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UnitSystem.NoConversion">
+            <summary> Do not apply any unit conversions, but read/write data directly from/to storage</summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UnitSystem.Automatic">
+            <summary> Determine unit system automatically.
+            <para>
+            Use this e.g. when loading a result data object from storage
+            and you want to use the unit system value stored with
+            the result data (the unit system of the simulation)
+            </para>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UnitSystem.Default">
+            <summary> Default unit system, mostly SI units </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UnitSystem.User">
+            <summary> User defined unit system. If no user unit is provided for a quantity, the default is being used. </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UnitSystem.UBG">
+            <summary> UBG unit system (Unit Base Group). This is using the <see cref="M:DHI.Mike1D.Generic.UserUnitDefaults.GetUBGUnitProvider"/> </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UnitSystem.US">
+            <summary> US unit system. This is using the <see cref="M:DHI.Mike1D.Generic.UserUnitDefaults.GetUSUnitProvider"/> </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.IUnitProvider">
             <summary>
              An IUserUnitProvider is used by DiagnosticsValue to convert values into user units.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.Generic.IUserUnitProvider.UserUnitKey(DHI.Generic.MikeZero.eumItem)">
+        <member name="M:DHI.Mike1D.Generic.IUnitProvider.GetUserUnit(DHI.Generic.MikeZero.eumItem)">
             <summary>
-            Return user unit key for EUM item type
+            Return user unit for EUM item type
             </summary>
-            <param name="item"></param>
-            <returns></returns>
+            <param name="item">EUM item type of quantity.</param>
+            <returns>User unit, <see cref="F:DHI.Generic.MikeZero.eumUnit.eumUUnitUndefined"/> if not found.</returns>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.IUnitProvider.GetUserUnit(System.String,DHI.Generic.MikeZero.eumItem)">
+            <summary>
+            Return user unit
+            </summary>
+            <param name="quantityId">Id of quantity</param>
+            <param name="item">EUM item type of quantity. Set to <see cref="F:DHI.Generic.MikeZero.eumItem.eumIItemUndefined"/> to disregard item type</param>
+            <returns>User unit, <see cref="F:DHI.Generic.MikeZero.eumUnit.eumUUnitUndefined"/> if not found.</returns>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.UserUnitInfo">
+            <summary>
+            Information on a user unit
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UserUnitInfo.Id">
+            <summary> Id of quantity. If null, only <see cref="F:DHI.Mike1D.Generic.UserUnitInfo.eumItem"/> is being matched.</summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UserUnitInfo.eumItem">
+            <summary> EUM item type of quantity</summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UserUnitInfo.UserUnit">
+            <summary> User specified unit of quantity </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.UserUnitInfo.#ctor(System.String,DHI.Generic.MikeZero.eumItem,DHI.Generic.MikeZero.eumUnit)">
+            <summary> Default constructor </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.UBGUnitProvider">
+            <summary>
+            UBG unit provider. Uses the EUM Unit Base Group (UBG) system
+            to determine a unit for a given item.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.UBGUnitProvider.GetUserUnit(DHI.Generic.MikeZero.eumItem)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.UBGUnitProvider.GetUserUnit(System.String,DHI.Generic.MikeZero.eumItem)">
+            <inheritdoc/>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.UserUnitProvider">
+            <summary>
+            A <see cref="T:DHI.Mike1D.Generic.IUnitProvider"/> based on a specified set
+            of unit definitions.
+            <para>
+            If a quantity ID is not provided when adding a user units,
+            it will match on the <see cref="T:DHI.Generic.MikeZero.eumItem"/> value only.
+            </para>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.UserUnitProvider.UnitSearchType">
+            <summary>
+            Type of string search to apply:
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UserUnitProvider.UnitSearchType.StartsWith">
+            <summary> Quantity Id starts with this string </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UserUnitProvider.UnitSearchType.EndsWith">
+            <summary> Quantity Id ends with this string </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UserUnitProvider.UnitSearchType.Regex">
+            <summary> Use regular expression for matching quantity Id </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.UserUnitProvider.Add(DHI.Generic.MikeZero.eumItem,DHI.Generic.MikeZero.eumUnit)">
+            <summary>
+            Add user unit to unit provider, based on <see cref="T:DHI.Generic.MikeZero.eumItem"/> type
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.UserUnitProvider.Add(System.String,DHI.Generic.MikeZero.eumItem,DHI.Generic.MikeZero.eumUnit)">
+            <summary>
+            Add user unit to unit provider, based on Id of quantity
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.UserUnitProvider.Add(DHI.Mike1D.Generic.UserUnitInfo)">
+            <summary>
+            Add user unit to unit provider
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.UserUnitProvider.Update(DHI.Mike1D.Generic.UserUnitInfo)">
+            <summary>
+            Update existing unit.
+            </summary>
+            <returns>True if unit was updated. False if not found.</returns>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.UserUnitProvider.Add(DHI.Mike1D.Generic.UserUnitProvider.UnitSearchType,DHI.Mike1D.Generic.UserUnitInfo)">
+            <summary>
+            Add user unit to unit provider, with the given search type
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.UserUnitProvider.GetUserUnit(DHI.Generic.MikeZero.eumItem)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.UserUnitProvider.GetUserUnit(System.String,DHI.Generic.MikeZero.eumItem)">
+            <inheritdoc/>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.UserUnitDefaults">
+            <summary>
+            Static class, containing units for various quantities, both SI and US
+            <para>
+            A quantity is identified by its id and EUM item type. It is possible to
+            match quantity id's in three ways:
+            1) Exact match (case insensitive)
+            2) Id starts with: string starts with a *: "*myid"
+            3) Id ends with  : string ends with a *: "myid*"
+            4) Id is matching a regular expression: string is inside [] "[regexMatch]"
+            </para>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UserUnitDefaults.SIUnits">
+            <summary>
+            Currently active SI unit definitions
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.UserUnitDefaults.USUnits">
+            <summary>
+            Currently active US unit definitions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.UserUnitDefaults.GetUBGUnitProvider">
+            <summary>
+            Get UBG unit provider
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.UserUnitDefaults.GetUSUnitProvider">
+            <summary>
+            Get default US unit provider
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.UserUnitDefaults.GetSIUnitProvider">
+            <summary>
+            Get default SI unit provider
+            </summary>
         </member>
         <member name="T:DHI.Mike1D.Generic.LocationRelativeType">
             <summary>
@@ -2166,6 +2375,765 @@
             Create dictionary with values from array of key-value pairs.
             </summary>
         </member>
+        <member name="T:DHI.Mike1D.Generic.ComponentResultType">
+            <summary>
+            Enumeration specifying AD or ST component result type.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.ComponentResultType.RainfallRunoff">
+            <summary> Rainfall runoff results. </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.ComponentResultType.CatchmentDischarge">
+            <summary> Catchment discharge results. </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.PredefinedQuantityAD">
+            <summary>
+            Enumeration of predefined quantities for AD components.
+            </summary>
+            <remarks>
+            Remember to add an entry to the <see cref="T:DHI.Mike1D.Generic.PredefinedQuantityTableADComponent"/> whenever
+            a new <see cref="T:DHI.Mike1D.Generic.PredefinedQuantityAD"/> is created.
+            </remarks>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.Undefined">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.Concentration">
+            <summary>
+            Concentration of AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.Transport">
+            <summary>
+            Mass transport of AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.TransportSpill">
+            <summary>
+            Mass transport spill of AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.TransportInfiltration">
+            <summary>
+            Mass transport infiltration of AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.TransportAccumulated">
+            <summary>
+            Accumulated mass transport of AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.TransportTotalMassChange">
+            <summary>
+            Total mass change rate
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.TransportTotalSources">
+            <summary>
+            Total mass change rate from sources
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.TransportTotalSinks">
+            <summary>
+            Total mass change rate from sinks
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.TransportTotalBoundaryInflow">
+            <summary>
+            Total mass change rate from boundary inflow
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.TransportTotalBoundaryOutflow">
+            <summary>
+            Total mass change rate from boundary outflow
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.Mass">
+            <summary>
+            Mass of AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassTotal">
+            <summary>
+            Total mass of AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassTotalSources">
+            <summary>
+            Total mass of AD component from sources
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassTotalSinks">
+            <summary>
+            Total mass of AD component to sinks
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassTotalBoundaryInflow">
+            <summary>
+            Total mass of AD component from boundary inflow
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassTotalBoundaryOutflow">
+            <summary>
+            Total mass of AD component to boundary outflow
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassRouted">
+            <summary>
+            Routed mass in SWQ simulation
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassRoutedAccumulated">
+            <summary>
+            Total routed mass in SWQ simulation
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassOnCatchment">
+            <summary>
+            Mass of pollutant on catchment in SWQ simulation
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassError">
+            <summary>
+            Mass error in the simulation for AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassErrorTotal">
+            <summary>
+            Total mass error in the simulation for AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassErrorAccumulated">
+            <summary>
+            Accumulated mass error in the simulation for AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassErrorAbsAccumulated">
+            <summary>
+            Modulus accumulated mass error in the simulation for AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassErrorTotalAccumulated">
+            <summary>
+            Total accumulated mass error in the simulation for AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassErrorTotalAbsAccumulated">
+            <summary>
+            Total modulus accumulated mass error in the simulation for AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassErrorChecksum">
+            <summary>
+            Mass error checksum for AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassErrorTotalChecksum">
+            <summary>
+            Total mass error checksum for AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassErrorAccumulatedChecksum">
+            <summary>
+            Accumulated mass error checksum for AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassErrorAbsAccumulatedChecksum">
+            <summary>
+            Modulus accumulated mass error checksum for AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.MassErrorTotalAbsAccumulatedChecksum">
+            <summary>
+            Total modulus accumulated mass error checksum for AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.Decay">
+            <summary>
+            First order decay of AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.DecayTotal">
+            <summary>
+            Total first order decay of AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.DecayAccumulated">
+            <summary>
+            Accumulated first order decay of AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.DecayTotalAccumulated">
+            <summary>
+            Total accumulated first order decay of AD component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.CatchmentDischargeTransport">
+            <summary>
+            Catchment discharge mass load
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.Load">
+            <summary>
+            Load in rainfall runoff or catchment discharge
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityAD.LoadFraction">
+            <summary>
+            Fraction of load in AD pollutant (RR or CD)
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.PredefinedQuantityTableADComponent">
+            <summary>
+            Dictionary from <see cref="T:DHI.Mike1D.Generic.PredefinedQuantityAD"/> to PredefinedQuantityProperties used by ADQuantities.Create()
+            to create various Quantities for AD components.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.PredefinedQuantityTableADComponent.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.Generic.PredefinedQuantityProperties">
+            <summary>
+            Properties for PredefinedQuantity.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.PredefinedQuantityProperties.Extra">
+            <summary> Extra string added to the end of the quantity id and description </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.PredefinedQuantityProperties.Method">
+            <summary> Static method delegate to create a quantity </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.PredefinedQuantityProperties.#ctor(System.String,System.Func{DHI.Mike1D.Generic.IQuantity,System.String,DHI.Mike1D.Generic.IQuantity})">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.Generic.PredefinedQuantityDataAD">
+            <summary>
+            Static class containing the <see cref="T:DHI.Mike1D.Generic.PredefinedQuantityTableADComponent"/>.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.PredefinedQuantityDataAD.Init">
+            <summary>
+            Force initialization
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityDataAD.TableComponents">
+            <summary>
+            Instance of <see cref="T:DHI.Mike1D.Generic.PredefinedQuantityTableADComponent"/>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.ExtraForQuantities">
+            <summary>
+            Provides methods for creating IDs and Description of quantities with extra string.
+            For example, for extra = "Checksum, Total, test" we get the following strings:
+              ExtraForId = "ChecksumTotalTest"
+              ExtraForDescription = ", Checksum, Total, test"
+            In ExtraForId we capitalize every word and remove the commas and the spaces.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.ExtraForQuantities.ExtraForId">
+            <summary> Extra for ID </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.ExtraForQuantities.ExtraForDescription">
+            <summary> Extra for Description </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ExtraForQuantities.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ExtraForQuantities.ModifyExtraForId(System.String)">
+            <summary>
+            Provides converted extra for Id.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ExtraForQuantities.ModifyExtraForDescription(System.String)">
+            <summary>
+            Provides converted extra for description.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.ADQuantities">
+            <summary>
+            Provides methods for creating AD quantities.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.Create(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.PredefinedQuantityAD)">
+            <summary>
+            Returns an AD quantity from predefined quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.Create(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.PredefinedQuantityAD,DHI.Mike1D.Generic.ComponentResultType)">
+            <summary>
+            Returns an AD quantity from predefined quantity and component result type for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.Create(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.ComponentResultType)">
+            <summary>
+            Returns a derived quantity for a given component result type.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.Create(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns an AD quantity with extra string added for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.Concentration(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns concentration quantity
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.Load(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns load quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.LoadFraction(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns load fraction quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.FaceTransport(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns face transport quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.FaceTransportUnit">
+            <summary>
+            Returns face transport quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.FaceTransportAccumulated(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns face transport accumulated (mass) quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.FaceTransportAccumulatedUnit">
+            <summary>
+            Returns face transport accumulated (mass) quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.MassQuantity(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns mass quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.MassQuantityUnit">
+            <summary>
+            Returns mass quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.MassErrorQuantity(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns mass quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.MassErrorQuantityUnit">
+            <summary>
+            Returns mass quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.MassPerTimeQuantity(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Create a mass-per-time quantity from the component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.MassPerTimeQuantityUnit">
+            <summary>
+            Create a mass-per-time quantity from the component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.DecayQuantity(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns decay quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.DecayQuantityUnit">
+            <summary>
+            Returns decay quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.DecayAccQuantity(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns decay accumulated quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.DecayAccQuantityUnit">
+            <summary>
+            Returns decay quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ADQuantities.CatchmentDischargeTransport(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns catchment discharge transport quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.PredefinedQuantityST">
+            <summary>
+            Enumeration of predefined quantities for ST components.
+            </summary>
+            <remarks>
+            Remember to add an entry to the
+            <see cref="T:DHI.Mike1D.Generic.PredefinedQuantityTableST"/> or
+            <see cref="T:DHI.Mike1D.Generic.PredefinedQuantityTableSTComponent"/> whenever
+            a new <see cref="T:DHI.Mike1D.Generic.PredefinedQuantityST"/> is created.
+            </remarks>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.Undefined">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.BedLoad">
+            <summary>
+            Bed load transport
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.SuspendedLoad">
+            <summary>
+            Suspended face transport
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.Transport">
+            <summary>
+            Sediment transport
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.TransportAccumulated">
+            <summary>
+            Accumulated sediment transport
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.ActiveLayerFraction">
+            <summary>
+            Active layer fraction
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.PassiveLayerFraction">
+            <summary>
+            Passive layer fraction
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.MassError">
+            <summary>
+            Mass error in the simulation for ST component
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.FractionalConcentration">
+            <summary>
+            Suspended concentration
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.FractionalTotalLayerThickness">
+            <summary>
+            Total layer thickness for non-cohesive fractions
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.FractionalActiveLayerThickness">
+            <summary>
+            Active layer thickness for non-cohesive fractions
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.FractionalPassiveLayerThickness">
+            <summary>
+            Passive layer thickness for non-cohesive fractions
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.FractionalTotalLayerMass">
+            <summary>
+            Total layer mass for non-cohesive fractions
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.FractionalActiveLayerMass">
+            <summary>
+            Active layer mass for non-cohesive fractions
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.FractionalPassiveLayerMass">
+            <summary>
+            Passive layer mass for non-cohesive fractions
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.FractionalSurfaceDistribution">
+            <summary>
+            Surface distribution for non-cohesive fractions
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.MassOnCatchment">
+            <summary>
+            Mass of sediment fraction on catchment (per fraction)
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.MassTransport">
+            <summary>
+            Total sediment mass transport (per fraction)
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.MassTransportAccumulated">
+            <summary>
+            Total routed mass of sediment fraction in SWQ simulation (per fraction)
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.BedLevel">
+            <summary>
+            Bed shear stress
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.BedLevelChange">
+            <summary>
+            Bed level change since simulation start
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.GeometricMeanDiameter">
+            <summary>
+            Geometric mean diameter
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.SkinFriction">
+            <summary>
+            Skin friction
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.BedShearStress">
+            <summary>
+            Dimensionless bed shear stress
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.DimensionlessBedShearStress">
+            <summary>
+            Dimensionless bed shear stress
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.d50">
+            <summary>
+            Grain size d50
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.d90">
+            <summary>
+            Grain size d90
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.SedimentVolumeChange">
+            <summary>
+            Sediment volume change
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.ActiveLayerThickness">
+            <summary>
+            Active layer thickness
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.BedLoadTotal">
+            <summary>
+            Bed load transport (integrated over fractions)
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.SuspendedLoadTotal">
+            <summary>
+            Suspended face transport (integrated over fractions)
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.TransportTotal">
+            <summary>
+            Total sediment transport (integrated over fractions)
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.TransportAccumulatedTotal">
+            <summary>
+            Total accumulated sediment transport (integrated over fractions)
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.ConcentrationTotal">
+            <summary>
+            Concentration of all components
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.LayerThicknessTotal">
+            <summary>
+            Total layer thickness
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.ActiveLayerThicknessTotal">
+            <summary>
+            Total active layer thickness
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.PassiveLayerThicknessTotal">
+            <summary>
+            Total passive layer thickness
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.MassOnCatchmentTotal">
+            <summary>
+            Mass of all sediment fractions on catchment (integrated over fractions)
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.MassTransportTotal">
+            <summary>
+            Total sediment mass transport (integrated over fractions)
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantityST.MassTransportAccumulatedTotal">
+            <summary>
+            Total routed mass of sediments in SWQ simulation (integrated over fractions)
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.PredefinedQuantityTableSTComponent">
+            <summary>
+            Dictionary from <see cref="T:DHI.Mike1D.Generic.PredefinedQuantityST"/> to PredefinedQuantityProperties used by STQuantities.Create()
+            to create various ST component id dependent Quantities.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.PredefinedQuantityTableSTComponent.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.Generic.PredefinedQuantityTableST">
+            <summary>
+            Dictionary from PredefinedQuantityST to ST component id independent Quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.PredefinedQuantityTableST.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.Generic.STPredefinedQuantityData">
+            <summary>
+            Static class containing the <see cref="T:DHI.Mike1D.Generic.PredefinedQuantityTableST"/>.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.STPredefinedQuantityData.TableComponents">
+            <summary>
+            Instance of <see cref="T:DHI.Mike1D.Generic.PredefinedQuantityTableSTComponent"/>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.STPredefinedQuantityData.Table">
+            <summary>
+            Instance of <see cref="T:DHI.Mike1D.Generic.PredefinedQuantityTableST"/>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.STQuantities">
+            <summary>
+            Provides methods for creating ST quantities.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.Create(DHI.Mike1D.Generic.PredefinedQuantityST)">
+            <summary>
+            Returns an ST quantity from predefined quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.Create(DHI.Mike1D.Generic.PredefinedQuantityST,DHI.Mike1D.Generic.ComponentResultType)">
+            <summary>
+            Returns an ST quantity from predefined quantity and component result type.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.Create(System.String,DHI.Mike1D.Generic.PredefinedQuantityST)">
+            <summary>
+            Returns an ST quantity from predefined quantity for a given component quantity id.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.Create(System.String,DHI.Mike1D.Generic.PredefinedQuantityST,DHI.Mike1D.Generic.ComponentResultType)">
+            <summary>
+            Returns an ST quantity from predefined quantity for a given component quantity id and component result type.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.Create(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.PredefinedQuantityST)">
+            <summary>
+            Returns an ST quantity from predefined quantity for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.Create(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.PredefinedQuantityST,DHI.Mike1D.Generic.ComponentResultType)">
+            <summary>
+            Returns an ST quantity from predefined quantity and component result type for a given component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.BedLoad(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns bed load transport quantity for a given ST component quantity, in [m3/s]
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.SuspLoad(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns suspended face transport quantity for a given component in [m3/s].
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.TotalLoad(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns face transport quantity for a given ST component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.TotalLoadAccumulated(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns accumulated transport quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.ActiveLayerFraction(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns active layer fraction quantity for a given ST component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.PassiveLayerFraction(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns passive layer fraction quantity for a given ST component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.MassError(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns mass error quantity for a given ST component quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.FractionalConcentration(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns suspended concentration quantity for fraction, in unit [g/m3]
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.FractionalTotalLayerThickness(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns total layer thickness per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.FractionalActiveLayerThickness(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns active layer thickness per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.FractionalPassiveLayerThickness(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns passive layer thickness per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.FractionalTotalLayerMass(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns total layer mass per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.FractionalActiveLayerMass(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns active layer mass per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.FractionalPassiveLayerMass(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns passive layer mass per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.FractionalSurfaceDistribution(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns surface distribution per NonCohesive fractions
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.MassOnCatchment(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns mass of sediment fraction on catchment (per fraction)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.MassTransport(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns total sediment mass transport (per fraction)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.STQuantities.MassTransportAccumulated(DHI.Mike1D.Generic.IQuantity,System.String)">
+            <summary>
+            Returns total routed mass of sediment fraction in SWQ simulation (per fraction)
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.Generic.PriorityQueue`2">
             <summary>
             A priority queue. It will return the value with the hightest priority/key first.
@@ -2345,6 +3313,237 @@
             priority queue (when dequeued).
             </summary>
         </member>
+        <member name="T:DHI.Mike1D.Generic.PropertyUpdater">
+            <summary>
+            Class for updating properties or fields of an object, based on a string representation of the propery/field.
+            </summary>
+            <example>
+            To update the the Delh property of a Mike1DData object:
+            <code>
+              Mike1DData mike1DData = [...]
+              PropertyUpdater updater = new PropertyUpdater(mike1DData);
+              updater.ApplyPropertyValue("HDParameters.SolverSettings.Delh", "0.12", diagnostics);
+            </code>
+            </example>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.PropertyUpdater.ObjectMemberData">
+            <summary>
+            Data for an object and the member of the object that is part of the property-string
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PropertyUpdater.ObjectMemberData.Info">
+            <summary> Member info </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PropertyUpdater.ObjectMemberData.Obj">
+            <summary> Object that member belongs to </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.PropertyUpdater.BaseFilePath">
+            <summary>
+            If a parameter is an <see cref="T:DHI.Mike1D.Generic.IFilePath"/>, then this is set as the <see cref="P:DHI.Mike1D.Generic.IFilePath.BaseFilePath"/>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.PropertyUpdater.BaseObject">
+            <summary>
+            Base object being modified
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.PropertyUpdater.#ctor(System.Object)">
+            <summary>
+            Constructor, with base object.
+            </summary>
+            <param name="baseObject"></param>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.PropertyUpdater.FindProperty(System.String,System.Collections.Generic.Stack{DHI.Mike1D.Generic.PropertyUpdater.ObjectMemberData}@,DHI.Mike1D.Generic.IDiagnostics,System.Char)">
+            <summary>
+            Find property with <paramref name="name"/> in base object.
+            </summary>
+            <param name="name">Name of property. Child properties can also be found, by adding a dot (<paramref name="splitChar"/>) in the name.</param>
+            <param name="memberData">Stack with object and member of object where property is available. The first element of the stack is the object containing the actual value to be set.</param>
+            <param name="diagnostics"></param>
+            <param name="splitChar">Char used for splitting propertyname, in case child properties are applied.</param>
+            <returns>True on success</returns>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.PropertyUpdater.ApplyPropertyValue(System.String,System.Object,DHI.Mike1D.Generic.IDiagnostics)">
+            <summary>
+            Apply <paramref name="value"/> to property with name <paramref name="propertyName"/>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.PropertyUpdater.ApplyPfsParameter(DHI.PFS.PFSKeyword,DHI.Mike1D.Generic.IDiagnostics)">
+            <summary>
+            Apply PFS paramter
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.PropertyUpdater.UnBoxValueTypes(System.Collections.Generic.Stack{DHI.Mike1D.Generic.PropertyUpdater.ObjectMemberData})">
+            <summary>
+            Value types are copied when boxing, so they must be unboxed and set back to their parent object member
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.PropertyUpdater.ApplyValue(System.Reflection.MemberInfo,System.Object,System.Object,System.String,DHI.Mike1D.Generic.IDiagnostics)">
+            <summary>
+            Apply <paramref name="value"/> to <paramref name="member"/> of <paramref name="memberObject"/>.
+            </summary>
+            <param name="member">Property/field to assign value to</param>
+            <param name="memberObject">Object containing property/field</param>
+            <param name="value">Value to apply</param>
+            <param name="name">Name of property (for error reporting)</param>
+            <param name="diagnostics">Error reporting object</param>
+            <returns>True on success</returns>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.PropertyUpdaterExtensions">
+            <summary>
+            Extension methods for <see cref="T:DHI.Mike1D.Generic.PropertyUpdater"/>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.PropertyUpdaterExtensions.SetValue(System.Reflection.MemberInfo,System.Object,System.Object)">
+            <summary>
+            Set value for property or field
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.ProxyExtensions">
+            <summary>
+            <para>
+            Extension methods for easing handling of proxies.
+            </para>
+            <para>
+            It provides some static convenience functions for proxies
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ProxyExtensions.Getter(DHI.Mike1D.Generic.IDoubleProxy,DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            <para>
+            From the proxy, return an <see cref="T:System.Func`1"/> for the specified quantity.
+            </para>
+            <para>
+            It returns the first quantity of that type that is offered,
+            and null if the quantity is not offered.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ProxyExtensions.Getter(DHI.Mike1D.Generic.IDoubleTimeProxy,DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity@)">
+            <summary>
+            <para>
+            From the proxy, return an <see cref="T:System.Func`1"/> for the specified quantity.
+            </para>
+            <para>
+            It returns the first quantity of that type that is offered,
+            and null if the quantity is not offered.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ProxyExtensions.Getters(DHI.Mike1D.Generic.IDoubleProxy,DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            Returns a set of <see cref="T:System.Func`1"/> for the quantity.
+            We can return several quantities with the same id (usually they will differ in their description).
+            If the quantity is not offerent, an empty list is returned.
+            </summary>
+            <param name="proxy"></param>
+            <param name="quantity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ProxyExtensions.GettersFraction(DHI.Mike1D.Generic.IDoubleProxy,DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            Returns a set of <see cref="T:System.Func`2"/> for the quantity.
+            We can return several quantities with the same id (usually they will differ in their description).
+            If the quantity is not offerent, an empty list is returned.
+            </summary>
+            <param name="proxy"></param>
+            <param name="quantity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ProxyExtensions.GetterUnboxed(DHI.Mike1D.Generic.IDoubleProxy,DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            <para>
+            From the proxy, return an <see cref="T:System.Func`1"/> for the specified quantity.
+            </para>
+            <para>
+            It returns the first quantity of that type that is offered,
+            and null if the quantity is not offered.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ProxyExtensions.Setter(DHI.Mike1D.Generic.IDoubleProxy,DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            <para>
+            From the proxy, return an <see cref="T:DHI.Mike1D.Generic.IDoubleGetSet"/> for the specified quantity.
+            </para>
+            <para>
+            It returns the first quantity of that type that is accepted,
+            and null if the quantity is not accepted.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ProxyExtensions.Getter(DHI.Mike1D.Generic.IDoubleReachProxy,DHI.Mike1D.Generic.IQuantity,System.Int32[]@)">
+            <summary>
+            <para>
+            From the proxy, return an <see cref="T:DHI.Mike1D.Generic.IVectorGetter`1"/> for the specified quantity.
+            </para>
+            <para>
+            It returns the first quantity of that type that is offered,
+            and null if the quantity is not offered.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ProxyExtensions.Getter(DHI.Mike1D.Generic.IDoubleReachProxy,DHI.Mike1D.Generic.IQuantity,System.Int32[]@,DHI.Mike1D.Generic.IQuantity@)">
+            <summary>
+            <para>
+            From the proxy, return an <see cref="T:DHI.Mike1D.Generic.IVectorGetter`1"/> for the specified quantity.
+            </para>
+            <para>
+            It returns the first quantity of that type that is offered,
+            and null if the quantity is not offered.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ProxyExtensions.Setter(DHI.Mike1D.Generic.IDoubleReachProxy,DHI.Mike1D.Generic.IQuantity,System.Int32[]@)">
+            <summary>
+            <para>
+            From the proxy, return an <see cref="T:DHI.Mike1D.Generic.IDoubleVectorGetSet"/> for the specified quantity.
+            </para>
+            <para>
+            It returns the first quantity of that type that is accepted,
+            and null if the quantity is not accepted.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ProxyExtensions.Getter(DHI.Mike1D.Generic.IDoubleElementSetProxy,DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IElementSetDefinition@)">
+            <summary>
+            <para>
+            From the proxy, return an <see cref="T:DHI.Mike1D.Generic.IDoubleVectorGetter"/> for the specified quantity.
+            </para>
+            <para>
+            It returns the first quantity of that type that is offered,
+            and null if the quantity is not offered.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ProxyExtensions.Setter(DHI.Mike1D.Generic.IDoubleElementSetProxy,DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IElementSetDefinition@)">
+            <summary>
+            <para>
+            From the proxy, return an <see cref="T:DHI.Mike1D.Generic.IDoubleVectorGetSet"/> for the specified quantity.
+            </para>
+            <para>
+            It returns the first quantity of that type that is accepted,
+            and null if the quantity is not accepted.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ProxyExtensions.TimeValueGetter(DHI.Mike1D.Generic.IDoubleTimeProxy,DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            <para>
+            From the proxy, return an <see cref="T:System.Func`2"/> for the specified quantity.
+            </para>
+            <para>
+            It returns the first quantity of that type that is offered,
+            and null if the quantity is not offered.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ProxyExtensions.SetValues(DHI.Mike1D.Generic.IDoubleVectorSetter,System.Double[])">
+            <summary>
+            Set the current values, vals will be copied into current array and update that.
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.Generic.QuantityProxySetWrapper`1">
             <summary>
             Class that wraps a number of quantity proxies in one proxy.
@@ -2458,13 +3657,7 @@
         <member name="M:DHI.Mike1D.Generic.DoubleProxySetWrapper.ValueFractionGetter(System.Int32)">
             <inheritdoc />
         </member>
-        <member name="M:DHI.Mike1D.Generic.DoubleProxySetWrapper.ValueGetterBoxed(System.Int32)">
-            <inheritdoc />
-        </member>
         <member name="M:DHI.Mike1D.Generic.DoubleProxySetWrapper.ValueSetter(System.Int32)">
-            <inheritdoc />
-        </member>
-        <member name="M:DHI.Mike1D.Generic.DoubleProxySetWrapper.ValueSetterBoxed(System.Int32)">
             <inheritdoc />
         </member>
         <member name="T:DHI.Mike1D.Generic.DoubleVectorProxySetWrapper">
@@ -3035,11 +4228,16 @@
         </member>
         <member name="M:DHI.Mike1D.Generic.Spatial.Geometry.GeometryFactory.CreateVector(System.Double,System.Double)">
             <summary>
-             Factory class to create a vector
+             Create a vector
             </summary>
             <param name="dx"></param>
             <param name="dy"></param>
             <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Spatial.Geometry.GeometryFactory.CreateVector(DHI.Mike1D.Generic.Spatial.Geometry.ICoordinate,DHI.Mike1D.Generic.Spatial.Geometry.ICoordinate)">
+            <summary>
+             Create a vector goint from <paramref name="c1"/> to <paramref name="c2"/>.
+            </summary>
         </member>
         <member name="T:DHI.Mike1D.Generic.Spatial.Geometry.Vector">
             <summary>
@@ -3119,6 +4317,25 @@
             Value is between <code>-pi &lt;= theta &lt;= pi</code>
             </para>
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Spatial.Geometry.Vector.Interpolate(System.Double,DHI.Mike1D.Generic.Spatial.Geometry.Vector,DHI.Mike1D.Generic.Spatial.Geometry.Vector)">
+            <summary>
+            Interpolate vector
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Spatial.Geometry.Vector.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Spatial.Geometry.Vector.Equals(DHI.Mike1D.Generic.Spatial.Geometry.Vector)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Spatial.Geometry.Vector.Equals(DHI.Mike1D.Generic.Spatial.Geometry.Vector,System.Double)">
+            <summary>
+            Equals with tolerance
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Spatial.Geometry.Vector.GetHashCode">
+            <inheritdoc/>
         </member>
         <member name="T:DHI.Mike1D.Generic.Spatial.Geometry.Ordinates">
             <summary>
@@ -3552,6 +4769,16 @@
             Creates a new CoordinateList of the specified type that contains elements copied from the specified collection and has sufficient capacity to accommodate the number of elements copied.
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.Generic.Spatial.Geometry.CoordinateList.Create(DHI.Mike1D.Generic.Spatial.Geometry.CoordinateType,System.Collections.Generic.IEnumerable{DHI.Mike1D.Generic.Spatial.Geometry.ICoordinateSequence})">
+            <summary>
+            Creates a new CoordinateList of the specified type that contains elements copied from the specified collections
+            and has sufficient capacity to accommodate the number of elements copied.
+            <para>
+            It is assumed that the collections are in increasing M-values. The last coordinate of sequence n-1
+            can equal the first coordinate of sequence n - the duplicated coordinate will be automatically removed.
+            </para>
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.Generic.Spatial.Geometry.CoordinateList.MValueForSearch">
             <summary>
             Helper class for searching in M-values, when using 
@@ -3689,6 +4916,21 @@
             <param name="coor">ICoordinate</param>
             <returns>Coordinate</returns>
         </member>
+        <member name="M:DHI.Mike1D.Generic.Spatial.SpatialExtensions.Perpendicular(DHI.Mike1D.Generic.Spatial.Geometry.Vector)">
+            <summary>
+            Create the counter clockwice (CCW) perpendicular vector
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Spatial.SpatialExtensions.Reverse(DHI.Mike1D.Generic.Spatial.Geometry.Vector)">
+            <summary>
+            Reverse vector
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Spatial.SpatialExtensions.Reverse(DHI.Mike1D.Generic.Spatial.Geometry.Vector,System.Boolean)">
+            <summary>
+            Reverse vector if <paramref name="reverse"/> is set
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.Generic.Spatial.SpatialExtensions.DirectionUnitVector(DHI.Mike1D.Generic.Spatial.Geometry.ICoordinateSequence,System.Double)">
             <summary>
             Finds the local reach direction as the direction from the locally surounding digi points. The 
@@ -3698,32 +4940,52 @@
             <param name="chainage"></param>
             <returns></returns>
         </member>
-        <member name="M:DHI.Mike1D.Generic.Spatial.SpatialExtensions.DirectionUnitVectorSmooth(DHI.Mike1D.Generic.Spatial.Geometry.ICoordinateSequence,System.Double,System.Boolean)">
-            <summary>
-            Finds the local reach direction as the direction from the locally surrounding digi points. The 
-            vector returned is a unit vector. 
-            <para>
-            This returns a smoothly varying unit vector: On the center of the line
-            between two digipoints, the direction of the line is returned. On
-            a digipoint the average of the line before and after the digipoint is returned. In between
-            the center of the line and the digipoint the direction varies linearly.
-            </para>
-            <para>
-            The <paramref name="reverseDirection"/> can be set to give the unit vector in the reverse 
-            direction, i.e. in case of negative flow direction. It will also flop the left/right side
-            of the sequence.
-            </para>
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.Generic.Spatial.SpatialExtensions.DirectionUnitVectorSmooth(DHI.Mike1D.Generic.Spatial.Geometry.ICoordinateSequence,System.Double)">
             <summary>
             Finds the local reach direction as the direction from the locally surrounding digi points. The 
             vector returned is a unit vector. 
             <para>
-            This returns a smoothly varying unit vector: On the center of the line
-            between two digipoints, the direction of the line is returned. On
-            a digipoint the average of the line before and after the digipoint is returned. In between
-            the center of the line and the digipoint the direction varies linearly.
+            This returns a smoothly varying unit vector:
+            On the center of the line between two digipoints, the direction of the line is returned.
+            On a digipoint, the average unit vector of the line before and after the digipoint is returned.
+            From the digipoint and up till the center of the line between two digipoints, or atmost 10.000 meters
+            from the digipoint, the direction varies linearly.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Spatial.SpatialExtensions.DirectionUnitVectorSmooth(DHI.Mike1D.Generic.Spatial.Geometry.ICoordinateSequence,System.Double,System.Double)">
+            <summary>
+            Finds the local reach direction as the direction from the locally surrounding digi points. The 
+            vector returned is a unit vector. 
+            <para>
+            This returns a smoothly varying unit vector:
+            On the center of the line between two digipoints, the direction of the line is returned.
+            On a digipoint, the average unit vector of the line before and after the digipoint is returned.
+            From the digipoint and up till the center of the line between two digipoints, or atmost <paramref name="maxSmoothingDist"/> meters
+            from the digipoint, the direction varies linearly.
+            </para>
+            <para>
+            The <paramref name="maxSmoothingDist"/> defines how far away from the digipoint that smoothing can happen.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Spatial.SpatialExtensions.DirectionUnitVectorAverage(DHI.Mike1D.Generic.Spatial.Geometry.ICoordinateSequence,System.Double,System.Double)">
+            <summary>
+            Finds the local reach direction as the direction from the locally surrounding digi points. The 
+            vector returned is a unit vector. 
+            <para>
+            This returns a smoothly varying direction unit vector, being the average direction unit vector over <paramref name="averageDistance"/>
+            around the <paramref name="chainage"/> point.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Spatial.SpatialExtensions.DirectionUnitVectorWeighted(DHI.Mike1D.Generic.Spatial.Geometry.ICoordinateSequence,System.Double,System.Double)">
+            <summary>
+            Finds the local reach direction as the direction from the locally surrounding digi points. The 
+            vector returned is a unit vector. 
+            <para>
+            This returns a smoothly varying direction unit vector, being a weighted direction unit vector over <paramref name="weightingDistance"/>
+            around the <paramref name="chainage"/> point, using a triangular weighting function around <paramref name="chainage"/>.
             </para>
             </summary>
         </member>
@@ -3812,9 +5074,9 @@
              at matching relative m-value, and performing point interpolation on those points.
              </para>
              </summary>
-            <param name="fraction">Fraction of 0 matches coords1, fraction 1 matches coords2</param>
-             <param name="coords1">First sequence</param>
-             <param name="coords2">Second sequence</param>
+            <param name="fraction">Fraction of 0 matches coords0, fraction 1 matches coords1</param>
+             <param name="coords0">First sequence</param>
+             <param name="coords1">Second sequence</param>
              <returns></returns>
         </member>
         <member name="M:DHI.Mike1D.Generic.Spatial.SpatialExtensions.ValidateIncreasingM(System.Collections.Generic.IList{DHI.Mike1D.Generic.Spatial.Geometry.ICoordinate})">
@@ -3930,6 +5192,146 @@
             <param name="values">Values to concatenate</param>
             <param name="builder">StringBuilder to use for concatenation</param>
             <returns>A string that consists of the members of values surruonded by quotechar and delimited by the separator char. If values has no members, the method returns String.Empty.</returns>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.ITimeCheckPointSet">
+            <summary>
+            Interface for a check point set. It must be able to provide the next
+            check point from some specified time.
+            <para>
+            A checkpoint is a point in time which the engine must hit exactly.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ITimeCheckPointSet.Prepare(System.DateTime,System.DateTime)">
+            <summary>
+            Prepare for simulation 
+            </summary>
+            <param name="simulationStart"></param>
+            <param name="simulationEnd"></param>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.ITimeCheckPointSet.GetCheckpoint(System.DateTime)">
+            <summary>
+            Get the first check point after the provided current time, or <see cref="F:System.DateTime.MaxValue"/>
+            if no checkpoint exists after current time.
+            </summary>
+            <param name="currentTime">Time to find check point after</param>
+            <returns>Check point after current time</returns>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.EquidistantTimeCheckPointSet">
+            <summary>
+            Class implementing a check point set with equidistant time check points.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.EquidistantTimeCheckPointSet.#ctor(System.TimeSpan)">
+            <summary>
+             Create new object
+            </summary>
+            <param name="step">Step between check points</param>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.EquidistantTimeCheckPointSet.#ctor(System.DateTime,System.TimeSpan)">
+            <summary>
+             Create new object
+            </summary>
+            <param name="start">Start of check points</param>
+            <param name="step">Step between check points</param>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.EquidistantTimeCheckPointSet.#ctor(System.DateTime,System.DateTime,System.TimeSpan)">
+            <summary>
+             Create new object
+            </summary>
+            <param name="start">Start of check points</param>
+            <param name="end">End of check points</param>
+            <param name="step">Step between check points</param>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.EquidistantTimeCheckPointSet.Prepare(System.DateTime,System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.Generic.EquidistantTimeCheckPointSet.GetCheckpoint(System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.Generic.TimeCheckPointController">
+            <summary>
+            The check point controller contains functionality for limiting the time
+            step to a set of check points in time.
+            <para>
+            It contains itself a list of check points, where check points can be added, <see cref="P:DHI.Mike1D.Generic.TimeCheckPointController.CheckPoints"/>.
+            </para>
+            <para>
+            It also contains a list of <see cref="T:DHI.Mike1D.Generic.ITimeCheckPointSet"/>, <see cref="P:DHI.Mike1D.Generic.TimeCheckPointController.CheckPointSets"/>, 
+            in case a user implementation of a check point set is appropriate (e.g. constant equidistant check points)
+            </para>
+            <para>
+            All check points within the list of check points and the list of check point sets will be considered as
+            check points.
+            </para>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.TimeCheckPointController._nLookAhead">
+            <summary>
+            Lookahead variables. dt is adjusted to hit checkpoints in _nLookAhead times steps.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.TimeCheckPointController.LookAhead">
+            <summary>
+            Lookahead variables. dt is adjusted to hit checkpoints in _nLookAhead times steps.
+            <para>
+            Default is 2
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.TimeCheckPointController.CheckPointSets">
+            <summary>
+            List of check point sets
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.TimeCheckPointController.LimitToCheckPoint(System.DateTime,System.TimeSpan)">
+            <summary>
+            Make sure next timestep does not go past next CheckPoint. Assume checkpoints are 
+            sorted increasingly.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.TimeCheckPointController.LimitToCheckPoint(System.DateTime,System.TimeSpan,System.DateTime)">
+            <summary>
+            Make sure next timestep does not go past next CheckPoint.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.TimeCheckPointController._timeCheckPoints">
+            <summary>
+            Checkpoint times. State variable
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.TimeCheckPointController.CheckPoints">
+            <summary>
+            List of check points
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.TimeCheckPointController.Prepare(System.DateTime,System.DateTime)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.TimeCheckPointController.GetCheckpoint(System.DateTime)">
+            <summary>
+            Get the first check point after the provided current time, or <see cref="F:System.DateTime.MaxValue"/>
+            if no checkpoint exists after current time.
+            </summary>
+            <param name="currentTime">Time to find check point after</param>
+            <returns>Check point after current time</returns>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.TimeCheckPointController.SortCheckPoints">
+            <summary>
+            Sort check points. Must be called after all checkpoint have been added and before LimitToCheckPoint() is used
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.TimeCheckPointController.AddCheckPoint(System.DateTime)">
+            <summary>
+            Add check point. Time series is written at each check point.
+            </summary>
+            <returns>True if added, false if already existing</returns>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.TimeCheckPointController.AddCheckPoints(System.Collections.Generic.List{System.DateTime})">
+            <summary>
+            Add check point. Time series is written at each check point.
+            </summary>
+            <returns>True if at least one check point was added, false if all of them already existed in the list</returns>
         </member>
         <member name="T:DHI.Mike1D.Generic.TimeSeries.TargetData">
             <summary>
@@ -4483,6 +5885,15 @@
         <member name="P:DHI.Mike1D.Generic.TimeSeries.ITsTime.NumberOfTimes">
             <summary>
             Number of time steps.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.TimeSeries.ITsTime.SecondsPerTimeUnit">
+            <summary>
+            Factor to scale from relative time unit to seconds
+            Ex: An hour_based relative time axis would have
+            <code>
+            SecondsPerTimeUnit = (60*60);
+            </code>
             </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.TimeSeries.ITsTime.StartTime">
@@ -6260,6 +7671,11 @@
             Returns true if the chainage equals, withing <see cref="F:DHI.Mike1D.Generic.Constants.LOCATION_EQUAL_TOLERANCE"/>
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.Generic.GenericExtensions.ChainageEquals(DHI.Mike1D.Generic.ILocation,System.Double,System.Double)">
+            <summary>
+            Returns true if the chainage equals, withing tolerance
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.Generic.GenericExtensions.Swap``1(``0@,``0@)">
             <summary>
             Swapping two elements.
@@ -6267,6 +7683,19 @@
             <typeparam name="T">Type of element to swap</typeparam>
             <param name="e1">first element</param>
             <param name="e2">second element</param>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.GenericExtensions.FindIndex``1(System.Collections.Generic.IList{``0},System.Predicate{``0})">
+            <summary>Searches for an element that matches the conditions defined by the specified predicate, and returns the zero-based index of the first occurrence within the range of elements in the list.</summary>
+            <param name="source">IList to search</param>
+            <param name="match">The <see cref="T:System.Predicate`1" /> delegate that defines the conditions of the element to search for.</param>
+            <returns>The zero-based index of the first occurrence of an element that matches the conditions defined by <paramref name="match" />, if found; otherwise, –1.</returns>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.GenericExtensions.FindIndex``1(System.Collections.Generic.IList{``0},System.Int32,System.Predicate{``0})">
+            <summary>Searches for an element that matches the conditions defined by the specified predicate, and returns the zero-based index of the first occurrence within the range of elements in the <see cref="T:System.Collections.Generic.List`1" /> that extends from the specified index to the last element.</summary>
+            <param name="source">IList to search</param>
+            <param name="startIndex">The zero-based starting index of the search.</param>
+            <param name="match">The <see cref="T:System.Predicate`1" /> delegate that defines the conditions of the element to search for.</param>
+            <returns>The zero-based index of the first occurrence of an element that matches the conditions defined by <paramref name="match" />, if found; otherwise, –1.</returns>
         </member>
         <member name="M:DHI.Mike1D.Generic.GenericExtensions.IndexOf(System.Collections.Generic.IList{DHI.Mike1D.Generic.IQuantity},DHI.Mike1D.Generic.IQuantity,System.Collections.Generic.IList{System.String})">
             <summary>
@@ -6571,6 +8000,13 @@
             <param name="dictionary">Dictionary to search in</param>
             <param name="key">Identifier/key string of additional data object</param>
             <param name="value">Value of key, if found.</param>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.GenericExtensions.GetValue``1(System.Collections.Generic.IDictionary{System.String,``0},System.String)">
+            <summary>
+            Get value, based on key. If no data exist for value, null is returned
+            </summary>
+            <param name="dictionary">Dictionary to search in</param>
+            <param name="key">Identifier/key string of additional data object</param>
         </member>
         <member name="T:DHI.Mike1D.Generic.GenericExtensions.KVPComparer">
             <summary>
@@ -7088,6 +8524,12 @@
             The set of node id's and values defined.
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.Generic.INetworkData`1.GetValue(System.String,`0@)">
+            <summary>
+            Get value for node
+            </summary>
+            <returns>False if no value is found</returns>
+        </member>
         <member name="M:DHI.Mike1D.Generic.INetworkData`1.GetReachData(System.String)">
             <summary>
             Get a <see cref="T:DHI.Mike1D.Generic.INetworkReachData`1"/> for the specified link/reachId.
@@ -7117,7 +8559,7 @@
         </member>
         <member name="P:DHI.Mike1D.Generic.INetworkReachData`1.GlobalValue">
             <summary>
-            Get the reach global value. Only valid if <see cref="M:DHI.Mike1D.Generic.INetworkReachData`1.IsGlobal"/>
+            Get the reach global value. Only valid if <see cref="!:HasGlobalValue"/>
             is true.
             </summary>
         </member>
@@ -7205,6 +8647,11 @@
             <para>
             Required for COM interop
             </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.INetworkDataSetDouble.Data">
+            <summary>
+            List of network data available.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.Generic.INetworkDataSetDouble.Offers">
@@ -7605,9 +9052,6 @@
             The changes have been implemented in order to be able to check the same license 
             multiple times (DHI.Generic.MIKEZero.LicenseWrapper.cs has a 1 minute window)
             and point 3 above.
-            
-            TODO: Revert back to DHI.Generic.MIKEZero.LicenseWrapper.cs and move added functionality from
-            here to that file, once it has been tested.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.Generic.LicenseWrapperSimple._ReleaseAllLicensesApp">
@@ -8064,27 +9508,6 @@
         <member name="P:DHI.Mike1D.Generic.VersionTool.DHIMinorVersion">
             <summary>
             Minor install version of DHI software
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.Generic.ImuDMStorageAccess">
-            <summary>
-            Interface for marshalling MU workspace to M1D
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.Generic.WorkspaceContainer">
-            <summary>
-            Class used to marshal workspace from the MU GUI. Placed in generic since it's used in 
-            SimLauncher and MUBridge which do not reference each other.
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.Generic.WorkspaceContainer.Stream">
-            <summary>
-            Stream of data
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.Generic.WorkspaceContainer.GUID">
-            <summary>
-            GUID associated with work space
             </summary>
         </member>
         <member name="T:DHI.Mike1D.Generic.AbstractLocationSpan">
@@ -9009,6 +10432,29 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:DHI.Mike1D.Generic.ReachSide">
+            <summary>
+            Side of river.
+            <para>
+            Side of river is when walking in positive chainage direction.
+            </para>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.ReachSide.Undefined">
+            <summary>
+            if no side is defined
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.ReachSide.Left">
+            <summary>
+            left lateral link
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.ReachSide.Right">
+            <summary>
+            right lateral link
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.Generic.CrossSectionType">
             <summary>
             the types of cross sections. Some are predefined geometries.
@@ -9797,6 +11243,13 @@
             using a DataContractSerializer.
             </summary>
             <typeparam name="TDataAccess">A DataAccess component</typeparam>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.GenericXmlBridge`1.VersionStrConst">
+            <summary>
+            Major version change: Not    backwards compatible, not forwards compatible
+            Minor version change: Mostly backwards compatible, not forwards compatible
+            Build version change: Fully  backwards compatible  and forwards compatible
+            </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.GenericXmlBridge`1.Data">
             <summary>
@@ -10664,6 +12117,26 @@
             Discharge volume out of network, in m^3
             </summary>
         </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantity.WaterSurcharge">
+            <summary>
+            Water surcharge from nodes
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantity.FullReachDischarge">
+            <summary>
+            Full reach discharge
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantity.SurfacePreciEvapoTranspiration">
+            <summary>
+            Discharge per area through surface interface
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.PredefinedQuantity.ControlVariables">
+            <summary>
+            All control module variables.
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.Generic.PredefinedQuantityTable">
             <summary>
             A PredefinedQuantityTable for each <see cref="T:DHI.Mike1D.Generic.PredefinedQuantity"/> contains 
@@ -10684,6 +12157,11 @@
         <member name="T:DHI.Mike1D.Generic.PredefinedQuantityData">
             <summary>
             Static class containing the <see cref="T:DHI.Mike1D.Generic.PredefinedQuantityTable"/>.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.PredefinedQuantityData.Init">
+            <summary>
+            Force initialize PredefinedQuantityData
             </summary>
         </member>
         <member name="F:DHI.Mike1D.Generic.PredefinedQuantityData.Table">
@@ -10783,14 +12261,18 @@
             </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.AD_WAR_CourantViolated">
-            <summary>
-              Looks up a localized string similar to Courant criteria was violated in {0} time steps during the simulation.\n Maximum Courant number: {1} at simulation time {2} at {3}.\n In average the criteria was violated in {4}% of the points in the simulation.\n The engine used a more stable but less accurate method at these points..
-            </summary>
+             <summary>
+               Looks up a localized string similar to Courant criteria was violated in {0} time steps during the simulation.
+            Maximum Courant number: {1} at simulation time {2} at {3}.
+            In average the criteria was violated in {4}% of the points in the simulation. The engine used a more stable but less accurate method at these points..
+             </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.AD_WAR_CourantViolatedFirst">
-            <summary>
-              Looks up a localized string similar to Courant criteria was violated in time step {0}, simulation time {2}.\n Maximum Courant number: {1} at {3}.\n The criteria was was violated in {4}% of the points in this time step.\n The engine used a more stable but less accurate method at these points..
-            </summary>
+             <summary>
+               Looks up a localized string similar to Courant criteria was violated in time step {0}, simulation time {2}.
+            Maximum Courant number: {1} at {3}. The criteria was was violated in {4}% of the points in this time step.
+            The engine used a more stable but less accurate method at these points..
+             </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.AD_WAR_CourantViolatedFirstVD">
             <summary>
@@ -10800,6 +12282,21 @@
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.AD_WAR_CourantViolatedVD">
             <summary>
               Looks up a localized string similar to Number of timesteps; Maximum Courant number; Time; Location; Percentage.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.AD_WAR_RRADIgnoredForHDSimulation">
+            <summary>
+              Looks up a localized string similar to Catchment Componet Source Boundaries (RR-AD) are only applicable when running RR and HD simultaneously. Boundaries are ignored..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.AD_WAR_RRADNetRainfallForHDSimulation">
+            <summary>
+              Looks up a localized string similar to Catchment Componet Source Boundary (RR-AD) {0} is based on Net Rainfall. Application of concentrations on Net Rainfall is only applicable when running RR and HD simultaneously. Boundary is ignored..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.AD_WAR_RRADNetRainfallForHDSimulationVD">
+            <summary>
+              Looks up a localized string similar to BoundaryId.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.AD_WAR_TooManyWaterAgeComp">
@@ -11647,6 +13144,16 @@
               Looks up a localized string similar to No resistance factors found in point source resistance boundary item..
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_BoundaryNoSelectedItem">
+            <summary>
+              Looks up a localized string similar to Boundary {0} does not have a selected item from time series..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_BoundaryNoSelectedItemVD">
+            <summary>
+              Looks up a localized string similar to Boundary ID.
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_BranchNotFound">
             <summary>
               Looks up a localized string similar to Could not find branch in network, skipping {0}..
@@ -12337,6 +13844,16 @@
               Looks up a localized string similar to Generation of maps is not supported.
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_MarkerNotDefined">
+            <summary>
+              Looks up a localized string similar to Bridge {0} does not have marker {1} defined.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_MarkerNotDefinedVD">
+            <summary>
+              Looks up a localized string similar to Bridge ID; Marker ID.
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_MHStrucNotDefined">
             <summary>
               Looks up a localized string similar to Sensor {0} uses structure that is not defined..
@@ -12375,6 +13892,16 @@
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_MonthOfYearOutOfRangeVD">
             <summary>
               Looks up a localized string similar to Value; Structure ID; Control priority; Operand number.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_NegativeFlowFactor">
+            <summary>
+              Looks up a localized string similar to Negative flow factor for structure {0} is used..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_NegativeFlowFactorVD">
+            <summary>
+              Looks up a localized string similar to Structure ID.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_NoBranchDataInPFSFile">
@@ -12590,6 +14117,16 @@
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_STNotSupported">
             <summary>
               Looks up a localized string similar to Sediment transport simulations are not supported.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_StorageTableIsEmpty">
+            <summary>
+              Looks up a localized string similar to Storage {0} table does not contain any entries..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_StorageTableIsEmptyVD">
+            <summary>
+              Looks up a localized string similar to Storage ID.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_ERR_StrActionNotCreated">
@@ -12997,14 +14534,34 @@
               Looks up a localized string similar to File name.
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_WAR_FileFormatNew">
+            <summary>
+              Looks up a localized string similar to The .m1dx file is from a newer version of MIKE 1D. Data cannot be read correctly (version in file {0}, current m1dx version {1}). {2}.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_WAR_FileFormatNewVD">
+            <summary>
+              Looks up a localized string similar to Version found; Current version; File path.
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_WAR_FileFormatOldDataLoss">
             <summary>
-              Looks up a localized string similar to The file format is an older format, so some data may not be read correctly (version {0} found, reading using format version {1}). {2}.
+              Looks up a localized string similar to The .m1dx file is from a previous version. Some data may not be read correctly. Re-export the setup to .m1dx to assure full compatibility. Version in file {0}, current m1dx version {1}. {2}.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_WAR_FileFormatOldDataLossVD">
             <summary>
-              Looks up a localized string similar to Version found; Used version; File path.
+              Looks up a localized string similar to Version found; Current version; File path.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_WAR_FlowFactorControlRuleIgnored">
+            <summary>
+              Looks up a localized string similar to Use of flow factor is disabled for structure {0}. Control rule on flow factor for this structure is ignored..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_WAR_FlowFactorControlRuleIgnoredVD">
+            <summary>
+              Looks up a localized string similar to Structure ID.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.BR_WAR_GlobalSourceBoundaryNotImplemented">
@@ -13462,6 +15019,16 @@
               Looks up a localized string similar to Cannot run in DEMO mode since the control module does not support DEMO mode..
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.CT_ERR_CircularReference">
+            <summary>
+              Looks up a localized string similar to Variable {0} contains a circular reference..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.CT_ERR_CircularReferenceVD">
+            <summary>
+              Looks up a localized string similar to Variable ID.
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.CT_ERR_ControllableStructureNotFound">
             <summary>
               Looks up a localized string similar to Controllable structure {0} could not be found..
@@ -13475,6 +15042,16 @@
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.CT_ERR_CouldNotFindTimeSeriesItem">
             <summary>
               Looks up a localized string similar to Control sensor could not find time series item {1} in file {0}..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.CT_ERR_DuplicateVariable">
+            <summary>
+              Looks up a localized string similar to Duplicate definition of variable {0} found with expression {1}..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.CT_ERR_DuplicateVariableVD">
+            <summary>
+              Looks up a localized string similar to Variable ID; Expression.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.CT_ERR_ErrorSim">
@@ -14770,6 +16347,16 @@
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.EN_WAR_AdaptiveTimeStepMinReachedVD">
             <summary>
               Looks up a localized string similar to Simulation time.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.EN_WAR_CatchAreaZero">
+            <summary>
+              Looks up a localized string similar to Catchment {0} area is zero and connection to HD is ignored.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.EN_WAR_CatchAreaZeroVD">
+            <summary>
+              Looks up a localized string similar to Catchment ID.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.EN_WAR_CatchConnDuplicateLoc">
@@ -17102,6 +18689,16 @@
               Looks up a localized string similar to Pump ID.
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.MU_ERR_QHRelationNotSpecified">
+            <summary>
+              Looks up a localized string similar to Q-H relation for node {0} not specified.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.MU_ERR_QHRelationNotSpecifiedVD">
+            <summary>
+              Looks up a localized string similar to Node ID.
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.MU_ERR_QHWeirNotInternalVD">
             <summary>
               Looks up a localized string similar to Weir ID; Node ID.
@@ -17682,6 +19279,16 @@
               Looks up a localized string similar to AD hotstart enabled, while HD hotstart was not. AD hotstart ignored..
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.MU_WAR_ADPNodeDoesNotExist">
+            <summary>
+              Looks up a localized string similar to Initial water level is not applied. Node {0} specified in ADP file {1} does not exist in the network..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.MU_WAR_ADPNodeDoesNotExistVD">
+            <summary>
+              Looks up a localized string similar to Node ID; File path.
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.MU_WAR_BoundaryDeleted">
             <summary>
               Looks up a localized string similar to Boundary {0} does not contain any locations. The boundary was removed..
@@ -17895,6 +19502,16 @@
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.MU_WAR_NoActiveProject">
             <summary>
               Looks up a localized string similar to No active project in database. Using first non-active project..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.MU_WAR_NoMinCapacityCurve">
+            <summary>
+              Looks up a localized string similar to Min. capacity curve for the pump {0} is not specified. Zero capacity applied as minimum.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.MU_WAR_NoMinCapacityCurveVD">
+            <summary>
+              Looks up a localized string similar to Pump ID.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.MU_WAR_NoXSAtEnd">
@@ -22880,6 +24497,66 @@
               Looks up a localized string similar to Total load model is treated as bed load in MIKE1D. To use bed and suspended load, use a st1d file. .
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.SWQ_ComponentNotMatching">
+            <summary>
+              Looks up a localized string similar to Component in the boundary specification {0} does not match the component {1} in surface pollutant specification..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.SWQ_ComponentNotMatchingVD">
+            <summary>
+              Looks up a localized string similar to Component ID; Component ID.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.SWQ_ImproperItem">
+            <summary>
+              Looks up a localized string similar to Catchment component source boundary {0} contains improper SWQ item for {1}..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.SWQ_ImproperItemVD">
+            <summary>
+              Looks up a localized string similar to Boundary ID; Component ID.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.SWQ_NoCatchment">
+            <summary>
+              Looks up a localized string similar to Catchment {0} does not exist..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.SWQ_NoCatchmentVD">
+            <summary>
+              Looks up a localized string similar to Catchment ID.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.SWQ_NoComponent">
+            <summary>
+              Looks up a localized string similar to Component {0} needed for SWQ simulation does not exist..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.SWQ_NoComponentVD">
+            <summary>
+              Looks up a localized string similar to Component ID.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.SWQ_NoPollutant">
+            <summary>
+              Looks up a localized string similar to Pollutant data with SWQ ID {0} does not exist..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.SWQ_NoPollutantVD">
+            <summary>
+              Looks up a localized string similar to SWQ ID.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.SWQ_NoSediment">
+            <summary>
+              Looks up a localized string similar to Sediment {0} needed for SWQ simulation does not exist..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.SWQ_NoSedimentVD">
+            <summary>
+              Looks up a localized string similar to Sediment ID.
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.TestMessage1">
             <summary>
               Looks up a localized string similar to Hello {0}.
@@ -23003,6 +24680,11 @@
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.XS_ERR_CoordDuplicates">
             <summary>
               Looks up a localized string similar to Cross section has duplicate coordinates: Location {0}, topo ID {1}, ID {2}. This can lead to other errors or incorrect results..
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.XS_ERR_CoordDuplicatesVD">
+            <summary>
+              Looks up a localized string similar to Location; Topo ID; Cross section ID.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.Generic.DHI_Mike1D_Generic.XS_ERR_CoordMNotIncreasing">
@@ -24146,27 +25828,6 @@
             Copies all elements of the list to an array.
             </summary>
         </member>
-        <member name="T:DHI.Mike1D.Generic.DDoubleTimeGetter">
-            <summary>
-            A value getter can be called at any time to provide 
-            the actual value of the source.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:DHI.Mike1D.Generic.DDoubleTimeSetter">
-            <summary>
-            A value setter can be called at any time to set the
-            the actual value of the source.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:DHI.Mike1D.Generic.DDoubleTimeIntervalSetter">
-            <summary>
-            A value setter can be called at any time to set the
-            the actual value of the source.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:DHI.Mike1D.Generic.IDoubleTimeGetter">
             <summary>
             A value getter can be called at any time to provide 
@@ -24208,32 +25869,6 @@
             Set the current value
             </summary>
         </member>
-        <member name="T:DHI.Mike1D.Generic.IDoubleTimeVectorSetter">
-            <summary>
-            A vector setter can be called at any time to set 
-            the values of the sources. It will often just
-            be wrapping a list of DDoubleSetter
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.Generic.IDoubleTimeVectorSetter.SetValues(System.DateTime,System.Double[])">
-            <summary>
-            Set the current values
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.Generic.IDoubleTimeGetSet">
-            <summary>
-             A Value GetSet can be called any time to get/set 
-             the value of the source. It will often just be wrapping
-             a <see cref="T:DHI.Mike1D.Generic.DDoubleTimeGetter"/> and a <see cref="T:DHI.Mike1D.Generic.DDoubleTimeSetter"/>
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.Generic.IDoubleTimeVectorGetSet">
-            <summary>
-             A Vector GetSet can be called any time to get/set 
-             the value of the source. It will often just be wrapping
-             a list of IDoubleGetSet'ers
-            </summary>
-        </member>
         <member name="T:DHI.Mike1D.Generic.IDoubleTimeProxy">
             <summary>
             TODO: For IDoubleProxy, datatype should be replaced with struct containing:
@@ -24242,27 +25877,12 @@
             when different modules have items of same datatype.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.Generic.IDoubleTimeProxy.TimeValueGetter(DHI.Mike1D.Generic.IQuantity)">
+        <member name="M:DHI.Mike1D.Generic.IDoubleTimeProxy.TimeValueGetter(System.Int32)">
             <summary>
-            Get value setter for the specified data quantity
+            Get value getter for the specified data quantity
             </summary>
-            <param name="quantity">Requested Quantity</param>
-            <returns>A value getter delegate that can set the value</returns>
-        </member>
-        <member name="M:DHI.Mike1D.Generic.IDoubleTimeProxy.TimeValueGetter(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity@)">
-            <summary>
-            Get value setter for the specified data quantity
-            </summary>
-            <param name="quantity">Requested Quantity</param>
-            <param name="actualQuantity">Actual Quantity. Can differ in the description</param>
-            <returns>A value getter delegate that can set the value</returns>
-        </member>
-        <member name="M:DHI.Mike1D.Generic.IDoubleTimeProxy.TimeValueSetter(DHI.Mike1D.Generic.IQuantity)">
-            <summary>
-            Get value setter for the specified data type
-            </summary>
-            <param name="quantity">Requested Quantity</param>
-            <returns>A value setter delegate that can set the value</returns>
+            <param name="index">Index of requested Quantity</param>
+            <returns>A value getter delegate that can get the value</returns>
         </member>
         <member name="M:DHI.Mike1D.Generic.IDoubleTimeProxy.TimeOffers">
             <summary>
@@ -24270,18 +25890,12 @@
             </summary>
             <returns>List of data types offered</returns>
         </member>
-        <member name="M:DHI.Mike1D.Generic.IDoubleTimeProxy.TimeAccepts">
-            <summary>
-            List of data types that is accepted and can be used in SetValue
-            </summary>
-            <returns>List of data types accepted</returns>
-        </member>
         <member name="T:DHI.Mike1D.Generic.DDoubleTimeGetterBox">
             <summary>
             Class boxing DDoubleGetter and implementing IDoubleGetter
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.Generic.DDoubleTimeGetterBox.#ctor(DHI.Mike1D.Generic.DDoubleTimeGetter)">
+        <member name="M:DHI.Mike1D.Generic.DDoubleTimeGetterBox.#ctor(System.Func{System.DateTime,System.Double})">
             <summary>
             Default constructor
             </summary>
@@ -24289,26 +25903,6 @@
         <member name="M:DHI.Mike1D.Generic.DDoubleTimeGetterBox.GetValue(System.DateTime)">
             <summary>
             Get the current value
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.Generic.DDoubleTimeGetSetBox">
-            <summary>
-            Class boxing DDoubleGetter and DDoubleSetter implementing IDoubleGetSet
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.Generic.DDoubleTimeGetSetBox.#ctor(DHI.Mike1D.Generic.DDoubleTimeGetter,DHI.Mike1D.Generic.DDoubleTimeSetter)">
-            <summary>
-            Default constructor
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.Generic.DDoubleTimeGetSetBox.GetValue(System.DateTime)">
-            <summary>
-            Get the current value
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.Generic.DDoubleTimeGetSetBox.SetValue(System.DateTime,System.Double)">
-            <summary>
-            Set the current value
             </summary>
         </member>
         <member name="T:DHI.Mike1D.Generic.DDoubleTimeVectorGetterBox">
@@ -24329,31 +25923,6 @@
         <member name="M:DHI.Mike1D.Generic.DDoubleTimeVectorGetterBox.GetValues(System.DateTime,System.Double[])">
             <summary>
             Get the current values. A new array will be returned every time
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.Generic.DDoubleTimeVectorGetSetBox">
-            <summary>
-            Class boxing a set of <see cref="T:DHI.Mike1D.Generic.IDoubleGetSet"/>.
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.Generic.DDoubleTimeVectorGetSetBox.Sources">
-            <summary>
-            Sources of where to get/set values
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.Generic.DDoubleTimeVectorGetSetBox.GetValues(System.DateTime)">
-            <summary>
-            Get the current values. A new array will be returned every time
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.Generic.DDoubleTimeVectorGetSetBox.GetValues(System.DateTime,System.Double[])">
-            <summary>
-            Get the current values. A new array will be returned every time
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.Generic.DDoubleTimeVectorGetSetBox.SetValues(System.DateTime,System.Double[])">
-            <summary>
-            Set the current values
             </summary>
         </member>
         <member name="T:DHI.Mike1D.Generic.IBridge">
@@ -25208,18 +26777,6 @@
             <param name="targetType">The Type that the substituted object should be assigned to.  </param>
             <returns>New/updated object replacing object to serialize</returns>
         </member>
-        <member name="T:DHI.Mike1D.Generic.DBoolGetter">
-            <summary>
-            A value getter can be called at any time to provide 
-            the actual value of the source.
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.Generic.DDoubleSetter">
-            <summary>
-            A value setter can be called at any time to set the
-            the actual value of the source.
-            </summary>
-        </member>
         <member name="T:DHI.Mike1D.Generic.IValueGetter`1">
             <summary>
             A value getter can be called at any time to provide 
@@ -25299,22 +26856,6 @@
             the actual values of the sources.
             </summary>
         </member>
-        <member name="T:DHI.Mike1D.Generic.IVectorSetter`1">
-            <summary>
-            A vector setter can be called at any time to set 
-            the values of the sources. It will often just
-            be wrapping a list of DVectorSetter
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.Generic.IVectorSetter`1.SetValues(`0[])">
-            <summary>
-            Set the current values, vals will be copied into current array and update that.
-            </summary>
-            <remarks>
-            When implementing new code, be sure to copy data into the existing data,
-            such that engine data is not made available for editing with this call.
-            </remarks>
-        </member>
         <member name="T:DHI.Mike1D.Generic.IDoubleVectorSetter">
             <summary>
             A vector setter can be called at any time to set 
@@ -25322,14 +26863,10 @@
             be wrapping a list of DDoubleSetter
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.Generic.IDoubleVectorSetter.SetValues(System.Double[])">
+        <member name="M:DHI.Mike1D.Generic.IDoubleVectorSetter.SetValue(System.Int32,System.Double)">
             <summary>
-            Set the current values, vals will be copied into current array and update that.
+            Set value of specified element.
             </summary>
-            <remarks>
-            When implementing new code, be sure to copy data into the existing data,
-            such that engine data is not made available for editing with this call.
-            </remarks>
         </member>
         <member name="T:DHI.Mike1D.Generic.IDoubleGetSet">
             <summary>
@@ -25375,21 +26912,6 @@
             <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Offers"/></param>
             <returns>A value getter delegate that can set the value</returns>
         </member>
-        <member name="M:DHI.Mike1D.Generic.IDoubleProxy.ValueFractionGetter(System.Int32)">
-            <summary>
-            Get value setter for the specified data quantity
-            </summary>
-            <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Offers"/></param>
-            <returns>A value getter delegate that can set the value</returns>
-        </member>
-        <member name="M:DHI.Mike1D.Generic.IDoubleProxy.ValueGetterBoxed(System.Int32)">
-            <summary>
-            Get value setter for the specified data quantity
-            </summary>
-            <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Offers"/></param>
-            <returns>An interface providing functionality to get the value</returns>
-            <remarks>This will usually just be boxing the DDoubleGetter - for COM interop compatibility</remarks>
-        </member>
         <member name="M:DHI.Mike1D.Generic.IDoubleProxy.ValueSetter(System.Int32)">
             <summary>
             Get value setter for the specified data type
@@ -25397,13 +26919,23 @@
             <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Accepts"/></param>
             <returns>A value setter delegate that can set the value</returns>
         </member>
-        <member name="M:DHI.Mike1D.Generic.IDoubleProxy.ValueSetterBoxed(System.Int32)">
+        <member name="T:DHI.Mike1D.Generic.IDoubleFractionProxy">
             <summary>
-            Get value setter for the specified data type
+            An <see cref="T:DHI.Mike1D.Generic.IDoubleFractionProxy"/> can interpolate
+            within the current time step, from time N to time Np1.
             </summary>
-            <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Accepts"/></param>
-            <returns>An interface providing functionality to set the value</returns>
-            <remarks>This will usually just be boxing the DDoubleGetter - for COM interop compatibility</remarks>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.IDoubleFractionProxy.ValueFractionGetter(System.Int32)">
+            <summary>
+            Get value getter for the specified data quantity. The fraction getter can interpolate
+            within the current time step, from time N to time Np1.
+            <para>
+            If a quantity does not offer timestep interpolation, null is returned, and the <see cref="M:DHI.Mike1D.Generic.IDoubleProxy.ValueGetter(System.Int32)"/>
+            must be called instead.
+            </para>
+            </summary>
+            <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Offers"/></param>
+            <returns>A value getter delegate that can set the value, or null, if this quantity does not implement time step interpolation.</returns>
         </member>
         <member name="T:DHI.Mike1D.Generic.IDoubleVectorProxy">
             <summary>
@@ -25491,7 +27023,7 @@
             Class boxing DDoubleGetter and DDoubleSetter implementing IDoubleGetSet
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.Generic.DDoubleGetSetBox.#ctor(System.Func{System.Double},DHI.Mike1D.Generic.DDoubleSetter)">
+        <member name="M:DHI.Mike1D.Generic.DDoubleGetSetBox.#ctor(System.Func{System.Double},System.Action{System.Double})">
             <summary>
             Constructor where getting and setting is allowed.
             </summary>
@@ -25614,6 +27146,15 @@
             such that engine data is not made available for editing with this call.
             </remarks>
         </member>
+        <member name="M:DHI.Mike1D.Generic.DDoubleVectorGetSetBox.SetValue(System.Int32,System.Double)">
+            <summary>
+            Set the current values, vals will be copied into current array and update that.
+            </summary>
+            <remarks>
+            When implementing new code, be sure to copy data into the existing data,
+            such that engine data is not made available for editing with this call.
+            </remarks>
+        </member>
         <member name="T:DHI.Mike1D.Generic.EmptyDoubleProxy">
             <summary>
             Default empty proxy. Use <see cref="F:DHI.Mike1D.Generic.EmptyDoubleProxy.Instance"/> to get hold of one
@@ -25648,28 +27189,12 @@
             <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Offers"/></param>
             <returns>A value getter delegate that can set the value</returns>
         </member>
-        <member name="M:DHI.Mike1D.Generic.EmptyDoubleProxy.ValueGetterBoxed(System.Int32)">
-            <summary>
-            Get value setter for the specified data quantity
-            </summary>
-            <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Offers"/></param>
-            <returns>An interface providing functionality to get the value</returns>
-            <remarks>This will usually just be boxing the DDoubleGetter - for COM interop compatibility</remarks>
-        </member>
         <member name="M:DHI.Mike1D.Generic.EmptyDoubleProxy.ValueSetter(System.Int32)">
             <summary>
             Get value setter for the specified data type
             </summary>
             <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Accepts"/></param>
             <returns>A value setter delegate that can set the value</returns>
-        </member>
-        <member name="M:DHI.Mike1D.Generic.EmptyDoubleProxy.ValueSetterBoxed(System.Int32)">
-            <summary>
-            Get value setter for the specified data type
-            </summary>
-            <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Accepts"/></param>
-            <returns>An interface providing functionality to set the value</returns>
-            <remarks>This will usually just be boxing the DDoubleGetter - for COM interop compatibility</remarks>
         </member>
         <member name="T:DHI.Mike1D.Generic.EmptyDoubleReachProxy">
             <summary>
@@ -26806,6 +28331,16 @@
             Collection of static methods used in Mike1D.
             </summary>
         </member>
+        <member name="F:DHI.Mike1D.Generic.MathUtil.Radian2Degrees">
+            <summary>
+            Constant for converting radians to degrees
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.Generic.MathUtil.Degrees2Radians">
+            <summary>
+            Constant for converting degrees to radians
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.Generic.MathUtil.VolumeOfPartialCone(System.Double,System.Double,System.Double)">
             <summary>
              Return the volume of a partial cone of a given height and surface areas.
@@ -26823,6 +28358,12 @@
         <member name="M:DHI.Mike1D.Generic.MathUtil.Limit(System.Double,System.Double,System.Double)">
             <summary>
              Limit a value between min and max
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.MathUtil.AreEqualRel(System.Double,System.Double,System.Double)">
+            <summary>
+            Returns true if <paramref name="a"/> and <paramref name="b"/> are equal
+            within a relative tolerance.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.Generic.MathUtil.Interp(System.Double,System.Double[],System.Double[],DHI.Mike1D.Generic.ExtrapolationTypes)">
@@ -27199,11 +28740,11 @@
             <param name="fraction">number with wich to scale the highest</param>
             <param name="lastInterval">last result returned. Must be &gt;= 0 and &lt;= vector.Length. Use -1 if not known or first time called</param>
         </member>
-        <member name="M:DHI.Mike1D.Generic.MathUtil.GetInterval(System.DateTime,System.Collections.Generic.IList{System.DateTime},System.Double@,System.Int32)">
+        <member name="M:DHI.Mike1D.Generic.MathUtil.GetInterval(System.DateTime,System.Collections.Generic.IReadOnlyList{System.DateTime},System.Double@,System.Int32)">
             <summary>
              <see cref="M:DHI.Mike1D.Generic.MathUtil.GetInterval(System.Double,System.Double[],System.Double@,System.Int32)"/> for DateTimes.
             
-            This has an <see cref="T:System.Collections.Generic.IList`1"/> DateTime as argument instead of a DateTime[]. 
+            This has an <see cref="T:System.Collections.Generic.IReadOnlyList`1"/> DateTime as argument instead of a DateTime[]. 
             which is slower than a DateTime[] version
             </summary>
         </member>
@@ -27553,6 +29094,11 @@
             Default constructor
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.Generic.NetworkDataSetDouble.#ctor(System.Collections.Generic.IList{DHI.Mike1D.Generic.INetworkDataDouble})">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.Generic.NetworkDataSetDouble.Offers">
             <inheritdoc />
         </member>
@@ -27765,7 +29311,7 @@
             Serves as a hash function for a particular type. 
             </summary>
             <returns>
-            A hash code for the current <see cref="T:System.Object" />.
+            A hash code for the current <see cref="T:DHI.Mike1D.Generic.Quantity" />.
             </returns>
             <filterpriority>2</filterpriority>
         </member>
@@ -27780,11 +29326,86 @@
             <exception cref="T:System.NullReferenceException">The <paramref name="obj" /> parameter is null.</exception>
             <filterpriority>2</filterpriority>
         </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.ToBaseId(System.String)">
+            <summary>
+            Converting a Quantity Id to its base form, without commas and spaces
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.Equals(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+             Equals method on BaseId, which is the Id with commas and spaces removed.
+            </summary>
+            <returns>
+             true if the two objects equals to each other; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.EqualsBaseId(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+             Equals method on BaseId, which is the Id with commas and spaces removed.
+            </summary>
+            <returns>
+             true if the two objects equals to each other; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.GetHashCode(DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            Serves as a hash function for this type. Uses the Id of the quantity as specified, but not the description.
+            </summary>
+            <returns>
+            A hash code for the current <see cref="T:DHI.Mike1D.Generic.Quantity" />.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.GetHashCodeBaseId(DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            Serves as a hash function based on Base Id. 
+            </summary>
+            <returns>
+            A hash code for the current <see cref="T:DHI.Mike1D.Generic.Quantity" />.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
         <member name="M:DHI.Mike1D.Generic.Quantity.ComparerDescription">
             <summary>
             Provides a equality comparer that also includes the <see cref="P:DHI.Mike1D.Generic.Quantity.Description"/>
             in the comparison
             </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.Quantity.Comparer">
+            <summary>
+            IEqualityComparer for <see cref="T:DHI.Mike1D.Generic.IQuantity"/> that
+            compares the id as is (including commas and spaces)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.Comparer.Equals(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.Comparer.GetHashCode(DHI.Mike1D.Generic.IQuantity)">
+            <inheritdoc/>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.Quantity.FullComparer">
+            <summary>
+            IEqualityComparer that also includes the <see cref="P:DHI.Mike1D.Generic.Quantity.Description"/>
+            in the comparison
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.FullComparer.Equals(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.FullComparer.GetHashCode(DHI.Mike1D.Generic.IQuantity)">
+            <inheritdoc/>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.Quantity.BaseIdComparer">
+            <summary>
+            IEqualityComparer for <see cref="T:DHI.Mike1D.Generic.IQuantity"/> that
+            compares based on the BaseId of the quantity (without komma and spaces)
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.BaseIdComparer.Equals(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.BaseIdComparer.GetHashCode(DHI.Mike1D.Generic.IQuantity)">
+            <inheritdoc/>
         </member>
         <member name="M:DHI.Mike1D.Generic.Quantity.ComparerGroup">
             <summary>
@@ -27794,6 +29415,21 @@
             grouped under one.
             </para>
             </summary>
+        </member>
+        <member name="T:DHI.Mike1D.Generic.Quantity.GroupComparer">
+            <summary>
+            Provides a equality comparer that groups quantities of the same type. 
+            <para>
+            Quantities like SnowCover, SnowCover_2, SnowCover_3 are in this context
+            grouped under one.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.GroupComparer.Equals(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.GroupComparer.GetHashCode(DHI.Mike1D.Generic.IQuantity)">
+            <inheritdoc/>
         </member>
         <member name="M:DHI.Mike1D.Generic.Quantity.Create(DHI.Mike1D.Generic.PredefinedQuantity)">
             <summary>
@@ -27818,6 +29454,11 @@
         <member name="M:DHI.Mike1D.Generic.Quantity.Create(DHI.Generic.MikeZero.eumItem,System.String,System.String)">
             <summary>
             Create a new Quantity. Not static for COM support.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Quantity.CreateVariable(System.String)">
+            <summary>
+            Create a quantity for control module variable
             </summary>
         </member>
         <member name="M:DHI.Mike1D.Generic.Quantity.ToString">
@@ -28598,6 +30239,42 @@
             </para>
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.Generic.Util.GetUnitConversionFactor(DHI.Generic.MikeZero.eumQuantity,DHI.Generic.MikeZero.eumQuantity)">
+            <summary>
+            Get a unit conversion factor from target unit to source unit. Undefined units are treated as SI unit, and
+            does not contribute to the factor. Units need not be equivalent.
+            <para>
+            See also <see cref="M:DHI.Mike1D.Generic.Util.UnitConversionFactors(DHI.Generic.MikeZero.eumUnit,DHI.Generic.MikeZero.eumUnit,System.Double@,System.Double@,System.Boolean)"/>
+            for details.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Util.GetUserUnitOrDefault(DHI.Mike1D.Generic.IUnitProvider,DHI.Generic.MikeZero.eumItem,DHI.Generic.MikeZero.eumUnit)">
+            <summary>
+            Get a unit conversion factor for EUM quantity
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Util.UpdateQuantityUserUnit(DHI.Mike1D.Generic.IUnitProvider,DHI.Mike1D.Generic.IQuantity)">
+            <summary>
+            Update quantity with user unit, if user unit is available
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Util.CandoUnitConversion(DHI.Generic.MikeZero.eumUnit,DHI.Generic.MikeZero.eumUnit)">
+            <summary>
+            Returns true if unit conversions can be performed between the two units, i.e.
+            they are different and none of them are undefined.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Util.GetUnitConversionFactor(DHI.Mike1D.Generic.IUnitProvider,DHI.Generic.MikeZero.eumItem,DHI.Generic.MikeZero.eumUnit)">
+            <summary>
+            Get a unit conversion factor for EUM quantity
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Util.GetUnitConversionFactor(DHI.Mike1D.Generic.IUnitProvider,DHI.Generic.MikeZero.eumItem,DHI.Generic.MikeZero.eumUnit,DHI.Generic.MikeZero.eumUnit@)">
+            <summary>
+            Get a unit conversion factor for EUM quantity
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.Generic.Util.UnitConversionFactors(DHI.Generic.MikeZero.eumUnit,DHI.Generic.MikeZero.eumUnit,System.Double@,System.Double@,System.Boolean)">
             <summary>
             Calculate scale factor and offset for converting between eum units. 
@@ -28625,6 +30302,35 @@
             <param name="factor">Factor in conversion </param>
             <param name="offset">Offset in conversion </param>
             <param name="unitsMustBeEquivalent">Flag specifying whether to calculate scale and offset even though units are not equivalent </param>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Util.UnitConversionFactors(DHI.Generic.MikeZero.eumQuantity,DHI.Generic.MikeZero.eumQuantity,System.Double@,System.Double@,System.Boolean,System.Boolean)">
+            <summary>
+            Calculate scale factor and offset for converting between eum units. 
+            <para>
+            In case of success, the <paramref name="factor"/> and <paramref name="offset"/>
+            contains the conversion values, that will convert from source to target using
+            <code>
+              target = source*factor + offset
+            </code>
+            </para>
+            <para>
+            The method will fail 1) if one of the units are undefined and <paramref name="undefinedAsSI"/> is not set, 
+            or 2) if the units are not equivalent and <paramref name="unitsMustBeEquivalent"/> is set. 
+            On failure, default values are used (scale is 1 and offset is 0).
+            and false is returned
+            </para>
+            <para>
+            It can handle units that are not equivalent, i.e. if the target is kg/m3 and the source is g/s, and there is some
+            processing (in proper units) between the target and the source, the conversion will take care of the factor 1000
+            here.
+            </para>
+            </summary>
+            <param name="target">Target unit</param>
+            <param name="source">Source unit</param>
+            <param name="factor">Factor in conversion </param>
+            <param name="offset">Offset in conversion </param>
+            <param name="unitsMustBeEquivalent">Flag specifying whether to calculate scale and offset even though units are not equivalent </param>
+            <param name="undefinedAsSI">Treat undefined value as SI.</param>
         </member>
         <member name="M:DHI.Mike1D.Generic.Util.UnitConversionFactors(DHI.Generic.MikeZero.eumUnit,DHI.Generic.MikeZero.eumUnit,System.Double@,System.Double@,System.Boolean,System.Boolean)">
             <summary>
@@ -28673,7 +30379,17 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="M:DHI.Mike1D.Generic.Util.ValueInUserUnitToStringWithUnit(DHI.Mike1D.Generic.IUnitProvider,DHI.Generic.MikeZero.eumItem,System.Double)">
+            <summary>
+            Convert a value to user unit and return as a string
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.Generic.Util.ValueInUserUnitToString(DHI.Generic.MikeZero.eumItem,System.Double)">
+            <summary>
+            Convert a value to user unit and return as a string
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Util.ValueInUserUnitToString(DHI.Mike1D.Generic.IUnitProvider,DHI.Generic.MikeZero.eumItem,System.Double)">
             <summary>
             Convert a value to user unit and return as a string
             </summary>
@@ -28687,11 +30403,18 @@
             <summary>
             Convert a value to user unit and return as a string
             </summary>
-            <param name="eumItemType"></param>
-            <param name="value"></param>
-            <returns></returns>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Util.ValueInUserUnit(DHI.Mike1D.Generic.IUnitProvider,DHI.Generic.MikeZero.eumItem,System.Double)">
+            <summary>
+            Convert a value to user unit and return as a string
+            </summary>
         </member>
         <member name="M:DHI.Mike1D.Generic.Util.UserUnitToString(DHI.Generic.MikeZero.eumItem)">
+            <summary>
+            Return a unit as a string
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Util.UserUnitToString(DHI.Mike1D.Generic.IUnitProvider,DHI.Generic.MikeZero.eumItem)">
             <summary>
             Return a unit as a string
             </summary>
@@ -28771,18 +30494,23 @@
         <member name="F:DHI.Mike1D.Generic.Util._assemblyBinRoot">
             <summary> Root folder of assemblies that are not in the GAC </summary>
         </member>
-        <member name="M:DHI.Mike1D.Generic.Util.SetupEnvironmentNoGac">
+        <member name="M:DHI.Mike1D.Generic.Util.SetupInstallRoot">
             <summary>
             Sets up a run environment that does not utilize the GAC.
             This is only necessary in a develoment environment and should not
             be used by others.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.Generic.Util.SetupEnvironmentNoGac(System.String)">
+        <member name="M:DHI.Mike1D.Generic.Util.SetupInstallRoot(System.String)">
             <summary>
             Sets up a run environment that does not utilize the GAC.
             This is only necessary in a develoment environment and should not
             be used by others.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.Generic.Util.SetupEnvironmentPath(System.String)">
+            <summary>
+            Setup environment path to this DHI install root.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.Generic.Util.Min(System.TimeSpan,System.TimeSpan)">
@@ -29109,7 +30837,7 @@
             <summary>
             Flag indicating if double data arrays should be stored as floats (to save disc space).
             <para>
-            Default is true.
+            Default is false.
             </para>
             </summary>
         </member>
@@ -29140,6 +30868,9 @@
         <member name="M:DHI.Mike1D.ModelState.BlockWriterXml.WriteValue(System.String,System.Int32)">
             <inheritdoc/>
         </member>
+        <member name="M:DHI.Mike1D.ModelState.BlockWriterXml.WriteValue(System.String,System.Boolean)">
+            <inheritdoc/>
+        </member>
         <member name="M:DHI.Mike1D.ModelState.BlockWriterXml.WriteValue(System.String,System.Double)">
             <inheritdoc/>
         </member>
@@ -29162,9 +30893,6 @@
             <inheritdoc/>
         </member>
         <member name="M:DHI.Mike1D.ModelState.BlockWriterXml.WriteValue(System.String,System.Collections.Generic.IEnumerable{System.DateTime})">
-            <inheritdoc/>
-        </member>
-        <member name="M:DHI.Mike1D.ModelState.BlockWriterXml.WriteDataValue(System.String,System.Collections.Generic.IEnumerable{System.DateTime})">
             <inheritdoc/>
         </member>
         <member name="M:DHI.Mike1D.ModelState.BlockWriterXml.Close">
@@ -29225,6 +30953,11 @@
             Read a list of strings
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.ModelState.IBlockReader.ReadBooleans">
+            <summary>
+            Read a list of strings
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.ModelState.IBlockReader.ReadInts">
             <summary>
             Read a list of integers
@@ -29259,6 +30992,21 @@
         <member name="P:DHI.Mike1D.ModelState.BlockReaderXml.TokenType">
             <summary>
             Type of current token
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ModelState.BlockReaderXml.HasLineInfo">
+            <summary>
+            Flag indicating if class can return line information
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ModelState.BlockReaderXml.LineNumber">
+            <summary>
+            The current line number in the xml file, or -1 if not available
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ModelState.BlockReaderXml.LinePosition">
+            <summary>
+            The current line position in the xml file, or -1 if not available
             </summary>
         </member>
         <member name="M:DHI.Mike1D.ModelState.BlockReaderXml.#ctor(System.String)">
@@ -29296,6 +31044,9 @@
             <inheritdoc/>
         </member>
         <member name="M:DHI.Mike1D.ModelState.BlockReaderXml.ReadStrings">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.ModelState.BlockReaderXml.ReadBooleans">
             <inheritdoc/>
         </member>
         <member name="M:DHI.Mike1D.ModelState.BlockReaderXml.ReadInts">
@@ -29342,6 +31093,11 @@
             </summary>
         </member>
         <member name="M:DHI.Mike1D.ModelState.IBlockWriter.WriteValue(System.String,System.Int32)">
+            <summary>
+            Write parameter value with specified name
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ModelState.IBlockWriter.WriteValue(System.String,System.Boolean)">
             <summary>
             Write parameter value with specified name
             </summary>
@@ -29398,7 +31154,8 @@
         </member>
         <member name="M:DHI.Mike1D.ModelState.IModelStateReadWrite.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
             <summary>
-            Read state and apply to module
+            Read state and apply to module.
+            Returns true if state was successfully read.
             </summary>
         </member>
         <member name="T:DHI.Mike1D.ModelState.StateToken">
@@ -29539,11 +31296,32 @@
             State start info for this reader.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.ModelState.ModelStateReader.#ctor(DHI.Mike1D.ModelState.StatestartInfo)">
+        <member name="P:DHI.Mike1D.ModelState.ModelStateReader.HasLineInfo">
+            <summary>
+            Flag indicating if class can return line information
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ModelState.ModelStateReader.LineNumber">
+            <summary>
+            The current line number in the xml file, or -1 if not available
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.ModelState.ModelStateReader.LinePosition">
+            <summary>
+            The current line position in the xml file, or -1 if not available
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ModelState.ModelStateReader.AppendLineInfo(System.String)">
+            <summary>
+            Append line information to string. If no line information is available, the input string is returned directly.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ModelState.ModelStateReader.#ctor(DHI.Mike1D.ModelState.StatestartInfo,DHI.Mike1D.Generic.IDiagnostics)">
             <summary>
             Create new Model State Reader
             </summary>
             <param name="statestartInfo"></param>
+            <param name="diagnostics"></param>
         </member>
         <member name="P:DHI.Mike1D.ModelState.ModelStateReader.Options">
             <summary>
@@ -29649,6 +31427,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:DHI.Mike1D.ModelState.ModelStateReader.ReadBooleans">
+            <summary>
+            Read a list of integers
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.ModelState.ModelStateReader.ReadInts">
             <summary>
             Read a list of integers
@@ -29686,6 +31469,11 @@
             </summary>
         </member>
         <member name="M:DHI.Mike1D.ModelState.ModelStateExtensions.ReadString(DHI.Mike1D.ModelState.ModelStateReader,System.String)">
+            <summary>
+            Read a parameter from state, return its value
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.ModelState.ModelStateExtensions.ReadBooleans(DHI.Mike1D.ModelState.ModelStateReader,System.String)">
             <summary>
             Read a parameter from state, return its value
             </summary>
@@ -29735,6 +31523,11 @@
             Read a parameter from state, return its value
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.ModelState.ModelStateExtensions.Warning(DHI.Mike1D.ModelState.ModelStateReader,System.String)">
+            <summary>
+            Warning while reading state
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.ModelState.ModelStateWriter">
             <summary>
             Class for writing to state stream.
@@ -29745,9 +31538,9 @@
             will not be added to the stream. 
             </para>
             <para>
-            The optional object can be used if an ancester does not know whether a child actually
-            contains state, so the ancester can add itself and its paramaters as optional, and only
-            if a child has state, the ancester values will be included.
+            The optional object can be used if an ancestor does not know whether a child actually
+            contains state, so the ancestor can add itself and its parameters as optional, and only
+            if a child has state, the ancestor values will be included.
             </para>
             </summary>
         </member>
@@ -29795,7 +31588,7 @@
         </member>
         <member name="M:DHI.Mike1D.ModelState.ModelStateWriter.WriteStartObject(System.String,System.Boolean)">
             <summary>
-            Adds an optinal start object tag with the specified name to 
+            Adds an optional start object tag with the specified name to 
             the list of optional objects
             </summary>
         </member>
@@ -29821,6 +31614,14 @@
             <param name="optional">Flag indicating of the parameter is optional</param>
         </member>
         <member name="M:DHI.Mike1D.ModelState.ModelStateWriter.WriteValue(System.String,System.Int32,System.Boolean)">
+            <summary>
+            Write parameter value to current object
+            </summary>
+            <param name="parameterName">Name of parameter</param>
+            <param name="value">Value of parameter</param>
+            <param name="optional">Flag indicating of the parameter is optional</param>
+        </member>
+        <member name="M:DHI.Mike1D.ModelState.ModelStateWriter.WriteValue(System.String,System.Boolean,System.Boolean)">
             <summary>
             Write parameter value to current object
             </summary>
@@ -29890,13 +31691,6 @@
             <param name="parameterName">Name of parameter</param>
             <param name="values">Array of values</param>
             <param name="optional">Flag indicating of the parameter is optional</param>
-        </member>
-        <member name="M:DHI.Mike1D.ModelState.ModelStateWriter.WriteDataValue(System.String,System.Collections.Generic.IEnumerable{System.DateTime})">
-            <summary>
-            Write parameter array values to current object
-            </summary>
-            <param name="parameterName">Name of parameter</param>
-            <param name="values">Array of values</param>
         </member>
         <member name="M:DHI.Mike1D.ModelState.ModelStateWriter.HandleOptionalParameter(System.String,System.Object,System.Boolean)">
             <summary>
@@ -30106,6 +31900,13 @@
         <member name="M:DHI.Spatial.Algorithm.GridWeightCalculator.#ctor">
             <summary>
             Default Constructor
+            </summary>
+        </member>
+        <member name="P:DHI.Spatial.Algorithm.GridWeightCalculator.Reprojector">
+            <summary>
+            Reprojector for reprojecting from model/catchment coordinates
+            to grid coordinates. If null, it is assumed that the two
+            projections are identical.
             </summary>
         </member>
         <member name="M:DHI.Spatial.Algorithm.GridWeightCalculator.SetGridOrigin(System.Double,System.Double,System.Double)">

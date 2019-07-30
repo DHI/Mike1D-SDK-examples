@@ -1214,9 +1214,6 @@
         <member name="M:DHI.Mike1D.StructureModule.BridgeBase.ValueGetter(System.Int32)">
             <inheritdoc />
         </member>
-        <member name="M:DHI.Mike1D.StructureModule.BridgeBase.ValueFractionGetter(System.Int32)">
-            <inheritdoc />
-        </member>
         <member name="M:DHI.Mike1D.StructureModule.BridgeBase.CalcFHWAOverflow(System.Double)">
             <summary>
             </summary>
@@ -2676,9 +2673,6 @@
         <member name="M:DHI.Mike1D.StructureModule.StormwaterInlet.ValueGetter(System.Int32)">
             <inheritdoc />
         </member>
-        <member name="M:DHI.Mike1D.StructureModule.StormwaterInlet.ValueFractionGetter(System.Int32)">
-            <inheritdoc />
-        </member>
         <member name="T:DHI.Mike1D.StructureModule.IDamBreakBase">
             <summary>
             Dambreak base parameters.
@@ -2848,9 +2842,6 @@
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.StructureModule.DamBreakBase.ValueGetter(System.Int32)">
-            <inheritdoc />
-        </member>
-        <member name="M:DHI.Mike1D.StructureModule.DamBreakBase.ValueFractionGetter(System.Int32)">
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.StructureModule.DamBreakBase.WriteStatePipeCollapseEvent">
@@ -3778,17 +3769,20 @@
         <member name="M:DHI.Mike1D.StructureModule.Gate.ResetControlledState">
             <inheritdoc />
         </member>
-        <member name="M:DHI.Mike1D.StructureModule.Gate.ValueFractionGetter(System.Int32)">
-            <inheritdoc />
-        </member>
-        <member name="M:DHI.Mike1D.StructureModule.Gate.ValueGetter(System.Int32)">
-            <inheritdoc />
-        </member>
         <member name="M:DHI.Mike1D.StructureModule.Gate.GetControlAction(System.String)">
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.StructureModule.Gate.GetCurrentValue(System.String)">
             <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Gate.ValueGetter(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Gate.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Gate.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc/>
         </member>
         <member name="T:DHI.Mike1D.StructureModule.IDischargeStructure">
             <summary>
@@ -3941,9 +3935,6 @@
         <member name="M:DHI.Mike1D.StructureModule.DischargeStructure.ValueGetter(System.Int32)">
             <inheritdoc />
         </member>
-        <member name="M:DHI.Mike1D.StructureModule.DischargeStructure.ValueFractionGetter(System.Int32)">
-            <inheritdoc />
-        </member>
         <member name="M:DHI.Mike1D.StructureModule.DischargeStructure.PrepareTimeStep(System.DateTime,System.DateTime)">
             <inheritdoc />
         </member>
@@ -4016,6 +4007,12 @@
         </member>
         <member name="M:DHI.Mike1D.StructureModule.DischargeStructure.GetCurrentValue(System.String)">
             <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.DischargeStructure.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.DischargeStructure.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc/>
         </member>
         <member name="T:DHI.Mike1D.StructureModule.ADComponentSensorDescriptionInfo">
             <summary>
@@ -4393,9 +4390,6 @@
         <member name="M:DHI.Mike1D.StructureModule.SquaredGatedBCWeir.Validate">
             <inheritdoc />
         </member>
-        <member name="M:DHI.Mike1D.StructureModule.SquaredGatedBCWeir.ValueFractionGetter(System.Int32)">
-            <inheritdoc />
-        </member>
         <member name="M:DHI.Mike1D.StructureModule.SquaredGatedBCWeir.ValueGetter(System.Int32)">
             <inheritdoc />
         </member>
@@ -4439,6 +4433,12 @@
         </member>
         <member name="M:DHI.Mike1D.StructureModule.SquaredGatedBCWeir.ResetControlledState">
             <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.SquaredGatedBCWeir.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.SquaredGatedBCWeir.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc/>
         </member>
         <member name="T:DHI.Mike1D.StructureModule.StructureDataFactory">
             <summary>
@@ -5291,9 +5291,6 @@
             </summary>
         </member>
         <member name="M:DHI.Mike1D.StructureModule.Culvert.ValueGetter(System.Int32)">
-            <inheritdoc />
-        </member>
-        <member name="M:DHI.Mike1D.StructureModule.Culvert.ValueFractionGetter(System.Int32)">
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.StructureModule.Culvert.Initialize(DHI.Mike1D.CrossSectionModule.ICrossSection,DHI.Mike1D.CrossSectionModule.ICrossSection,System.Boolean,DHI.Mike1D.Generic.IDiagnostics)">
@@ -7391,7 +7388,7 @@
         </member>
         <member name="M:DHI.Mike1D.StructureModule.EnergyLoss.StorageWidthAtStructure(System.Double,System.Double,System.Double,System.Double)">
             <summary>
-            Calculation of the area at the energy loss structure
+            Calculation of the storage width at the energy loss structure
             </summary>
             <param name="level">Level at structure</param>
             <param name="upsTheta">Fraction of distance upstream of structure</param>
@@ -7714,9 +7711,6 @@
             <param name="y">Downstream depth above crest</param>
         </member>
         <member name="M:DHI.Mike1D.StructureModule.ExtendedHonmaWeir.ValueGetter(System.Int32)">
-            <inheritdoc />
-        </member>
-        <member name="M:DHI.Mike1D.StructureModule.ExtendedHonmaWeir.ValueFractionGetter(System.Int32)">
             <inheritdoc />
         </member>
         <member name="T:DHI.Mike1D.StructureModule.IExtendedHonmaWeir">
@@ -8266,7 +8260,7 @@
         </member>
         <member name="M:DHI.Mike1D.StructureModule.HonmaWeir.ControlSetWeirCoefficient(System.Double,System.Int32)">
             <summary>
-            Set weir coefficientto specified value
+            Set weir coefficient to specified value
             </summary>
             <param name="weirCoefficient">New weir coefficient. </param>
             <param name="controlStrategyId">Control strategy id, used for keeping track of which strategy 
@@ -8278,6 +8272,9 @@
         <member name="M:DHI.Mike1D.StructureModule.HonmaWeir.GetCurrentValue(System.String)">
             <inheritdoc />
         </member>
+        <member name="M:DHI.Mike1D.StructureModule.HonmaWeir.ResetControlledState">
+            <inheritdoc />
+        </member>
         <member name="P:DHI.Mike1D.StructureModule.HonmaWeir.InvertLevelUpstream">
             <inheritdoc />
         </member>
@@ -8285,9 +8282,6 @@
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.StructureModule.HonmaWeir.ValueGetter(System.Int32)">
-            <inheritdoc />
-        </member>
-        <member name="M:DHI.Mike1D.StructureModule.HonmaWeir.ValueFractionGetter(System.Int32)">
             <inheritdoc />
         </member>
         <member name="T:DHI.Mike1D.StructureModule.IHonmaWeir">
@@ -9103,6 +9097,18 @@
             <param name="controlStrategyId">Control strategy id, used for keeping track of which strategy 
             is currently active. The strategy id can be outputted to result file.</param>
         </member>
+        <member name="M:DHI.Mike1D.StructureModule.Orifice.ControlClose(System.Int32)">
+            <summary>
+            Close orifice
+            </summary>
+            <param name="controlStrategyId">Control strategy currently used.</param>
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Orifice.ControlOpen(System.Int32)">
+            <summary>
+            Open orifice
+            </summary>
+            <param name="controlStrategyId">Control strategy currently used.</param>
+        </member>
         <member name="M:DHI.Mike1D.StructureModule.Orifice.GetControlAction(System.String)">
             <inheritdoc />
         </member>
@@ -9115,8 +9121,11 @@
         <member name="M:DHI.Mike1D.StructureModule.Orifice.ValueGetter(System.Int32)">
             <inheritdoc />
         </member>
-        <member name="M:DHI.Mike1D.StructureModule.Orifice.ValueFractionGetter(System.Int32)">
-            <inheritdoc />
+        <member name="M:DHI.Mike1D.StructureModule.Orifice.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Orifice.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc/>
         </member>
         <member name="T:DHI.Mike1D.StructureModule.PumpType">
             <summary>
@@ -9167,7 +9176,7 @@
             <summary>
             Pump parameters. 
             <para>
-             A pump moves water within the network, with the ability to start and stop a specific water levels
+             A pump moves water within the network, with the ability to start and stop at specific water levels
             </para>
             </summary>
         </member>
@@ -9458,7 +9467,7 @@
             <summary>
             Must be set to true to activate external control of start and stop levels (through a PID control or similar).
             <para>
-            If pump is controlled through ControlMoudle, this will set this automatically (during Prepare)
+            If pump is controlled through ControlModule, this will set this automatically (during Prepare)
             </para>
             <para>
             Can not be combined with <see cref="P:DHI.Mike1D.StructureModule.Pump.DischargeControlActive"/>
@@ -9469,7 +9478,7 @@
             <summary>
             Must be set to true to activate (external) control of discharge (through a PID control or similar).
             <para>
-            If pump is controlled through ControlMoudle, this will set this automatically (during Prepare)
+            If pump is controlled through ControlModule, this will set this automatically (during Prepare)
             </para>
             <para>
             Can not be combined with <see cref="P:DHI.Mike1D.StructureModule.Pump.StartStopLevelControlActive"/>
@@ -9641,8 +9650,16 @@
             <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Offers"/></param>
             <returns>A value getter delegate that can set the value</returns>
         </member>
-        <member name="M:DHI.Mike1D.StructureModule.Pump.ValueFractionGetter(System.Int32)">
-            <inheritdoc />
+        <member name="M:DHI.Mike1D.StructureModule.Pump.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Pump.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Pump.PumpStateFromString(System.String)">
+            <summary>
+            Convert string into enum
+            </summary>
         </member>
         <member name="T:DHI.Mike1D.StructureModule.StructureParameters">
             <summary>
@@ -9931,7 +9948,7 @@
         </member>
         <member name="P:DHI.Mike1D.StructureModule.IStructure.TopoID">
             <summary>
-            TopoID used when structure is searching for neighbouring cross sections in the reach.
+            TopoID used when structure is searching for neighboring cross sections in the reach.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.StructureModule.IStructure.Location">
@@ -9942,7 +9959,7 @@
         <member name="P:DHI.Mike1D.StructureModule.IStructure.Implicit">
             <summary>
             Flag to control if the structure is implicit or explicit. If the structure is explicit
-            (Implicit == false) then the derivatives of the dicharge are always zero.
+            (Implicit == false) then the derivatives of the discharge are always zero.
             Default value: true
             </summary>
         </member>
@@ -9965,6 +9982,11 @@
             The invert level is the level where water starts 
             flowing in to the structure from the downstream side. 
             It does not necessarily flow through the structure.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.StructureModule.IStructure.FlowFactor">
+            <summary>
+            The discharge (and discharge derivatives) are scaled by the flow factor.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.StructureModule.IStructure.Length">
@@ -10731,9 +10753,6 @@
         <member name="M:DHI.Mike1D.StructureModule.OverFlowFormula.ValueGetter(System.Int32)">
             <inheritdoc />
         </member>
-        <member name="M:DHI.Mike1D.StructureModule.OverFlowFormula.ValueFractionGetter(System.Int32)">
-            <inheritdoc />
-        </member>
         <member name="T:DHI.Mike1D.StructureModule.IOverFlowGate">
             <summary>
             Description of an overflow gate. An overflow gate is in this context a broad crested weir with a rectangular 
@@ -10812,9 +10831,6 @@
             <returns></returns>
         </member>
         <member name="M:DHI.Mike1D.StructureModule.OverFlowGate.ValueGetter(System.Int32)">
-            <inheritdoc />
-        </member>
-        <member name="M:DHI.Mike1D.StructureModule.OverFlowGate.ValueFractionGetter(System.Int32)">
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.StructureModule.OverFlowGate.ControlClose(System.Int32)">
@@ -12116,9 +12132,6 @@
         <member name="M:DHI.Mike1D.StructureModule.BroadCrestedWeir.ValueGetter(System.Int32)">
             <inheritdoc />
         </member>
-        <member name="M:DHI.Mike1D.StructureModule.BroadCrestedWeir.ValueFractionGetter(System.Int32)">
-            <inheritdoc />
-        </member>
         <member name="T:DHI.Mike1D.StructureModule.IBroadCrestedWeirGeometry">
             <summary>
             Specification of the weir geometry
@@ -12744,7 +12757,7 @@
         </member>
         <member name="F:DHI.Mike1D.StructureModule.UnderFlowGate._surchargedUnderflowCoefficient">
             <summary>
-            Coefficient used to avoid instabillities when switching from subcritical to critical.
+            Coefficient used to avoid instabilities when switching from subcritical to critical.
             Type: Dimensionless factor
             Unit: []
             Default: 0.0
@@ -12752,7 +12765,7 @@
         </member>
         <member name="P:DHI.Mike1D.StructureModule.UnderFlowGate.SurchargedUnderflowCoefficient">
             <summary>
-            Coefficient used to avoid instabillities when switching from subcritical to critical.
+            Coefficient used to avoid instabilities when switching from subcritical to critical.
             Type: Dimensionless factor
             Unit: []
             Default: 0.0
@@ -12905,9 +12918,6 @@
             </summary>
         </member>
         <member name="M:DHI.Mike1D.StructureModule.UnderFlowGate.ValueGetter(System.Int32)">
-            <inheritdoc />
-        </member>
-        <member name="M:DHI.Mike1D.StructureModule.UnderFlowGate.ValueFractionGetter(System.Int32)">
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.StructureModule.UnderFlowGate.ControlClose(System.Int32)">
@@ -13118,11 +13128,14 @@
             </summary>
             <returns>List of data types offered</returns>
         </member>
-        <member name="M:DHI.Mike1D.StructureModule.Valve.ValueFractionGetter(System.Int32)">
-            <inheritdoc />
-        </member>
         <member name="M:DHI.Mike1D.StructureModule.Valve.ValueGetter(System.Int32)">
             <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Valve.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Valve.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc/>
         </member>
         <member name="T:DHI.Mike1D.StructureModule.ValveType">
             <summary>
@@ -13207,7 +13220,7 @@
         </member>
         <member name="T:DHI.Mike1D.StructureModule.Structure">
             <summary>
-            Base class for all structures. The class is abstract since an instance of it wouldn't make sence
+            Base class for all structures. The class is abstract since an instance of it wouldn't make sense
             </summary>
         </member>
         <member name="M:DHI.Mike1D.StructureModule.Structure.#ctor">
@@ -13350,11 +13363,6 @@
             Structure type, unique for each type structure.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.StructureModule.Structure.SetControlStrategyId(System.Int32)">
-            <summary>
-            Set control strategy ID manually.
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.StructureModule.Structure.Validate">
             <summary>
             Writes errors, warnings and hints into their respective member classes. The member objects are initially cleared.
@@ -13418,6 +13426,11 @@
             <param name="q">Flow</param>
             <param name="dqdhUps">Derivative of flow with respect to upstream water level</param>
             <param name="dqdhDws">Derivative of flow with respect to downstream water level</param>
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Structure.ApplyFlowFactor">
+            <summary>
+            Applies flow factor to discharge and it's derivatives
+            </summary>
         </member>
         <member name="M:DHI.Mike1D.StructureModule.Structure.Linearisation(System.Double@,System.Double@,System.Double@,System.Double,System.Double)">
             <summary>
@@ -13522,10 +13535,35 @@
             Invert level down stream
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.StructureModule.Structure.FlowFactor">
+            <inheritdoc />
+        </member>
         <member name="P:DHI.Mike1D.StructureModule.Structure.ExtensionData">
             <summary>
             Property used by (de)serializer, when it can not find proper target for
             a data field. Support of forward compatible data contracts. 
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Structure.ControlSetFlowFactor(System.Double,System.Int32)">
+            <summary>
+            Set flow factor to specified value
+            </summary>
+            <param name="flowFactor">New flow factor. </param>
+            <param name="controlStrategyId">Control strategy id, used for keeping track of which strategy 
+            is currently active. The strategy id can be outputted to result file.</param>
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Structure.GetControlAction(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Structure.GetCurrentValue(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Structure.ResetControlledState">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.StructureModule.Structure.SetControlStrategyId(System.Int32)">
+            <summary>
+            Set control strategy ID manually.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.StructureModule.Structure.Offers">
@@ -13550,13 +13588,6 @@
             </summary>
             <returns>List of data types accepted</returns>
         </member>
-        <member name="M:DHI.Mike1D.StructureModule.Structure.ValueFractionGetter(System.Int32)">
-            <summary>
-            Get value fraction setter for the specified data quantity
-            </summary>
-            <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Offers"/></param>
-            <returns>A value getter delegate that can set the value</returns>
-        </member>
         <member name="M:DHI.Mike1D.StructureModule.Structure.ValueGetter(System.Int32)">
             <summary>
             Get value setter for the specified data quantity
@@ -13564,28 +13595,12 @@
             <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Offers"/></param>
             <returns>A value getter delegate that can set the value</returns>
         </member>
-        <member name="M:DHI.Mike1D.StructureModule.Structure.ValueGetterBoxed(System.Int32)">
-            <summary>
-            Get value setter for the specified data quantity
-            </summary>
-            <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Offers"/></param>
-            <returns>An interface providing functionality to get the value</returns>
-            <remarks>This will usually just be boxing the DDoubleGetter - for COM interop compatibility</remarks>
-        </member>
         <member name="M:DHI.Mike1D.StructureModule.Structure.ValueSetter(System.Int32)">
             <summary>
             Get value setter for the specified data type
             </summary>
             <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Accepts"/></param>
             <returns>A value setter delegate that can set the value</returns>
-        </member>
-        <member name="M:DHI.Mike1D.StructureModule.Structure.ValueSetterBoxed(System.Int32)">
-            <summary>
-            Get value setter for the specified data type
-            </summary>
-            <param name="quantityIndex">Requested Quantity, index in <see cref="M:DHI.Mike1D.Generic.IQuantityProxy.Accepts"/></param>
-            <returns>An interface providing functionality to set the value</returns>
-            <remarks>This will usually just be boxing the DDoubleGetter - for COM interop compatibility</remarks>
         </member>
         <member name="T:DHI.Mike1D.StructureModule.StructureCollection">
             <summary>
@@ -14013,9 +14028,6 @@
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.StructureModule.VillemonteWeir.ValueGetter(System.Int32)">
-            <inheritdoc />
-        </member>
-        <member name="M:DHI.Mike1D.StructureModule.VillemonteWeir.ValueFractionGetter(System.Int32)">
             <inheritdoc />
         </member>
     </members>

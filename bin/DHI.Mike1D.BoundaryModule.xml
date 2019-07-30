@@ -4,6 +4,106 @@
         <name>DHI.Mike1D.BoundaryModule</name>
     </assembly>
     <members>
+        <member name="T:DHI.Mike1D.BoundaryModule.BoundaryAdaptiveTimeSeriesEvaluator">
+            <summary>
+            Helper class to calculate preferred time step based on a
+            list of times and a list of values.
+            <para>
+            This class is intended for cases where only one value serie
+            use this time axis.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryAdaptiveTimeSeriesEvaluator.#ctor(System.Collections.Generic.IReadOnlyList{System.DateTime},System.Collections.Generic.IReadOnlyList{System.Double})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="times">Times</param>
+            <param name="values">Values</param>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryAdaptiveTimeSeriesEvaluator.GetPreferredTimeStep(System.DateTime,System.TimeSpan,System.TimeSpan,System.Double,System.Double,System.Double)">
+            <inheritdoc/>
+        </member>
+        <member name="T:DHI.Mike1D.BoundaryModule.BoundaryAdaptiveTimeValueSeriesEvaluator">
+            <summary>
+            Helper class to calculate preferred time step based on a
+            list of times and a list of values.
+            <para>
+            This class is intended for cases where more than one value series
+            share the same time axis.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryAdaptiveTimeValueSeriesEvaluator.#ctor(DHI.Mike1D.BoundaryModule.BoundaryAdaptiveTimeEvaluator,System.Collections.Generic.IReadOnlyList{System.Double})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="times">Time evaluator, shared by multiple instances of this class</param>
+            <param name="values">Values</param>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryAdaptiveTimeValueSeriesEvaluator.GetPreferredTimeStep(System.DateTime,System.TimeSpan,System.TimeSpan,System.Double,System.Double,System.Double)">
+            <inheritdoc/>
+        </member>
+        <member name="T:DHI.Mike1D.BoundaryModule.BoundaryAdaptiveTimeEvaluator">
+            <summary>
+            Helper class to calculate preferred time step based on a
+            list of times and a list of values. This class holds the time
+            data only, and can be reused if more value series share the same time axis.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryAdaptiveTimeEvaluator.#ctor(System.Collections.Generic.IReadOnlyList{System.DateTime})">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryAdaptiveTimeEvaluator.GetIntervalVariation(System.DateTime,System.DateTime,System.Int32@,System.Double@,System.Int32@,System.Double@)">
+            <summary>
+            Get interval and fraction of start and end. 
+            Returns boolean indicating if variation is possible, 
+            i.e. false if start and end is in same interval, true
+            if interval is different 
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryAdaptiveTimeEvaluator.GetPreferredTimeStep(System.Collections.Generic.IReadOnlyList{System.Double},System.DateTime,System.TimeSpan,System.TimeSpan,System.Double,System.Double,System.Double)">
+            <summary>
+            Get preferred time step, where values should not vary more than
+            <paramref name="maxRelChange"/> within the given time step.
+            <para>
+            Variation is measured as the difference from any value to
+            the linearly interpolated value from <code>start</code> to <code>start + curDt</code>.
+            </para>
+            <para>
+            this method returns the preferred time step where variation is at most <paramref name="maxRelChange"/>.
+            </para>
+            </summary>
+            <param name="values">Values</param>
+            <param name="start">Start time of time step</param>
+            <param name="minDt">Smallest time step allowed</param>
+            <param name="curDt">Current time step size</param>
+            <param name="maxRelChange">Maximum relative change</param>
+            <param name="cutoff">Cutoff value, for values below this value, the variation is not checked for</param>
+            <param name="referenceValue">Reference value, used by e.g. water level boundaries (usually bottom level)</param>
+            <returns>Preferred time step, a value between <paramref name="minDt"/> and <paramref name="curDt"/></returns>
+        </member>
+        <member name="T:DHI.Mike1D.BoundaryModule.BoundaryAdaptiveProbeWrapper">
+            <summary>
+            A helper class for implementing the <see cref="T:DHI.Mike1D.BoundaryModule.IBoundaryAdaptive"/> interface
+            for a <see cref="T:DHI.Mike1D.BoundaryModule.IBoundarySource"/> by probing the values.
+            <para>
+            Probing will not find all extreme values, and hence it is more accurate to
+            implement the <see cref="T:DHI.Mike1D.BoundaryModule.IBoundaryAdaptive"/> directly and use knowledge of the
+            boundary data, instead of being based on probing.
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryAdaptiveProbeWrapper.#ctor(DHI.Mike1D.BoundaryModule.IBoundarySource)">
+            <summary>
+            Default constructor with <paramref name="boundary"/> to wrap.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryAdaptiveProbeWrapper.GetPreferredTimeStep(System.DateTime,System.TimeSpan,System.TimeSpan,System.Double,System.Double,System.Double)">
+            <inheritdoc/>
+        </member>
         <member name="T:DHI.Mike1D.BoundaryModule.BoundaryData">
             <summary>
             The BoundaryData class is the main entrance to boundary data access.
@@ -45,8 +145,24 @@
         </member>
         <member name="P:DHI.Mike1D.BoundaryModule.BoundaryData.CatchmentComponentSourceBoundaries">
             <summary>
-            Get a list of all catchment component source boundaries, which are AD components that
-            are added to the inflow from the specified catchments into the network.
+            Catchment component source boundaries are AD component boundaries that
+            are handled by the catchment (by a catchment plugin).
+            The catchment calculates an AD load/concentration
+            which can be outputted and added to the network.
+            <para>
+            These boundaries will not be applied to runoff from a catchment result file (<see cref="P:DHI.Mike1D.BoundaryModule.BoundaryData.CatchmentResultFiles"/>).
+            Concentrations for those must be specified in <see cref="P:DHI.Mike1D.BoundaryModule.CatchmentResultFile.Components"/>, or
+            <see cref="P:DHI.Mike1D.BoundaryModule.CatchmentResultFile.ComponentResultFiles"/>.
+            </para>
+            <para>
+            The net-rainfall catchment quantity version is special. This requires also HD,
+            because only at that point in time it is known exactly how much rain that falls on the river surface.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.BoundaryData.CatchmentResultFiles">
+            <summary>
+            List of catchment result files, containing rainfall runoff and/or catchment discharge.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.BoundaryModule.BoundaryData.StructureSourceBoundaries">
@@ -89,6 +205,11 @@
             <param name="simStart">Start time of simulation</param>
             <param name="simEnd">End time of simulation</param>
             <param name="diagnostics">Diagnostics object that issues are reported to</param>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryData.PrepareComponents(System.Collections.Generic.IDictionary{System.String,DHI.Generic.MikeZero.eumQuantity})">
+            <summary>
+            Prepare the object for AD/ST integration, setting output unit from boundary system for all components
+            </summary>
         </member>
         <member name="M:DHI.Mike1D.BoundaryModule.BoundaryData.Validate(System.DateTime,System.DateTime)">
             <summary>
@@ -136,6 +257,14 @@
             Null if not existing in the list.
             </summary>
             <param name="globalSourceBoundaryType">Global source boundary type to get</param>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryData.GetOrCreateGlobalSource(DHI.Mike1D.BoundaryModule.GlobalSourceBoundaryTypes,DHI.Mike1D.BoundaryModule.GlobalSourceApplicationTypes)">
+            <summary>
+            Gets the GlobalSourceBoundary that handles the <paramref name="globalSourceBoundaryType"/>.
+            Null if not existing in the list.
+            </summary>
+            <param name="globalSourceBoundaryType">Global source boundary type to get</param>
+            <param name="applicationType">When created, set this application type</param>
         </member>
         <member name="M:DHI.Mike1D.BoundaryModule.BoundaryData.CreateRuntimeDiagnostics">
             <summary>
@@ -204,6 +333,11 @@
         <member name="M:DHI.Mike1D.BoundaryModule.BoundaryExtensions.ToCatchmentType(DHI.Mike1D.BoundaryModule.GlobalSourceBoundaryTypes)">
             <summary>
             Convert a global boundary type to a catchment boundary type.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryExtensions.DistributionType(DHI.Mike1D.BoundaryModule.IGlobalSourceBoundary)">
+            <summary>
+            Type of distribution on reaches for the global boundary type
             </summary>
         </member>
         <member name="M:DHI.Mike1D.BoundaryModule.BoundaryExtensions.Rescale(DHI.Mike1D.BoundaryModule.GriddedSource)">
@@ -329,7 +463,7 @@
             Default constructor (for COM interop)
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemDDoubleGetter.#ctor(DHI.Mike1D.Generic.DDoubleTimeGetter)">
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemDDoubleGetter.#ctor(System.Func{System.DateTime,System.Double})">
             <summary>
             Constructor initialized with the delegate.
             </summary>
@@ -563,18 +697,83 @@
             Calculate interval and fraction for the time.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemRRResult.RRTimeInterpolator.GetIntervalVariation(System.DateTime,System.DateTime,System.Int32@,System.Double@,System.Int32@,System.Double@)">
-            <summary>
-            Get interval and fraction of start and end. 
-            Returns boolean indicating if variation is possible, 
-            i.e. false if start and end is in same interval, true
-            if interval is different 
-            </summary>
-        </member>
         <member name="P:DHI.Mike1D.BoundaryModule.BoundaryItemRRResult.ExtensionData">
             <summary>
             Data from an extended DataContract not recognized here
             </summary>
+        </member>
+        <member name="T:DHI.Mike1D.BoundaryModule.BoundaryItemSWQ">
+            <summary>
+            SWQ boundary item implementation, placeholder for the <see cref="P:DHI.Mike1D.BoundaryModule.BoundaryItemSWQ.SWQId"/> and not a "real" <see cref="T:DHI.Mike1D.BoundaryModule.IBoundaryItem"/>.
+            <para>
+            Only applicable for component items of a <see cref="T:DHI.Mike1D.BoundaryModule.CatchmentComponentSourceBoundary"/>.
+            Requires that the <see cref="P:DHI.Mike1D.BoundaryModule.BoundaryItemSWQ.SWQId"/> is present in the <code>RainfallRunoffData.Pollutants</code>.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.BoundaryItemSWQ.SWQId">
+            <summary>
+            Id of the SWQ model parameters
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemSWQ.Create(System.String)">
+            <summary>
+            BoundaryItemConstant factory, creates and returns a new object.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.BoundaryItemSWQ.DHI#Mike1D#BoundaryModule#IBoundaryItem#EumQuantity">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemSWQ.DHI#Mike1D#BoundaryModule#IBoundaryItem#GetValue(System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemSWQ.DHI#Mike1D#BoundaryModule#IBoundaryItem#GetAccumulatedValue(System.DateTime,System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemSWQ.Validate">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.BoundaryModule.BoundaryItemTableConcentration">
+            <summary>
+            Table concentration item implementation.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.BoundaryItemTableConcentration.TableId">
+            <summary>
+            The Id of the table
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.BoundaryItemTableConcentration.Table">
+            <summary>
+            Table containing runoff per area to concentration.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.BoundaryItemTableConcentration.EumQuantity">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemTableConcentration.Create(System.String,System.Int32)">
+            <summary>
+            BoundaryItemConstant factory, creates and returns a new object.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemTableConcentration.SetValues(System.Int32,System.Double,System.Double)">
+            <summary>
+            Set values to table concentration at specified index
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemTableConcentration.GetConcentrationValue(System.Double)">
+            <summary>
+            Gets a concentration for given runoff per area from the table.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemTableConcentration.GetValue(System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemTableConcentration.GetAccumulatedValue(System.DateTime,System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemTableConcentration.Validate">
+            <inheritdoc />
         </member>
         <member name="T:DHI.Mike1D.BoundaryModule.BoundarySourceComponentType">
             <summary>
@@ -601,6 +800,18 @@
             The source is a load, in kg/day/person or similar units
             </summary>
         </member>
+        <member name="F:DHI.Mike1D.BoundaryModule.BoundarySourceComponentType.TableConcentration">
+            <summary>
+            The source is determined from a table converting runoff to concentration.
+            Can have just a single BoundaryItemTableConcentration item.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.BoundaryModule.BoundarySourceComponentType.SWQAdvanced">
+            <summary>
+            The source is an advanced SWQ method.
+            Can have just a single BoundarySourceSWQ item.
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.BoundaryModule.BoundarySourceComponent">
             <summary>
             Boundary source for a component, containing either a concentration type
@@ -624,9 +835,9 @@
         </member>
         <member name="P:DHI.Mike1D.BoundaryModule.BoundarySourceComponent.ComponentId">
             <summary>
-            The component id to use when coupling to the AD module
+            The component id to use when coupling to the AD/ST module
             <para>
-            If this is null then this is not an AD component
+            If this is null then this is not an AD/ST component
             </para>
             </summary>
         </member>
@@ -671,6 +882,17 @@
             <see cref="P:DHI.Mike1D.BoundaryModule.BoundarySourceComponent.EumQuantity"/>
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundarySourceComponent.GetValue(System.DateTime)">
+            <summary>
+            Get value of the component.
+            </summary>
+            <param name="date">Date/time to get value for</param>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.BoundarySourceComponent.TryModify(System.Double,System.DateTime)">
+            <summary>
+            Try modify boundary value, if <see cref="P:DHI.Mike1D.BoundaryModule.BoundarySourceComponent.Modifier"/> is not null
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.BoundaryModule.BoundarySourceComponentUnitConverter">
             <summary>
             Class for unit conversion of component boundary values
@@ -699,6 +921,82 @@
         <member name="M:DHI.Mike1D.BoundaryModule.BoundarySourceComponentUnitConverter.GetValue(System.DateTime)">
             <summary>
             Get value from boundary, including unit conversion.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.BoundaryModule.ComponentScope">
+            <summary>
+            Enumeration specifying where component belongs
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.BoundaryModule.ComponentScope.ADComponent">
+            <summary> AD component </summary>
+        </member>
+        <member name="F:DHI.Mike1D.BoundaryModule.ComponentScope.SedimentFraction">
+            <summary> Sediment fraction </summary>
+        </member>
+        <member name="T:DHI.Mike1D.BoundaryModule.CatchmentResultFile">
+            <summary>
+            Catchment result file, containing rainfall runoff and/or catchment discharge.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.CatchmentResultFile.BoundaryID">
+            <summary>
+            ID of boundary
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.BoundaryModule.CatchmentResultFile._boundaryID">
+            <summary> See <see cref="P:DHI.Mike1D.BoundaryModule.IBoundarySource.BoundaryID"/> </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.CatchmentResultFile.CatchmentIds">
+            <summary>
+            List of catchment ID's to use from catchment result file. If null, all catchments from the file is being loaded.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.CatchmentResultFile.FilePath">
+            <summary>
+            Path to RR result file containing Runoff or Catchment Discharge.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.CatchmentResultFile.ComponentResultFiles">
+            <summary>
+            List of paths to RR component (pollutant or sediment) result file.
+            <para>
+            Files must contain component concentration or loads for catchments in the Runoff result file.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.CatchmentResultFile.Components">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.CatchmentResultFile.GetValue(System.Int32,System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.CatchmentResultFile.GetAccumulatedValue(System.Int32,System.DateTime,System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.BoundaryModule.CatchmentComponentResultFile">
+            <summary>
+            Component result file, for adding AD and sediment component loads from result file to network.
+            <para>
+            It will only add component load if the HD result file does also contain that catchment.
+            I.e. if component result file contains data from more catchments than the HD result file,
+            the additional catchments will be ignored.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.CatchmentComponentResultFile.Scope">
+            <summary>
+            Which types of components to use from result file. Can include more than one type of components
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.CatchmentComponentResultFile.ComponentIds">
+            <summary>
+            Components to use from result file. If null or empty, it will use all components defined in the setup.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.CatchmentComponentResultFile.FilePath">
+            <summary>
+            Path to RR result file containing Runoff or Catchment Discharge.
             </summary>
         </member>
         <member name="F:DHI.Mike1D.BoundaryModule.GriddedSourceWeightCalculationType.Automatic">
@@ -2254,7 +2552,7 @@
         </member>
         <member name="T:DHI.Mike1D.BoundaryModule.BoundaryItemQH">
             <summary>
-            QH boundary item. Access to a QH table. Gets the water level via a DDoubleGetter
+            Q(h) boundary item. Access to a Q(h) table. Gets the water level via a DDoubleGetter
             </summary>
         </member>
         <member name="P:DHI.Mike1D.BoundaryModule.BoundaryItemQH.EumQuantity">
@@ -2268,7 +2566,7 @@
         </member>
         <member name="P:DHI.Mike1D.BoundaryModule.BoundaryItemQH.QHTable">
             <summary>
-            Return the Boundary item type - always TimeSeries
+            Q(h) table of values. X is h and Y is Q.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.BoundaryModule.BoundaryItemQH.GetValue(System.DateTime)">
@@ -2343,6 +2641,31 @@
             </summary>
             <param name="collection">The collection whose elements are copied to the new list.</param>
         </member>
+        <member name="T:DHI.Mike1D.BoundaryModule.GlobalSourceApplicationTypes">
+            <summary>
+            Enumeration specifying where a global source is applied
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.BoundaryModule.GlobalSourceApplicationTypes.Default">
+            <summary>
+            Default or not applicable for this type of global boundary
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.BoundaryModule.GlobalSourceApplicationTypes.HD">
+            <summary>
+            Apply to HD only
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.BoundaryModule.GlobalSourceApplicationTypes.RR">
+            <summary>
+            Apply to RR/Catchments only
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.BoundaryModule.GlobalSourceApplicationTypes.HDRR">
+            <summary>
+            Apply to HD and RR/Catchments
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.BoundaryModule.GlobalSourceBoundary">
             <summary>
             A global source that contributes to the entire network
@@ -2357,8 +2680,10 @@
             Type of boundary source, always returns GlobalSource
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.BoundaryModule.GlobalSourceBoundary.DistributionType">
-            <inheritdoc />
+        <member name="P:DHI.Mike1D.BoundaryModule.GlobalSourceBoundary.ApplicationType">
+            <summary>
+            Flag specifying where this boundary is applied
+            </summary>
         </member>
         <member name="P:DHI.Mike1D.BoundaryModule.GlobalSourceBoundary.UseGeoLocatedSources">
             <inheritdoc />
@@ -2671,7 +2996,7 @@
             <param name="curDt">Current time step size</param>
             <param name="maxRelChange">Maximum relative change</param>
             <param name="cutoff">Cutoff value, for boundary values below this value, the variation is not checked for</param>
-            <param name="referenceValue">Reference value, used by water level boundaries (usually bottom level)</param>
+            <param name="referenceValue">Reference value, used by e.g. water level boundaries (usually bottom level)</param>
             <returns>Preferred time step, a value between <paramref name="minDt"/> and <paramref name="curDt"/></returns>
         </member>
         <member name="T:DHI.Mike1D.BoundaryModule.IBoundaryData">
@@ -2770,6 +3095,31 @@
             Setter access for the constant value. Use GetValue to retrieve it.
             </summary>
         </member>
+        <member name="T:DHI.Mike1D.BoundaryModule.IBoundaryWithComponents">
+            <summary>
+            Interface for boundaries with components
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.IBoundaryWithComponents.Components">
+            <summary>
+            A list of all components sources attached to the source. Each component may include more than
+            one entry in this list.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.IBoundaryWithComponents.GetValue(System.Int32,System.DateTime)">
+            <summary>
+            Get value for component at given at the given time
+            </summary>
+            <param name="boundarySourceComponentIndex">Index into <see cref="P:DHI.Mike1D.BoundaryModule.IBoundaryWithComponents.Components"/></param>
+            <param name="date">DateTime to get value</param>
+            <returns>Value</returns>
+        </member>
+        <member name="M:DHI.Mike1D.BoundaryModule.IBoundaryWithComponents.GetAccumulatedValue(System.Int32,System.DateTime,System.DateTime)">
+            <summary>
+            Get accumulated value for component at given index at the given time span
+            </summary>
+            <returns>Value</returns>
+        </member>
         <member name="T:DHI.Mike1D.BoundaryModule.IBoundarySource">
             <summary>
             Base interface for all BoundarySources
@@ -2800,26 +3150,6 @@
             </summary>
             <returns>Value</returns>
         </member>
-        <member name="P:DHI.Mike1D.BoundaryModule.IBoundarySource.Components">
-            <summary>
-            A list of all components sources attached to the source. Each component may include more than
-            one entry in this list. 
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.BoundaryModule.IBoundarySource.GetValue(System.Int32,System.DateTime)">
-            <summary>
-            Get value for component at given at the given time
-            </summary>
-            <param name="boundarySourceComponentIndex">Index into <see cref="P:DHI.Mike1D.BoundaryModule.IBoundarySource.Components"/></param>
-            <param name="date">DateTime to get value</param>
-            <returns>Value</returns>
-        </member>
-        <member name="M:DHI.Mike1D.BoundaryModule.IBoundarySource.GetAccumulatedValue(System.Int32,System.DateTime,System.DateTime)">
-            <summary>
-            Get accumulated value for component at given index at the given time span
-            </summary>
-            <returns>Value</returns>
-        </member>
         <member name="M:DHI.Mike1D.BoundaryModule.IBoundarySource.GetNextTransitionTime(System.DateTime)">
             <summary>
             Gets the next time for which there is a different value in the boundary source.
@@ -2830,7 +3160,7 @@
             The default implementation is to query all the boundary items of the boundary source. 
             For unknown types of boundary items the default is to return
             the incoming date as the next transition time, indicating it is unknown
-            if/when the next transition actually takes place. A boundaryitem can also
+            if/when the next transition actually takes place. A boundary item can also
             return <see cref="F:System.DateTime.MaxValue"/>, indicating that the item never
             changes value.
             </remarks>
@@ -3118,6 +3448,9 @@
         <member name="F:DHI.Mike1D.BoundaryModule.DistributedSourceBoundaryTypes.GroundWaterLeakage">
             <summary> Ground water leakage. Not supported </summary>
         </member>
+        <member name="F:DHI.Mike1D.BoundaryModule.DistributedSourceBoundaryTypes.Exfiltration">
+            <summary> Water exfiltration from link </summary>
+        </member>
         <member name="T:DHI.Mike1D.BoundaryModule.IDistributedSourceBoundary">
             <summary>
             Interface for a DistributedSourceBoundary
@@ -3377,14 +3710,14 @@
             </para>
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.BoundaryModule.IGlobalSourceBoundary.DistributionType">
-            <summary>
-            Type of distribution
-            </summary>
-        </member>
         <member name="P:DHI.Mike1D.BoundaryModule.IGlobalSourceBoundary.GlobalSourceBoundaryType">
             <summary>
             Type of Global source boundary.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.BoundaryModule.IGlobalSourceBoundary.ApplicationType">
+            <summary>
+            Flag specifying where this boundary is applied.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.BoundaryModule.IGlobalSourceBoundary.GeoLocatedSources">
@@ -4218,6 +4551,11 @@
             below current water level
             </summary>
         </member>
+        <member name="F:DHI.Mike1D.BoundaryModule.PointSourceBoundaryInflowTypes.NodeExfiltration">
+            <summary>
+            Exfiltration from node. It is infiltration with an opposite sign.
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.BoundaryModule.PointSourceBoundary">
             <summary>
             A source located at a specific point in the network.
@@ -4231,7 +4569,7 @@
         </member>
         <member name="P:DHI.Mike1D.BoundaryModule.PointSourceBoundary.PointSourceType">
             <summary>
-            Type of BoundarySource - always PointSource
+            Type of Point source boundary. Default is <see cref="F:DHI.Mike1D.BoundaryModule.PointSourceBoundaryTypes.Inflow"/>
             </summary>
         </member>
         <member name="P:DHI.Mike1D.BoundaryModule.PointSourceBoundary.PointSourceBoundaryInflowType">

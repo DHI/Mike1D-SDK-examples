@@ -2491,6 +2491,11 @@
             If depth is above <see cref="P:DHI.Mike1D.CrossSectionModule.XSBase.TopLevel"/> or above <see cref="P:DHI.Mike1D.CrossSectionModule.XSBase.BottomLevel"/>
             an exception is thrown.
             </summary>
+            <para>
+            For too high water depth the method returns error code -1.
+            For too low water depth the method returns error code -2.
+            The error codes are handled by XSBase.IssueErrors method.
+            </para>
         </member>
         <member name="M:DHI.Mike1D.CrossSectionModule.XSBase.RestoreModifiedResistanceFactors">
             <summary>
@@ -3222,6 +3227,11 @@
              List of points defining polygon cross section.
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.CrossSectionModule.XSBaseRaw.MaximumStorageWidth">
+            <summary>
+             Maximum storage width of the cross section
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.CrossSectionModule.XSBaseRaw.Initialize">
             <inheritdoc />
         </member>
@@ -3368,6 +3378,9 @@
             Note: Not implemented yet
             Note: Not always possible.
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.CrossSectionModule.XSBaseRaw.CalculateProcessedData">
+            <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.CrossSectionModule.XSBaseRaw.UpdatePointResistance">
             <summary>
@@ -3715,6 +3728,40 @@
             <param name="reverseDirection">Boolean indicating if the structure direction is reversed</param>
             <param name="upstreamCrossSection">The upstream cross section</param>
             <param name="downstreamCrossSection">The downstream cross section</param>
+        </member>
+        <member name="M:DHI.Mike1D.CrossSectionModule.CrossSectionExtensions.GetRiverBankLevels(DHI.Mike1D.CrossSectionModule.CrossSectionData,DHI.Mike1D.Generic.ILocationSpan,System.String,DHI.Mike1D.Generic.ReachSide,System.Boolean)">
+            <summary>
+            Get bank levels of cross sections inside span.
+            </summary>
+            <param name="crossSections">Cross sections</param>
+            <param name="span">Span to get crest levels for</param>
+            <param name="topoId">Topo-id of cross sections</param>
+            <param name="reachSide">Side of reach to get crest for</param>
+            <param name="lowflowBankCrest">Bool indicating if crest is defined as low-flow bank or levee-bank</param>
+            <returns>Crest level table, chainages and crest levels</returns>
+        </member>
+        <member name="M:DHI.Mike1D.CrossSectionModule.CrossSectionExtensions.GetRiverBankLevels(DHI.Mike1D.Generic.ILocationSpan,System.Collections.Generic.List{DHI.Mike1D.CrossSectionModule.ICrossSection},DHI.Mike1D.Generic.ReachSide,System.Boolean)">
+            <summary>
+            Get bank levels of cross sections inside span.
+            <para>
+            The <paramref name="css"/> can contain only one cross section before start-chainage of span
+            and only one cross section after end-chainage of span, to be used for interpolation.
+            </para>
+            </summary>
+            <param name="span">Span to get crest levels for</param>
+            <param name="css">List of cross sections covering the span</param>
+            <param name="reachSide">Side of reach to get crest for</param>
+            <param name="lowflowBankCrest">Bool indicating if crest is defined as low-flow bank or levee-bank</param>
+            <returns>Crest level table, chainages and crest levels</returns>
+        </member>
+        <member name="M:DHI.Mike1D.CrossSectionModule.CrossSectionExtensions.GetBankLevel(DHI.Mike1D.CrossSectionModule.ICrossSection,DHI.Mike1D.Generic.ReachSide,System.Boolean)">
+            <summary>
+            Get bank levels of cross section. If cross section is not open, or it has no markers,
+            the top of the cross section is returned.
+            </summary>
+            <param name="cs">Cross sections to get crest for</param>
+            <param name="reachSide">Side of reach to get crest for</param>
+            <param name="lowflowBankCrest">Bool indicating if to return low-flow bank or levee-bank level. If true, but low-flow bank is not defined, the levee-bank level is returned</param>
         </member>
         <member name="T:DHI.Mike1D.CrossSectionModule.CrossSectionDataFactory">
             <summary>

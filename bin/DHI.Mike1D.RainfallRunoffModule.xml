@@ -356,6 +356,14 @@
              Default: 1e8 (100 km2)
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.AreaInSquareKm">
+            <summary>
+             Full area of catchment
+             Type: Catchment area
+             Unit: [km2]
+             Default: 100
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.CenterPoint">
             <inheritdoc/>
         </member>
@@ -419,10 +427,19 @@
             List of Lids
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.ComponentSources">
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment.CatchmentPlugins">
             <summary>
-            A Component Source provides info on concentration of various 
-            components.
+            List of catchment plugins
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.CheckPoints">
+            <summary>
+            A set of check points in time that must be hit by the catchments.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._checkPointTime">
+            <summary>
+            The most recent check point time.
             </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._startTime">
@@ -437,12 +454,16 @@
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._endTime">
             <summary>
-             Protected end time of catchment data - the latest time for which the catchment can return data
+            Return the end time of the catchment simulation.
+            This is set during prepare, and the catchment must
+            make sure not to run beyond this time.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.EndTime">
             <summary>
-             End time of catchment data - the latest time for which the catchment can return data
+            Return the end time of the catchment simulation.
+            This is set during prepare, and the catchment must
+            make sure not to run beyond this time.
             </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._effectiveTimeStep">
@@ -454,24 +475,17 @@
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._timeOld">
             <summary>
-            Variable holding information on the latest calulated time
+            Variable holding information on the latest calculated time
             </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._timeNew">
             <summary>
-            Variable holding information on the latest calulated time
+            Variable holding information on the latest calculated time
             </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._timeOfLastUpdate">
             <summary>
             Last time the state of this catchment was updated (<see cref="M:DHI.Mike1D.RainfallRunoffModule.Catchment.Update(System.DateTime)"/> was called)
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._timeUpdateFraction">
-            <summary>
-            Fraction of time between prev time and current time for the last
-            call to <see cref="M:DHI.Mike1D.RainfallRunoffModule.Catchment.Update(System.DateTime)"/>. This should be updated everytime
-            <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment._timeOfLastUpdate"/> is updated.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.MinTime">
@@ -487,9 +501,10 @@
             </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._offers">
-            <summary>
-            List of datatypes offered in GetValue
-            </summary>
+            <summary>  List of datatypes offered in GetValue  </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._offerDelegates">
+            <summary>  List of delegates, matching list of <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment._offers"/>  </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._tsBuffer">
             <summary>
@@ -498,7 +513,17 @@
             create a TSBuffer before using it.
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TSBuffer">
+            <summary>
+             Set the TSBuffer to use in this catchment
+            </summary>
+        </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._boundarySourceRainfall">
+            <summary>
+            Rainfall boundary source
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.BoundarySourceRainfall">
             <summary>
             Rainfall boundary source
             </summary>
@@ -513,11 +538,62 @@
             Temperature boundary source
             </summary>
         </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._runoff">
+            <summary>  Total runoff from catchment at present time step.  Unit: [m^3/s] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.Runoff">
+            <inheritdoc />
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._volumeOnGroundBeforeRouting">
+            <summary> Volume on ground before routing </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._volumeOnGroundAfterRouting">
+            <summary> Volume on ground after routing </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._volumeOnGroundAdded">
+            <summary> Volume on ground added after UpdateStorage </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.VolumeOnGroundBeforeRouting">
+            <summary>
+            Volume of water stored in catchment after UpdateStorage but before UpdateRouting.
+            This water will be eventually routed.
+            Note: For CatchmentLinearReservoir this can be determined only after UpdateRouting,
+            because information about runoff is needed.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.VolumeOnGroundAfterRouting">
+            <summary>
+            Volume of water stored in catchment after UpdateRouting.
+            This water will be eventually routed.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.VolumeOnGroundAdded">
+            <summary>
+            Volume of water added to catchment after a time step.
+            This water will be eventually routed.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._runtimeDiagnostics">
+            <summary>
+            Diagnostics instance for a Catchment. Used during runtime.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.RuntimeDiagnostics">
+            <summary>
+            Get the Diagnostics instance for a Catchment. Used during runtime.
+            </summary>
+        </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._totalRunoffVolume">
             <summary> Total volume of runoff </summary>
         </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._totalRainfallVolume">
+            <summary> Total volume of rain </summary>
+        </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._totalAdditionalInflowVolume">
             <summary> Total volume of additional inflow </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._totalLossVolume">
+            <summary> Total volume of loss </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._minimumFlow">
             <summary> Minimum flow </summary>
@@ -531,15 +607,39 @@
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._timeOfMaximumFlow">
             <summary> Time of maximum flow </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._totalLossVolume">
-            <summary> Total volume of loss </summary>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TotalRunoffVolume">
+            <summary> Total runoff from this catchment (integrated over time) </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._totalRainfallVolume">
-            <summary> Total volume of rain </summary>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TotalRainfallVolume">
+            <summary> Total rainfall on this catchment (integrated over time) </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._yearlyRunoff">
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TotalAdditionalInflowVolume">
+            <summary> Total volume of additional inflow </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TotalLossVolume">
+            <summary> Total infiltration into this catchment (integrated over time) </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.MaximumFlow">
+            <summary> Maximum runoff flow </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.MinimumFlow">
+            <summary> Minimum runoff flow </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TimeOfMinimumFlow">
+            <summary> Time of maximum runoff flow </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TimeOfMaximumFlow">
+            <summary> Time of minimum runoff flow </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._yearlyStatistics">
+            <summary> Dictionary of statistics as a function of year </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.YearlyStatistics">
+            <summary> Dictionary of statistics as a function of year </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.GetYearlyStat(System.Int32)">
             <summary>
-            Dictionary of runoff as a function of year
+            Get or create a <see cref="T:DHI.Mike1D.RainfallRunoffModule.RRYearlyStat"/> object for the specified year.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.YearlyRunoff">
@@ -563,6 +663,9 @@
              Initialize Rainfall Runoff model. Sets up static data.
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.InitializePlugins">
+            <inheritdoc />
+        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.Type">
             <summary>
             The type of catchment: NAM, Urban A etc
@@ -581,10 +684,25 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.EffectiveArea">
+            <summary>
+            Effective area. The effective area is the area that collects water. 
+            Can be smaller than total area, eg for Linear Reservoir or when LIDs are present.
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.Prepare(System.DateTime,System.DateTime,DHI.Mike1D.RainfallRunoffModule.RRParameters,DHI.Mike1D.Generic.IDiagnostics)">
             <summary>
              Prepare Rainfall Runoff model. Sets up dynamic data so that the model is ready for first time step.
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.StateUpdated">
+            <summary>
+            If state has been updated from outside, call this method to recalculate state dependent parameters.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.PreparePlugins(System.DateTime)">
+            <param name="simulationStartTime"></param>
+            <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.PrepareState">
             <summary>
@@ -598,35 +716,37 @@
             <param name="source">Source to be prepared</param>
             <param name="diagnostics"> </param>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.CalculateYearlyStatistics">
-            <summary>
-            Update the yearly statistics. 
-            <para>
-            Called at end of every time step.
-            </para>
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.Update(System.DateTime)">
             <summary>
              Update internal state of catchment to time Time()
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.EffectiveArea">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.PerformTimeStep">
             <summary>
-            Effective area. The effective area is the area that collects water. 
-            Can be smaller than total area, eg for Linear Reservoir or when LIDs are present.
+            This procedure forwards the calculation with one time step.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.UpdateTime">
+            <summary>
+            Update time, setting <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment._timeNew"/> to <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment._timeOld"/> + <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment._effectiveTimeStep"/>.
+            This method will assue that <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment._timeNew"/> does not go beyond <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment._endTime"/>, by
+            modifying <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment._effectiveTimeStep"/>.
+            Before calling UpdateTime, be sure that <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment._effectiveTimeStep"/> is set.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.UpdateCheckPointTime(System.DateTime)">
+            <summary>
+            Updates check point time.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.UpdateTimeStepUsingCheckPoint(System.DateTime)">
+            <summary>
+            Updates the present time if it is greater than the check point time.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.CalculateStatistics">
             <summary>
             Calculate statistics on catchment. 
-            TODO: Consider moving this to individual catchments to increase performance (avoid using _stateVariables).
-            TODO: Consider moving this out of Catchments class and into seperate class, for generic handling of all catchments
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.PerformTimeStep">
-            <summary>
-            This procedure forwards the calculation with one time step.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.TriggerPostTimeStepEvent">
@@ -641,13 +761,12 @@
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.VolumeInCatchment">
             <summary>
-            Volume of water stored in catchment after previous TakeTimeStep()
+            Volume of water stored in catchment after previous time step.
             </summary>
-            <returns></returns>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.VolumeInCatchmentAtStart">
             <summary>
-            Volume of water stored in catchment after previous TakeTimeStep()
+            Volume of water stored in catchment after previous time step.
             </summary>
             <returns></returns>
         </member>
@@ -656,18 +775,17 @@
             This procedure is the one actually calculating the new time step.
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.AreaInSquareKm">
-            <summary>
-             Full area of catchment
-             Type: Catchment area
-             Unit: [km2]
-             Default: 100
-            </summary>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.PrepareForTimeStep">
+            <summary> Prepares the catchment for the time step. </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TSBuffer">
-            <summary>
-             Set the TSBuffer to use in this catchment
-            </summary>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.UpdateStorage">
+            <summary> Updates the storage for the catchment. </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.UpdateRouting">
+            <summary> Updates the routing for the catchment. </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.FinalizeTimeStep">
+            <summary> Finalizes the time step for the catchment. </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.Validate">
             <summary>
@@ -680,47 +798,23 @@
             </summary>
             <param name="diagnostics"></param>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.TimeValueGetter(DHI.Mike1D.Generic.IQuantity)">
-            <summary>
-            Get value setter for the specified data quantity
-            </summary>
-            <param name="quantity">Requested Quantity</param>
-            <returns>A value getter delegate that can set the value</returns>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.ValueGetter(System.Int32)">
+            <inheritdoc/>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.TimeValueGetter(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity@)">
-            <summary>
-            Get value setter for the specified data quantity
-            </summary>
-            <param name="quantity">Requested Quantity</param>
-            <param name="actualQuantity">Actual Quantity. Can differ in the description</param>
-            <returns>A value getter delegate that can set the value</returns>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.TimeValueGetter(System.Int32)">
+            <inheritdoc/>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.TimeValueGetterRR(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity@)">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.Offers">
             <summary>
-            Get value setter for the specified data quantity
+            List of data types that is offered and can be used in GetValue
             </summary>
-            <param name="quantity">Requested Quantity</param>
-            <param name="actualQuantity">Actual quantity, that may differ in the description</param>
-            <returns>A value getter delegate that can set the value</returns>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.TimeValueSetter(DHI.Mike1D.Generic.IQuantity)">
-            <summary>
-            Get value setter for the specified data type
-            </summary>
-            <param name="quantity">Requested Quantity</param>
-            <returns>A value setter delegate that can set the value</returns>
+            <returns>List of data types offered</returns>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.TimeOffers">
             <summary>
             List of data types that is offered and can be used in GetValue
             </summary>
             <returns>List of data types offered</returns>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.TimeAccepts">
-            <summary>
-            List of data types that is accepted and can be used in SetValue
-            </summary>
-            <returns>List of data types accepted</returns>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.GetRequiredTypes">
             <summary>
@@ -773,90 +867,41 @@
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.RuntimeDiagnostics">
-            <summary>
-            Get the Diagnostics instance for a Catchment. Used during runtime.
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TotalRunoffVolume">
-            <summary>
-            Total runoff from this catchment (integrated over time)
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TotalLossVolume">
-            <summary>
-            Total infiltration into this catchment (integrated over time)
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TotalRainfallVolume">
-            <summary>
-            Total rainfall on this catchment (integrated over time)
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.ResetBoundaries">
             <summary>
             Remove boundaries applied in previous runs
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.MaximumFlow">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.WritePluginStates(DHI.Mike1D.ModelState.ModelStateWriter)">
             <summary>
-            Maximum runoff flow
+            Write current state of plugins
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.MinimumFlow">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.ReadPluginStates(DHI.Mike1D.ModelState.ModelStateReader)">
             <summary>
-            Minimum runoff flow
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TimeOfMinimumFlow">
-            <summary>
-            Time of maximum runoff flow
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TimeOfMaximumFlow">
-            <summary>
-            Time of minimum runoff flow
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchment.TotalAdditionalInflowVolume">
-            <summary>
-            Total volume of additional inflow
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment._runtimeDiagnostics">
-            <summary>
-            Diagnostics instance for a Catchment. Used during runtime.
+            Write current state of plugins
             </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchment.ToString">
             <inheritdoc />
         </member>
-        <member name="T:DHI.Mike1D.RainfallRunoffModule.Catchment.CatchmentADData">
-            <summary>
-            Helper class for computing and storing mass flux state.
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment.CatchmentADData.MassFluxQuantity">
-            <summary>
-            Quantity of mass flux
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment.CatchmentADData._factor">
-            <summary> Unit conversion factor </summary>
-        </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchment.CatchmentADData._offset">
-            <summary> Unit conversion offset </summary>
-        </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.CatchmentState">
             <summary>
-            Base class for catchments utilizing the <see cref="T:DHI.Mike1D.RainfallRunoffModule.StateVariables"/> for
+            Base class for catchments utilizing the <see cref="T:DHI.Mike1D.RainfallRunoffModule.StateVariable"/> for
             maintaining and interpolating in state.
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentState._stateVariables">
-            <summary>
-            State variables in catchment
-            </summary>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentState._stateVariableTotalRunOff">
+            <summary> Total Runoff in [m3/s]. It includes also <see cref="P:DHI.Mike1D.RainfallRunoffModule.Catchment.AdditionalFlow"/>. </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentState._stateVariableTotalInfiltration">
+            <summary> Total infiltration in [m/s] </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentState._stateVariableLoss">
+            <summary> Losses in [m3/s] </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentState._stateVariableNetRainfall">
+            <summary> Net rainfall in [m/s] </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentState.#ctor(System.String)">
             <summary>
@@ -880,23 +925,8 @@
             Prepare state for new simulation. 
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentState.InitialiseStateVariableTable">
-            <summary>
-            This procedure initializes all the state variables declared for the catchment.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentState.CalculateYearlyStatistics">
-            <summary>
-            Calculate and update yearly statistics, <see cref="P:DHI.Mike1D.RainfallRunoffModule.Catchment.YearlyRunoff"/>.
-            <para>
-            Called at end of each time step, in <see cref="M:DHI.Mike1D.RainfallRunoffModule.Catchment.PerformTimeStep"/>
-            </para>
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentState.Update(System.DateTime)">
-            <summary>
-             Update internal state of catchment to time Time()
-            </summary>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentState.StateUpdated">
+            <inheritdoc/>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentState.CalculateStatistics">
             <summary>
@@ -906,85 +936,107 @@
             </para>
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentState.TimeValueGetterRR(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity@)">
-            <inheritdoc />
-        </member>
-        <member name="T:DHI.Mike1D.RainfallRunoffModule.AbstractCatchmentComponentSource">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentState.OnDeserializingMethod(System.Runtime.Serialization.StreamingContext)">
             <summary>
-            Base class for CatchmentComponentSource implementation.
-            <para>
-            A CatchmentComponentSource is attached to a catchment
-            and provides a concentration from the catchment for one component.
-            The concentration is that of the total-runoff, though
-            it may be aggregated from different concentrations of
-            different flows (ground-water flow, surface flow etc.)
-            </para>
+            Before deserializing, set default values
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.AbstractCatchmentComponentSource.EumQuantity">
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.RRYearlyStat">
             <summary>
-            The eum-quantity of the values. Used to handle unit conversion of 
-            the values from the boundary to the engine. 
+            Yearly statistics for catchments
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.AbstractCatchmentComponentSource.IsLoad">
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RRYearlyStat.TotalRunoff">
+            <summary> Total runoff in [m3] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RRYearlyStat.Inflow">
+            <summary> Inflow in [m3] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RRYearlyStat.Losses">
+            <summary> Losses in [m3] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.NAMYearlyStat.Rainfall">
+            <summary> Rainfall in [mm] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.NAMYearlyStat.PotentialEvaporation">
+            <summary> Potential evaporation in [mm] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.NAMYearlyStat.ActualEvaporation">
+            <summary> Actual evaporation in [mm] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.NAMYearlyStat.CapillaryFlux">
+            <summary> Capillary flux in [mm] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.NAMYearlyStat.InfiltrationToGroundWater">
+            <summary> Infiltration to ground water in [mm] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.NAMYearlyStat.GroundWaterAbstraction">
+            <summary> Ground water abstraction in [mm] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.NAMYearlyStat.Irrigation">
+            <summary> Irrigation in [mm] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.NAMYearlyStat.OverlandFlow">
+            <summary> Overland Flow in [m3] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.NAMYearlyStat.InterFlow">
+            <summary> InterFlow  in [m3] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.NAMYearlyStat.BaseFlow">
+            <summary> Base Flow in [m3] </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.RRTotalStat">
             <summary>
-            If false, then the value is a concentration, and application depends on inflow.
-            If true, then the value is a load and used directly.
+            Class for reporting total (accumulated) statistics.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.AbstractCatchmentComponentSource.Initialize(DHI.Mike1D.RainfallRunoffModule.ICatchment)">
-            <summary>
-            Initialize component source with the catchment that it belongs to.
-            <para>
-            Default implementation does nothing.
-            </para>
-            </summary>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.RRTotalStat._totalRunoffVolume">
+            <summary> Total volume of runoff </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.AbstractCatchmentComponentSource.GetValue(System.DateTime)">
-            <summary>
-            Get a concentration/load value for the current time.
-            </summary>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.RRTotalStat._totalAdditionalInflowVolume">
+            <summary> Total volume of additional inflow </summary>
         </member>
-        <member name="T:DHI.Mike1D.RainfallRunoffModule.CatchmentComponentSourceConstant">
-            <summary>
-            A constant catchment component source
-            </summary>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.RRTotalStat._minimumFlow">
+            <summary> Minimum flow </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentComponentSourceConstant.ConstValue">
-            <summary>
-            The component number to use when coupling to the AD module.
-            </summary>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.RRTotalStat._maximumFlow">
+            <summary> Maximum flow </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentComponentSourceConstant.GetValue(System.DateTime)">
-            <inheritdoc />
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.RRTotalStat._timeOfMinimumFlow">
+            <summary> Time of minimum flow </summary>
         </member>
-        <member name="T:DHI.Mike1D.RainfallRunoffModule.CatchmentComponentSourceEMC">
-            <summary>
-            A constant catchment component source
-            </summary>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.RRTotalStat._timeOfMaximumFlow">
+            <summary> Time of maximum flow </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentComponentSourceEMC.Initialize(DHI.Mike1D.RainfallRunoffModule.ICatchment)">
-            <inheritdoc />
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.RRTotalStat._totalLossVolume">
+            <summary> Total volume of loss </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentComponentSourceEMC.ConstValue">
-            <summary>
-            The component number to use when coupling to the AD module.
-            </summary>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.RRTotalStat._totalRainfallVolume">
+            <summary> Total volume of rain </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentComponentSourceEMC.GetValue(System.DateTime)">
-            <inheritdoc />
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RRTotalStat.TotalRunoffVolume">
+            <summary> Total volume of runoff </summary>
         </member>
-        <member name="T:DHI.Mike1D.RainfallRunoffModule.CatchmentComponentSourceNormalizedFlowTable">
-            <summary>
-            A constant catchment component source
-            </summary>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RRTotalStat.TotalAdditionalInflowVolume">
+            <summary> Total volume of additional inflow </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentComponentSourceNormalizedFlowTable.Initialize(DHI.Mike1D.RainfallRunoffModule.ICatchment)">
-            <inheritdoc />
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RRTotalStat.MinimumFlow">
+            <summary> Minimum flow </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentComponentSourceNormalizedFlowTable.GetValue(System.DateTime)">
-            <inheritdoc />
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RRTotalStat.MaximumFlow">
+            <summary> Maximum flow </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RRTotalStat.TimeOfMinimumFlow">
+            <summary> Time of minimum flow </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RRTotalStat.TimeOfMaximumFlow">
+            <summary> Time of maximum flow </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RRTotalStat.TotalLossVolume">
+            <summary> Total volume of loss </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RRTotalStat.TotalRainfallVolume">
+            <summary> Total volume of rain </summary>
         </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.ICatchmentUrbanData">
             <summary>
@@ -1187,9 +1239,47 @@
             Unit: [-]
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._offerDelegates">
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._initialLossStorageDepth">
             <summary>
-            List of delegates, matching list of <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment._offers"/>
+            Initial loss storage depth.
+            Unit: [m]
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.InitialLossStorageDepth">
+            <summary>
+            Initial loss storage depth.
+            <para>
+            State variable (not for all derived catchment models)
+            </para>
+            <para>
+            Unit: [m]
+            </para>
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._initialLossStorageDepthOld">
+            <summary> Initial loss storage depth at time N. Unit: [m] </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._snowStorage">
+            <summary>
+            Snow storage
+            Unit: [m]
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._snowStorageOld">
+            <summary> Snow storage at time N. Unit: [m] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.SnowStorage">
+            <summary>
+            Snow storage
+            <para>
+            State variable
+            </para>
+            <para>
+            Only applicable when <see cref="P:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.UseSnowModule"/> is set.
+            </para>
+            <para>
+            Unit: [m]
+            </para>
             </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._actRainIntensity">
@@ -1220,7 +1310,7 @@
             </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._lossOld">
-            <summary> Loss at time N. Unit: [m/s] </summary>
+            <summary> Loss at time N. Unit: [m3/s] </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._actRainMode">
             <summary>
@@ -1228,41 +1318,8 @@
             wet, dry or unknown.
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._prevRainMode">
-            <summary>
-            State of the previous period can take one of these values:
-            wet, dry or unknown.
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._initialLossStorageDepth">
-            <summary>
-            Initial loss storage depth.
-            Unit: [m]
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._initialLossStorageDepthOld">
-            <summary> Initial loss storage depth at time N. Unit: [m] </summary>
-        </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._runoff">
-            <summary>
-            Runoff.
-            Unit: [m3/s]
-            </summary>
-        </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._runoffOld">
             <summary> Runoff at time N. Unit: [m3/s] </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.Runoff">
-            <summary>
-            Runoff.
-            <para>
-            Unit: [m3/s]
-            </para>
-            <para>
-            This is a computational variable. Setting this has no effect 
-            (apart from when writing initial value to result file)
-            </para>
-            </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._rainfallFromForcing">
             <summary>
@@ -1282,7 +1339,7 @@
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._temperatureFromForcing">
             <summary>
             Temperature that must be applied during the calculation time step.
-            Note: the temperature is given in degres Celcius, which is not SI unit!
+            Note: the temperature is given in degrees Celsius, which is not SI unit!
             unit: [degCelcius]
             </summary>
         </member>
@@ -1300,32 +1357,6 @@
             <summary>
             Potential evaporation
             Unit: [m/s]
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._potentialEvaporationOld">
-            <summary> Potential evaporation at time N. Unit: [m/s] </summary>
-        </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._snowStorage">
-            <summary>
-            Snow storage
-            Unit: [m]
-            </summary>
-        </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._snowStorageOld">
-            <summary> Snow storage at time N. Unit: [m] </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.SnowStorage">
-            <summary>
-            Snow storage
-            <para>
-            State variable
-            </para>
-            <para>
-            Only applicable when <see cref="P:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.UseSnowModule"/> is set.
-            </para>
-            <para>
-            Unit: [m]
-            </para>
             </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._loadPerInhabitant">
@@ -1362,11 +1393,8 @@
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.CreateOffersBase">
             <summary>
-            Create offers, populating <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment._offers"/> and <see cref="F:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban._offerDelegates"/>
+            Create offers, populating <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment._offers"/> and <see cref="!:_offerDelegates"/>
             </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.TimeValueGetterRR(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity@)">
-            <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.TransferStateToOldBase">
             <summary>
@@ -1394,11 +1422,10 @@
             Compute losses from surface storage
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.UpdateForcings(System.DateTime)">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.UpdateForcings">
             <summary>
             This routine updates the forcings rainfall, evaporation etc
             </summary>
-            <param name="simTime">Simulation time</param>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.ResetEngineStateVariables">
             <summary>
@@ -1411,9 +1438,6 @@
             </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.CalculateStatistics">
-            <inheritdoc />
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.CalculateYearlyStatistics">
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentAbstractUrban.GetRequiredTypes">
@@ -1574,11 +1598,6 @@
             Global discharge sources, populated during initialize.
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge._offerDelegates">
-            <summary>
-            List of delegates, matching list of <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment._offers"/>
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.#ctor(System.String)">
             <summary>
              Constructor
@@ -1599,10 +1618,7 @@
              Initialize Rainfall Runoff model. Sets up static data.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.InitializeAD(DHI.Mike1D.ADDataAccess.ADComponentData,DHI.Mike1D.Generic.IDiagnostics)">
-            <inheritdoc />
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.InitializeST(DHI.Mike1D.STDataAccess.STData,DHI.Mike1D.Generic.IDiagnostics)">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.InitializeAD(DHI.Mike1D.ADDataAccess.ADComponentData,DHI.Mike1D.STDataAccess.STData,DHI.Mike1D.Generic.IDiagnostics)">
             <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.ApplyBoundary(DHI.Mike1D.BoundaryModule.CatchmentSourceBoundaryTypes,DHI.Mike1D.BoundaryModule.IBoundarySource)">
@@ -1629,7 +1645,10 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.TakeTimeStep">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.PrepareForTimeStep">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.UpdateRouting">
             <summary>
             This procedure forwards the calculation with one time step.
             </summary>
@@ -1639,42 +1658,11 @@
             Calculate statistics on catchment. 
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.CalculateYearlyStatistics">
-            <inheritdoc />
-        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.GetRequiredTypes">
             <summary>
             Get the type of boundary required by this catchment
             </summary>
             <returns></returns>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.TimeValueGetterRR(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity@)">
-            <summary>
-            Get value setter for the specified data quantity
-            </summary>
-            <param name="quantity">Requested Quantity</param>
-            <param name="actualQuantity">Actual quantity found, may differ in description.</param>
-            <returns>A value getter delegate that can set the value</returns>
-        </member>
-        <member name="T:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.CatchmentDischargeADData">
-            <summary>
-            <para>
-            For each <see cref="F:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge._catchmentDischargeSources"/>
-            and <see cref="F:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge._globalCatchmentDischargeSources"/>
-            a <see cref="T:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.BoundaryComponentDataSet"/> (list of <see cref="T:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.BoundaryComponentData"/>)
-            is required to handle component data for each source.
-            </para>
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.CatchmentDischargeSTData">
-            <summary>
-            <para>
-            For each <see cref="F:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge._catchmentDischargeSources"/>
-            and <see cref="F:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge._globalCatchmentDischargeSources"/>
-            a <see cref="T:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.BoundaryComponentDataSet"/> (list of <see cref="T:DHI.Mike1D.RainfallRunoffModule.CatchmentDischarge.BoundaryComponentData"/>)
-            is required to handle component data for each source.
-            </para>
-            </summary>
         </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.ICatchmentSurfaceData">
             <summary>
@@ -1893,6 +1881,48 @@
             <param name="storage">Current depth of the storage to be filled [m]</param>
             <param name="drainPotential">Potential drainage depth of the storage [m]</param>
             <returns>Depth that was drained from the storage [m]</returns>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.CatchmentValueBuffer">
+            <summary>
+            Class handling buffering and interpolation in time of
+            catchment values.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentValueBuffer.TimeBuffer">
+            <summary>
+            Bool indicating if to buffer in time, or just within the current time step.
+            <para>
+            If set to true, then the <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchment.MinTime"/> must be set in order
+            to clean up the buffer accordingly.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentValueBuffer.AutoUpdate">
+            <summary>
+            Bool indicating if to automatically update the catchment and have it perform time steps,
+            when requesting a value ahead in time of the current content in the buffer.
+            <para>
+            Default is false
+            </para>
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentValueBuffer.RefreshBuffer">
+            <summary>
+            Refresh the buffer with current values.
+            If <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchment.CurrentTime"/> has changed, the buffers are reset and reloaded (<see cref="M:DHI.Mike1D.RainfallRunoffModule.CatchmentValueBuffer.ResetBuffers"/>).
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentValueBuffer.ResetBuffers">
+            <summary>
+            Reset the buffer, clear values and add current state to buffer.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentValueBuffer.CleanupBefore(System.DateTime)">
+            <summary>
+            Dequeue all values older than date, 
+            i.e. keep the first one older than date,
+            such that we can do interpolation.
+            </summary>
         </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.GreenAmptInfiltration">
             <summary>
@@ -2243,7 +2273,7 @@
             <summary>
             The length of the channel.
             <para>
-            The model assumes a prismatic flow chammel with rectangular cross section.
+            The model assumes a prismatic flow channel with rectangular cross section.
             The channel bottom width is computed from catchment area and length.
             </para>
             <para>
@@ -2448,10 +2478,17 @@
             This routine resets certain state variables to zero before making calculations for the next time step.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.TakeTimeStep">
-            <summary>
-            Run the rainfall runoff model for the time step ending at the given time.
-            </summary>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.PrepareForTimeStep">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.UpdateStorage">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.UpdateRouting">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.FinalizeTimeStep">
+            <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.DryTimeStepLimitToCheckPointHourSync(System.TimeSpan,System.DateTime)">
             <summary>
@@ -2486,6 +2523,12 @@
             <summary>
             Helper class for the Newton-Raphson solver
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc/>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.StateUpdated">
             <summary>
@@ -2630,6 +2673,34 @@
             Unit: [m^(2/3)/s]
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.DataContract.CatchmentKinematicWaveSurfaceData.Length">
+            <summary>
+            The length of the subcatchment/channel.
+            <para>
+            The model assumes a prismatic flow channel with rectangular cross section.
+            The channel bottom width is computed from catchment area and length.
+            </para>
+            <para>
+            If not defined, the average length of the base catchment is used.
+            </para>
+            <para>
+            Default: undefined
+            Unit: [m]
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.DataContract.CatchmentKinematicWaveSurfaceData.Slope">
+            <summary>
+            The slope of the catchment/channel.
+            <para>
+            If not defined, the average slope of the base catchment is used.
+            </para>
+            <para>
+            Default: undefined
+            Unit: [m]
+            </para>
+            </summary>
+        </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.DataContract.CatchmentKinematicWaveSurfaceData.WettingCapacity">
             <summary>
             Wetting capacity
@@ -2695,6 +2766,16 @@
              </para>
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentLinearReservoirData.UrbanCatchment">
+            <summary>
+             Flag defining if the catchment is an urban or a rural catchment.
+             If value is undefined, it is automatically determined.
+             <para>
+             When automatically determined, a catchment is urban when it is French (<see cref="F:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.ModelType.FR"/>)
+             and has an <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentLinearReservoirData.ImperviousArea"/> factor larger than or equal to 0.2
+             </para>
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentLinearReservoirData.EffectiveAreaFraction">
             <summary>
             Effective area (fraction of full area) of the catchement used by the Dutch model
@@ -2703,9 +2784,14 @@
         </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentLinearReservoirData.ImperviousArea">
             <summary>
-            Impervious area is a factor which defines the part
+            Impervious area for the French model.
+            <para>
+            For an urban catchment it is also used as a factor which defines the part
             of the catchment considered to contribute to the runoff.
+            </para>
+            <para>
             Unit: [-]
+            </para>
             </summary>
         </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentLinearReservoirData.InitialLossMax">
@@ -2724,7 +2810,7 @@
         </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentLinearReservoirData.LagTime">
             <summary>
-            Lag time is the reciprocal equivalent of the 
+            Lag time is the reciprocal equivalent of the
             linear reservoir time constant
             used in model FR
             Unit: [s]
@@ -2776,6 +2862,23 @@
             Time in seconds where infiltration has taken place. Grows over the entire simulation
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.InfiltrationTime">
+            <summary>
+            Time in seconds where infiltration has taken place. Grows over the entire simulation
+            <para>
+            State variable for the Dutch model, <see cref="F:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.ModelType.NL"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.FirstReservoirOutflow">
+            <summary>
+            Runoff/outflow from first reservoir.
+            Only active when the double linear reservoir is active, i.e. the french rural catchment.
+            <para>
+            State variable
+            </para>
+            </summary>
+        </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir._bUrbanCatchment">
             <summary> Flag specifying whether catchment is urban (true) or rural (false) </summary>
         </member>
@@ -2784,7 +2887,7 @@
             Limit that determines if the catchment is urban or rural type.
             If the impervious area is smaller than this limit, the catchment is
             defined as Rural
-            Else if the impervious area if greater or equal to the limit, the 
+            Else if the impervious area if greater or equal to the limit, the
             catchment is defined as Urban.
             Unit: [-]
             Default: 0.2
@@ -2824,7 +2927,7 @@
             <summary>
             Calculates the linear reservoir coefficient
             = exp(-t/Kc) where Kc is the inverse of time constant (NL)
-            or the lag time divided 
+            or the lag time divided
             </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.Initialize(DHI.Mike1D.Generic.IDiagnostics)">
@@ -2856,6 +2959,16 @@
              FR model corresponds to C2
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.UrbanCatchment">
+            <summary>
+             Flag defining if the catchment is an urban or a rural catchment.
+             If value is undefined, it is automatically determined.
+             <para>
+             When automatically determined, a catchment is urban when it is French (<see cref="F:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.ModelType.FR"/>)
+             and has an <see cref="P:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.ImperviousArea"/> factor larger than or equal to 0.2
+             </para>
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.EffectiveAreaFraction">
             <summary>
             Effective area (fraction of full area) of the catchement used by the Dutch model
@@ -2864,8 +2977,14 @@
         </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.ImperviousArea">
             <summary>
-            Impervious area
+            Impervious area for the French model.
+            <para>
+            For an urban catchment it is also used as a factor which defines the part
+            of the catchment considered to contribute to the runoff.
+            </para>
+            <para>
             Unit: [-]
+            </para>
             </summary>
         </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.TimeConstant">
@@ -2880,7 +2999,8 @@
             <summary>
             Lag time is the reciprocal equivalent of the 
             linear reservoir time constant
-            used in model FR
+            used in model FR.
+            If set to 0, the linear reservoir time constant is calculated automatically.
             Unit: [s]
             default: 300
             </summary>
@@ -2934,13 +3054,31 @@
             FR: french model (C2)
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.TakeTimeStep">
-            <summary>
-            This procedure forwards the calculation with one time step.
-            </summary>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.PrepareForTimeStep">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.UpdateStorage">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.UpdateRouting">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.FinalizeTimeStep">
+            <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.VolumeInCatchment">
             <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentLinearReservoir.StateUpdated">
+            <summary>
+            If state has been updated from outside, call this method to recalculate state dependent parameters.
+            </summary>
         </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.ICatchmentNamData">
             <summary>
@@ -3617,7 +3755,7 @@
             Default: 0
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNamData._capilarFluxParameter">
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNamData._capillaryFluxParameter">
             <summary>
             Variable expressing at which ground water depth the capilar 
             flux is 1 mm/day when the lower zone is completely dry.
@@ -4981,7 +5119,8 @@
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._snowStorage">
             <summary>
-            State variable holding the amount of snow stored.
+            State variable holding the amount of snow stored, including the water retention (liquid water in snow),
+            i.e. the total mass of snow+water stored.
             Unit: [mm]
             </summary>
         </member>
@@ -5057,7 +5196,7 @@
             Unit: [mm/timestep]
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._capilarFlux">
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._capillaryFlux">
             <summary>
             Variable holding the total amount of water undergoing capillar movement during one time step.
             Unit: [mm]
@@ -5072,7 +5211,7 @@
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._interAndBaseFlow">
             <summary>
             Variable holding the sum of the interflor and the groundwaterflow.
-            Unit: [mm/hour]
+            Unit: [m/s]
             </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._totalInfiltration">
@@ -5081,34 +5220,60 @@
             Unit: [mm/timestep]
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._snowTemperature">
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._snowZoneTemperature">
             <summary>
-            Variable holding the temperature in the snow zone.
+            Computational variable holding the temperature in the snow zone.
             Unit: [Celcius]
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._snowPrecipitation">
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.SnowZoneTemperature">
             <summary>
-            Variable holding the amount of precipitation falling in each zone. It is determined as rainfall from forcing multiplied with the zone correction.
+            Computational variable holding the temperature in the snow zone.
+            Unit: [Celcius]
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._snowZonePrecipitation">
+            <summary>
+            Computational variable holding the amount of precipitation falling in each zone. It is determined as rainfall from forcing multiplied with the zone correction.
             Unit: [mm/hour]
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._snowCombinedDegreeDayCoeff">
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.SnowZonePrecipitation">
             <summary>
-            This variable holds the combined degree day coefficient, i.e. the degree day coefficient and the rain degree day coeffient
+            Computational variable holding the amount of precipitation falling in each zone. It is determined as rainfall from forcing multiplied with the zone correction.
+            Unit: [mm/hour]
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._snowZoneCombinedDegreeDayCoeff">
+            <summary>
+            Computational variable holding the combined degree day coefficient, i.e. the degree day coefficient and the rain degree day coeffient
             multiplied with the precipitation.
             Unit: [mm/Celcius/day]
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._snowAreaCoverage">
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.SnowZoneCombinedDegreeDayCoeff">
             <summary>
-            Variable holding the fraction of the catchment that is covered with snow.
+            Computational variable holding the combined degree day coefficient, i.e. the degree day coefficient and the rain degree day coeffient
+            multiplied with the precipitation.
+            Unit: [mm/Celcius/day]
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._snowZoneAreaCoverage">
+            <summary>
+            Computational variable holding the fraction of the catchment that is covered with snow.
             Unit: [dimensionless]
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._evaporationFromSnow">
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.SnowZoneAreaCoverage">
+            <summary> Computational variable holding the fraction of the catchment that is covered with snow. Unit: [dimensionless] </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.SnowZoneQMelt">
+            <summary> Computational variable holding the discharge from each snow zone from melting </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentNam._evaporationFromSnowModule">
             <summary>
-            This variable holds the evaporation taking place from a snow covered surface measured in mm/hour.
+            This variable holds the evaporation taking place when snow module is active, from a partly snow covered surface.
+            Evaporation only takes place on areas where there is no snow.
             Unit: [mm/hour]
             </summary>
         </member>
@@ -5156,9 +5321,6 @@
              Initialize Rainfall Runoff model. Sets up static data.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.InitialiseStateVariableTable">
-            <inheritdoc />
-        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.Type">
             <summary>
             The type of catchment: NAM, Urban A etc
@@ -5200,23 +5362,31 @@
              Update internal state of catchment to time Time()
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.TakeTimeStep">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.PrepareForTimeStep">
             <summary>
             This procedure forwards the NAM calculation with one time step.
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.UpdateStorage">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.UpdateRouting">
+            <inheritdoc />
+        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.CalculateStatistics">
             <inheritdoc />
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.CalculateYearlyStatistics">
-            <inheritdoc />
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.GetYearlyStat(System.Int32)">
+            <summary>
+            Get or create a <see cref="T:DHI.Mike1D.RainfallRunoffModule.NAMYearlyStat"/> object for the specified year.
+            </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.ResetEngineStateVariables">
             <summary>
             This routine resets certain state variables to zero before making calculations for the next time step.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.UpdateForcings(System.DateTime)">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.UpdateForcings">
             <summary>
             This routine updates the forcings that are used in several sub-routines:
             rainfall, evaporation, temperature, radiation, degree day coefficient and irrigation.
@@ -5224,7 +5394,7 @@
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.SnowModule(System.DateTime)">
             <summary>
-            This routime forwards the snow module one time step. The calculated runoff
+            This routine forwards the snow module one time step. The calculated runoff
             from snow is applied as input to the upper storage together with rain and evaporation.
             </summary>
             <param name="timeNew">The actual time during the simulation</param>
@@ -5235,7 +5405,6 @@
             </summary>
             <param name="minimumStorageforFullCoverage">The minimim storage for full coverage</param>
             <param name="presentStorage">The present value of the snow cover</param>
-            <returns></returns>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.GetDegreeDayCoeff(System.DateTime)">
             <summary>
@@ -5327,9 +5496,9 @@
             </summary>
             <param name="deficit"></param>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.CalculateCapilarFlux">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.CalculateCapillaryFlux">
             <summary>
-            This routine calculates the capilar flux form the ground water to the lower zone. In case the maximum
+            This routine calculates the capillary flux form the ground water to the lower zone. In case the maximum
             content of the lower zone is exceeded the excess water is stored in the upper storage. If the maximum
             content of the upper storage is exceeded the excess water is routed as overflow.
             </summary>
@@ -5350,8 +5519,7 @@
             at which the baseflow stops.
             </summary>
             <param name="initialCalculation">Flag telling if this routine is called during initialisation or during calculation.
-              True means it is called during initialisation, false means during calculation. It is true when NAM is called from MOUSE.
-              When called from MIKE11 it is false since here an initial baseflow is specified.</param>
+              True means it is called during initialisation, false means during calculation.</param>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.CalculateGwDepthForZeroBaseFlow(System.DateTime)">
             <summary>
@@ -5411,6 +5579,11 @@
             through the seond reservoir.
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.CalculateDerivedStateVariablesInitial">
+            <summary>
+            Update derived variables, mostly for better outputting at initial time step
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.CalculateDerivedStateVariables">
             <summary>
             This routine calulates the total runoff, the irrigation supply (if irrigation module is active) and combined interflow and groundwater flow.
@@ -5422,6 +5595,9 @@
             corresponds to the values written to the result file. All discharge variables are subject to a unit conversion. 
             During the calculation discharges are calculated using the unit mm/hour and must therefor be converted into m3/s. 
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.FinalizeTimeStep">
+            <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.LinearRouting(System.Double,System.Double,System.Double)">
             <summary>
@@ -5450,7 +5626,7 @@
             <summary>
             This function returns the actual rain on the catchment. If snow is not included it returns 
             the rainfall specified in the boundary. In case the snow module is activated the actual rain
-            is  calculated by adding the precipitaions on the different zones.
+            is  calculated by adding the precipitations on the different zones.
             Unit: [mm/hour]
             </summary>
             <returns></returns>
@@ -5464,14 +5640,6 @@
             <param name="m1">The first month that must be used for interpolation in seasonal data.</param>
             <param name="m2">The second month hat must be used for interpolation in seasonal data.</param>
             <param name="day">The number of days that must be used for interpolation in seasonal data.</param>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.TimeValueGetterRR(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity@)">
-            <summary>
-            Get value setter for the specified data quantity
-            </summary>
-            <param name="quantity">Requested Quantity</param>
-            <param name="actualQuantity">Actual quantity, may differ in description</param>
-            <returns>A value getter delegate that can set the value</returns>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.GetRequiredTypes">
             <summary>
@@ -5664,59 +5832,15 @@
             </para>
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.SnowQMelt">
-            <summary>
-            Discharge from each snow zone from melting
-            </summary>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc/>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.YearlyCapFlux">
-            <summary>
-            Yearly capilary flux
-            </summary>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc/>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.YearlyActualEvaporation">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.StateUpdated">
             <summary>
-            Yearly actual evaporation
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.YearlyRainfall">
-            <summary>
-            Yearly rainfall
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.YearlyIrrigation">
-            <summary>
-            Yearly irrigation
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.YearlyGroundWaterAbstraction">
-            <summary>
-            Yearly ground water abstraction
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.YearlyPotentialEvaporation">
-            <summary>
-            Yearly potential evaporation
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.YearlyInfiltrationToGroundWater">
-            <summary>
-            Yearly infiltration to groundwater
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.YearlyOverlandFlow">
-            <summary>
-            Yearly overland flow
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.YearlyBaseFlow">
-            <summary>
-            Yearly base flow
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.YearlyInterFlow">
-            <summary>
-            Yearly interflow
+            When state has been updated, this method can be called to update derived/computational variables
             </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentNam.OnDeserializingMethod(System.Runtime.Serialization.StreamingContext)">
@@ -5794,7 +5918,7 @@
             Enabled when <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentUHMData.HydrographType"/> is <see cref="F:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.HydrographTypes.UserDefined"/>.
             </para>
             <para>
-            Set to null to use instead the <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentUHMData.HydrographTsFileName"/> and <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentUHMData.HydrographTsItemNumber"/>
+            Set to null to use instead the <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentUHMData.HydrographTsFile"/> and <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentUHMData.HydrographTsItemNumber"/>
             </para>
             </summary>
         </member>
@@ -5807,9 +5931,18 @@
             </para>
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentUHMData.HydrographTsFile">
+            <summary>
+            User defined hydrograph time series file.
+            <para>
+            Enabled when <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentUHMData.HydrographType"/> is <see cref="F:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.HydrographTypes.UserDefined"/>
+            and <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentUHMData.Hydrograph"/> is null.
+            </para>
+            </summary>
+        </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentUHMData.HydrographTsItemNumber">
             <summary>
-            Item to use in <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentUHMData.HydrographTsFileName"/>
+            Item to use in <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentUHMData.HydrographTsFile"/>
             Note: this index is 1-based
             </summary>
         </member>
@@ -6005,14 +6138,22 @@
         <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.Hydrograph">
             <inheritdoc />
         </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.__hydrographTsFilename">
+            <summary> Backwards compatible serialization </summary>
+        </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.HydrographTsFileName">
+            <summary>
+            User defined hydrograph time series filename.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.HydrographTsFile">
             <summary>
             User defined hydrograph time series filename.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.HydrographTsItemNumber">
             <summary>
-            Item to use in <see cref="P:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.HydrographTsFileName"/>
+            Item to use in <see cref="P:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.HydrographTsFile"/>
             Note: this index is 1-based
             </summary>
         </member>
@@ -6157,18 +6298,6 @@
             in [m]
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.Runoff">
-            <summary>
-            Runoff.
-            <para>
-            Unit: [m3/s]
-            </para>
-            <para>
-            This is a computational variable. Setting this has no effect 
-            (apart from when writing initial conditions to result file)
-            </para>
-            </summary>
-        </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM._routingCourantNumber">
             <summary>
             Courant number for advanced advection scheme: Velocity of 
@@ -6264,21 +6393,25 @@
             pp. 224-228
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.TakeTimeStep">
-            <summary>
-            Take an UHM rainfall runoff time step
-            </summary>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.PrepareForTimeStep">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.UpdateStorage">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.UpdateRouting">
+            <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.AddBaseFlowToRunoff">
             <summary>
             Add base flow to the runoff
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.FinalizeTimeStep">
+            <inheritdoc />
+        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.VolumeInCatchment">
-            <summary>
-            Volume of water stored in catchment after previous TakeTimeStep()
-            </summary>
-            <returns></returns>
+            <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.ComputeSCSLoss">
             <summary>
@@ -6385,7 +6518,7 @@
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.HydrographTypes.UserDefined">
             <summary>
-            User defined hydrograph, stored in <see cref="P:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.HydrographTsFileName"/> and <see cref="P:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.HydrographTsItemNumber"/>.
+            User defined hydrograph, stored in <see cref="P:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.HydrographTsFile"/> and <see cref="P:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.HydrographTsItemNumber"/>.
             </summary>
         </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.LossModels">
@@ -6437,6 +6570,9 @@
             <summary>
             Lag time of Snyder's Synthetic Unit Hydrograph method, Alameda version
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc/>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentUHM.StateUpdated">
             <summary>
@@ -6690,18 +6826,6 @@
             </para>
             </summary>
         </member>
-        <member name="F:DHI.Mike1D.RainfallRunoffModule.Horton.Ft">
-            <summary>
-            Infiltration rate at current time step.
-            Unit: [m/s]
-            Computational variable.
-            <para>
-            This is stored and used when switching from
-            dry to wet mode, in order to get a smooth transition
-            of infiltration rates.
-            </para>
-            </summary>
-        </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Horton.Twet">
             <summary>
             Time of the wet Horton mode.
@@ -6722,6 +6846,18 @@
             </para>
             Unit: [s]
             State variable.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Horton.Ft">
+            <summary>
+            Infiltration rate at current time step.
+            Unit: [m/s]
+            Computational variable.
+            <para>
+            This is stored and used when switching from
+            dry to wet mode, in order to get a smooth transition
+            of infiltration rates.
+            </para>
             </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Horton.SwitchHortonModeTo(DHI.Mike1D.RainfallRunoffModule.HortonMode)">
@@ -6758,6 +6894,12 @@
             Integrate the wet Infiltration rate from 0 to time, giving a total infiltration depth in [m] since time zero of wet period
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Horton.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Horton.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc/>
+        </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.ICatchmentInfiltrationCalculator">
             <summary>
             Common interface for calculating infiltration
@@ -6778,6 +6920,59 @@
             <param name="depth">Current depth, depth available for infiltration. [m]</param>
             <returns>Infiltration rate [m/s]</returns>
         </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ICatchmentPlugin">
+            <summary>
+            A generic catchment plugin.
+            An example of such plugin is SWQ module.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ICatchmentPlugin.Initialize(DHI.Mike1D.RainfallRunoffModule.ICatchment)">
+            <summary> Initializes the plugin. </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ICatchmentPlugin.Prepare(System.DateTime)">
+            <summary> Prepares the plugin. </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ICatchmentPlugin.PrepareForTimeStep(System.DateTime)">
+            <summary> Prepares the plugin for the time step. </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ICatchmentPlugin.UpdateStorage">
+            <summary> Updates the storage for the catchment plugin. </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ICatchmentPlugin.UpdateRouting">
+            <summary> Updates the routing for the catchment plugin. </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ICatchmentPlugin.FinalizeTimeStep">
+            <summary> Finalizes time step for the catchment plugin. </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ICatchmentPlugin.AddToOffers">
+            <summary> Adds quantities provided by the plugin to offers. </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.EmptyCatchmentPlugin">
+            <summary>
+            An empty catchment plugin that does not do anything.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.EmptyCatchmentPlugin.Initialize(DHI.Mike1D.RainfallRunoffModule.ICatchment)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.EmptyCatchmentPlugin.Prepare(System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.EmptyCatchmentPlugin.PrepareForTimeStep(System.DateTime)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.EmptyCatchmentPlugin.UpdateStorage">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.EmptyCatchmentPlugin.UpdateRouting">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.EmptyCatchmentPlugin.FinalizeTimeStep">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.EmptyCatchmentPlugin.AddToOffers">
+            <inheritdoc />
+        </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.ICatchmentRunController">
             <summary>
             Controlling the time stepping of a standalone rainfall runoff simulation is done by this interface. 
@@ -6796,30 +6991,6 @@
             more correctly, the time where the <see cref="E:DHI.Mike1D.RainfallRunoffModule.Catchments.PostTimeStepEvent"/>
             will be raised. The catchments needs to be updated by a using component.
             </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentRunController.PerTimeStepUpdate">
-            <summary>
-            List of catchments that needs explicit updates, 
-            synchronizing of their time steps is handled by the
-            <see cref="M:DHI.Mike1D.RainfallRunoffModule.Catchments.RunUntil(System.DateTime)"/> method.
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.RainfallRunoffModule.CatchmentRunControllerPerTimestep">
-            <summary>
-            A <see cref="T:DHI.Mike1D.RainfallRunoffModule.ICatchmentRunController"/> that will make sure all catchments
-            performs all time steps.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentRunControllerPerTimestep.#ctor(System.DateTime,System.Collections.Generic.IList{DHI.Mike1D.RainfallRunoffModule.ICatchment})">
-            <summary>
-            Create new controller
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentRunControllerPerTimestep.TimeOfNextUpdate">
-            <inheritdoc />
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentRunControllerPerTimestep.PerTimeStepUpdate">
-            <inheritdoc />
         </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.IStormwaterLID">
             <summary>
@@ -8528,6 +8699,612 @@
             </summary>
             <param name="volume">Volume to calculate depth for. Must be less than volume of full swale</param>
         </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.EMCCalculator">
+            <summary>
+            A routing, pollutant build-up and wash-off calculator for SWQ module.
+            The wash-off is calculated based on Event Mean Concentration method.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.EMCCalculator._timeStepForEvents">
+            <summary>
+            Time step used to go through rainfall values to determine events and their volume.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.EMCCalculator._stopTime">
+            <summary>
+            Stop time of the simulation which is defined through method SetStopTime.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.EMCCalculator.SetStopTime(System.DateTime)">
+            <summary>
+            Method called from Catchments.RunUntil which defines a stop time of the simulation.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.EMCCalculator.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.EMCCalculator.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.RoutingKinematicWave">
+            <summary>
+            Washed-off pollutant mass routing for Kinematic Wave catchment.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.RoutingKinematicWave.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.RoutingKinematicWave.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.RoutingLinearReservoir">
+            <summary>
+            Washed-off pollutant mass routing for Linear Reservoir catchment.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.RoutingLinearReservoir.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.RoutingLinearReservoir.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.RoutingNam">
+            <summary>
+            Washed-off pollutant mass routing for NAM catchment.
+            TODO: This is just initial implementation. Does not give useful results yet!
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.RoutingTimeArea">
+            <summary>
+            Washed-off pollutant mass routing for Time Area catchment.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.RoutingTimeArea.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.RoutingTimeArea.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.RoutingUHM">
+            <summary>
+            Washed-off pollutant mass routing for UHM catchment.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.RoutingUHM.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.RoutingUHM.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQModule">
+            <summary>
+            Module for performing Storm Water Quality (SWQ) simulations.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQModule.#ctor(DHI.Mike1D.Generic.IDiagnostics)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQModule.InitializeAttachedPollutants">
+            <summary>
+            Find actual AD component, <see cref="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.AttachedComponent.Component"/>, from <see cref="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.AttachedComponent.ComponentId"/>.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQModule.CreateCatchmentPlugins">
+            <summary>
+            Create calculators from pollutant specification.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPlugin">
+            <summary>
+            A Storm Water Quality (SWQ) plugin handling different SWQ calculators for specified catchment.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPlugin.#ctor(DHI.Mike1D.RainfallRunoffModule.Catchment)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPlugin.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPlugin.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc/>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPluginCatchmentCombined">
+            <summary>
+            An SWQ plugin handling combined catchments.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQModelTypes">
+            <summary>
+            SWQ model types.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQModelTypes.Concentration">
+            <summary> Concentration from constant value, periodic input, or time series input. </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQModelTypes.TableConcentration">
+            <summary> Table concentration method. </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQModelTypes.BuildUpWashOff">
+            <summary> Build-up/wash-off method. </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQModelTypes.EventMeanConcentration">
+            <summary> Event mean concentration method. </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.BuildUpTypes">
+            <summary>
+            Build-up types
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.BuildUpTypes.Linear">
+            <summary> Linear build-up. </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.BuildUpTypes.Exponential">
+            <summary> Exponential build-up. </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SurfaceLoadTypes">
+            <summary>
+            Surface load types
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SurfaceLoadTypes.Pollutant">
+            <summary> Pollutant corresponding to AD component. </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SurfaceLoadTypes.Sediment">
+            <summary> Sediment corresponding to ST component. </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IBuildUpData">
+            <summary>
+            Data needed for different build-up methods.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IBuildUpData.BuildUpType">
+            <summary>
+            Build-up type.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IBuildUpData.BuildUpRate">
+            <summary>
+            Accumulation rate.
+            Unit: [kg/(m^2*s)]
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IBuildUpData.MaximumBuildUpMassPerArea">
+            <summary>
+            Maximum accumulated mass per area.
+            Unit: [kg/m^2]
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IBuildUpData.ADWPInitial">
+            <summary>
+            Duration of ADWP before the start of the simulation.
+            It determines the initial built-up mass.
+            Note: ADWP - Antecedent Dry Weather Period.
+            Unit: [s]
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IWashOffData">
+            <summary>
+            Data needed for wash-off formula using power law dependence on rainfall intensity.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IWashOffData.DetachmentRate">
+            <summary>
+            Detachment rate.
+            Used by the RainIntensityPowerLaw method.
+            Unit: [kg/(m^2*s)]
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IWashOffData.WashOffExponent">
+            <summary>
+            Wash-off exponent.
+            Used by the RainIntensityPowerLaw method.
+            Unit: [-]
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IEMCData">
+            <summary>
+            Data for Event Mean Concentration (EMC) method.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IEMCData.ADWPMinimal">
+            <summary>
+            When DWP between two consecutive runoff events is shorter than this value,
+            EMC method will treat the two events as one event.
+            Note: ADWP - Antecedent Dry Weather Period.
+            Unit: [s]
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IEMCData.EventThreshold">
+            <summary>
+            Threshold which excludes events with low rainfall intensity.
+            Unit: [m/s]
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IEMCData.MaximumEMC">
+            <summary>
+            Sets the upper limit on surface pollutant concentration in runoff.
+            Unit: [kg/m^3]
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IAttachedComponent">
+            <summary>
+            Contains info about attached component.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IAttachedComponent.ComponentId">
+            <summary>
+            Attached pollutant component Id.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IAttachedComponent.Fraction">
+            <summary>
+            Pollutant mass is this fraction of the sediment mass.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.BuildUpData">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.BuildUpData.BuildUpType">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.BuildUpData.BuildUpRate">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.BuildUpData.MaximumBuildUpMassPerArea">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.BuildUpData.ADWPInitial">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.WashOffData">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.WashOffData.DetachmentRate">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.WashOffData.WashOffExponent">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.EMCData">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.EMCData.ADWPMinimal">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.EMCData.EventThreshold">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.EMCData.MaximumEMC">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.AttachedComponent">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.AttachedComponent.ComponentId">
+            <inheritdoc />
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.AttachedComponent.Fraction">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutantData">
+            <summary>
+            Data for SWQ pollutant model
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutantData.BuildUpData">
+            <see cref="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IBuildUpData"/>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutantData.WashOffData">
+            <see cref="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IWashOffData"/>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutantData.EMCData">
+            <see cref="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IEMCData"/>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutantData.ModelType">
+            <see cref="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQModelTypes"/>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutantData.SurfaceLoadType">
+            <see cref="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SurfaceLoadTypes"/>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutantData.ComponentId">
+            <summary>
+            The Id of the AD or ST component the SWQ model corresponds to.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutantData.AttachedComponents">
+            <summary>
+            AD model components attached to the ST component.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutantData.Id">
+            <summary>
+            The Id of the SWQ model.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutant">
+            <summary>
+            Pollutant used in computations
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutant.Data">
+            <see cref="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutantData"/>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorBase">
+            <summary>
+            A base class for Storm Water Quality (SWQ) calculators.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorBase.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorBase.#ctor(DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutant)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.ISWQCalculatorOffers">
+            <summary>
+            A base interface for SWQ routing calculators.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorBaseOffers.AttachedComponentCalculators">
+            <summary> For an ST component, calculation of attached component loads and concentration based on the ST component loads and concentrations </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorBaseOffers._massOnCatchment">
+            <summary> Mass on catchment [kg].  </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorBaseOffers._massRouted">
+            <summary> Mass routed in this timestep in [kg] </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorBaseOffers._massRoutedAccumulated">
+            <summary> Mass routed since the start of the simulation [kg] </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorBaseOffers._concentration">
+            <summary> Concentration of routed water, in [kg/m3] for ordinary AD components </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorBaseOffers._transport">
+            <summary> Mass flux, [kg/s] </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQRoutingCalculatorBase">
+            <summary>
+            A base class for SWQ routing calculators.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQRoutingCalculatorBase.#ctor(DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutant,DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.BuildUpWashOffCalculator)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQRoutingCalculatorBase.#ctor(DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutant)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQAttachedComponentCalculator">
+            <summary>
+            A SWQ calculator for attached components.
+            Simply holds the offers and the getters.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorBoundary">
+            <summary>
+            A class for calculating water quality directly from concentration.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorBoundary.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorBoundary.#ctor(DHI.Mike1D.BoundaryModule.BoundarySourceComponent)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorBoundary.#ctor(DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutant)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorDischargeBoundary">
+            <summary>
+            A class for calculating water quality directly from concentration.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorDischargeBoundary.#ctor(DHI.Mike1D.BoundaryModule.ICatchmentSourceBoundary,DHI.Mike1D.BoundaryModule.BoundarySourceComponent)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorTable">
+            <summary>
+            A class for calculating water quality directly from table concentration.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorTable.#ctor(DHI.Mike1D.BoundaryModule.BoundaryItemTableConcentration)">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQCalculatorTable.#ctor(DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPollutant)">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.BuildUpWashOffCalculator">
+            <summary>
+            A pollutant build-up and wash-off calculator for SWQ module.
+            The wash-off is calculated based on rainfall intensity.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.BuildUpWashOffCalculator.Mass">
+            <summary> Build up mass per area on catchment. </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.BuildUpWashOffCalculator.Time">
+            <summary> Simulation time. </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.BuildUpWashOffCalculator.WashedOffMass">
+            <summary> Washed off mass per area. </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.IBuildUpFunction">
+            <summary>
+            Interface for build-up function.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.LinearBuildUpFunction">
+            <summary>
+            Linear build-up function.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.ExponentialBuildUpFunction">
+            <summary>
+            Exponential build-up function.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR">
+            <summary>
+            Enumeration of predefined quantities for RR module.
+            </summary>
+            <remarks>
+            Remember to add an entry to the
+            <see cref="T:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityTableRR"/>
+            a new <see cref="T:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR"/> is created.
+            </remarks>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.Undefined">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.KinematicWaveRunoff">
+            <summary>
+            Runoff
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.KinematicWaveDepth">
+            <summary>
+            Depth
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.KinematicWaveWettingLoss">
+            <summary>
+            Wetting loss
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.KinematicWaveStorageLoss">
+            <summary>
+            Storage loss
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.KinematicWaveInfiltration">
+            <summary>
+            Infiltration
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.KinematicWaveInfiltrationPotential">
+            <summary>
+            Potential infiltration
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.TimeAreaSnowStorage">
+            <summary>
+            Snow storage
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.TimeAreaLoss">
+            <summary>
+            Loss
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.TimeAreaInitialLossStorage">
+            <summary>
+            Initial loss storage
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.UHMLossVolume">
+            <summary>
+            Loss volume
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.UHMExcessRainfall">
+            <summary>
+            Excess rainfall
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.FastRunoff">
+            <summary>
+            Fast runoff
+            Also represents boundary: Stormwater loads (surface)
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR.SlowRunoff">
+            <summary>
+            Slow runoff
+            Also represents boundary: Stormwater loads (RDII)
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityTableRR">
+            <summary>
+            Dictionary from PredefinedQuantityRR to actual Quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityTableRR.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.RRPredefinedQuantityData">
+            <summary>
+            Static class containing the <see cref="T:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityTableRR"/>.
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.RRPredefinedQuantityData.Table">
+            <summary>
+            Instance of <see cref="T:DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityTableRR"/>
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.RRQuantities">
+            <summary>
+            Provides methods for creating RR quantities.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.RRQuantities.Create(DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR)">
+            <summary>
+            Returns an RR quantity from predefined quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.RRQuantities.Create(DHI.Mike1D.RainfallRunoffModule.PredefinedQuantityRR,DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.SurfaceType,System.String)">
+            <summary>
+            Returns an RR quantity from predefined quantity and CatchmentKinematicWave surface type.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.RRQuantities.Create(DHI.Mike1D.ADDataAccess.ADComponent,DHI.Mike1D.Generic.PredefinedQuantityAD,DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.SurfaceType,System.String)">
+            <summary>
+            Returns an AD quantity from predefined quantity and CatchmentKinematicWave surface type for given AD component.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.RRQuantities.Create(DHI.Mike1D.ADDataAccess.ADComponent,DHI.Mike1D.Generic.PredefinedQuantityAD,DHI.Mike1D.Generic.ComponentResultType,DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.SurfaceType,System.String)">
+            <summary>
+            Returns an AD quantity from predefined quantity and CatchmentKinematicWave surface type for given AD component.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.RRQuantities.Create(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.PredefinedQuantityAD,DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.SurfaceType,System.String)">
+            <summary>
+            Returns an AD quantity from predefined quantity and CatchmentKinematicWave surface type for given AD quantity.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.RRQuantities.Create(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.RainfallRunoffModule.CatchmentKinematicWave.SurfaceType,System.String)">
+            <summary>
+            Combines a quantity with CatchmentKinematicWave surface type.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffClassFactory">
+            <summary>
+            Factory class for creating custom classes for RainfallRunoff processing
+            <para>
+            To use a custom class overriding the default implementation, create a new class
+            that extends from the default implementation and overrides its methods, and
+            add a function here that creates an instance of this new class.
+            </para>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffClassFactory.Instance">
+            <summary>
+            Static instance of <see cref="T:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffClassFactory"/>
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffClassFactory.RRStateFileWriterCreator">
+            <summary>
+            Function to create a custom <see cref="T:DHI.Mike1D.RainfallRunoffModule.RRStatFileWriter"/>. If null, the default <see cref="T:DHI.Mike1D.RainfallRunoffModule.RRStatFileWriter"/> implementation is used.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffClassFactory.CreateRRStatFileWriter(DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData)">
+            <summary>
+            Create a RRStatFileWriter
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData">
             <summary>
              Access to catchment data
@@ -8546,6 +9323,11 @@
         <member name="P:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData.Catchments">
             <summary>
              Get collection of catchments 
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData.Pollutants">
+            <summary>
+             Get a list of pollutants for SWQ simulation
             </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData.#ctor">
@@ -8578,6 +9360,11 @@
         <member name="F:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData.LCRV">
             <summary>
             Internal method
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData.ProjectionString">
+            <summary>
+            Projection string, inherited from MIKE 1D Data object.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData.AdditionalData">
@@ -8621,11 +9408,6 @@
             Destructor
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData.WriteRRStatFile(System.DateTime,System.DateTime,DHI.Mike1D.Generic.IDiagnostics)">
-            <summary>
-            Write RR stat file
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData.Finish">
             <summary>
             Finish simulation. Calls finish on all cathcments that require finalization.
@@ -8642,6 +9424,21 @@
              A collection of Rainfall Runoff catchments
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchments.PauseSimulation">
+            <summary>
+            If this is true, then the simulation will pause before the next timestep
+            </summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchments._catchmentCurr">
+            <summary> Key is <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchment.CurrentTime"/> and Value is a list of all catchments with that current time.
+            <para>    SortedDictionary is a binary search tree with O(log(n)) insertion and removal </para></summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchments._catchmentCurrMap">
+            <summary> In sync with <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchments._catchmentCurr"/>, for faster lookup than O(log(n))</summary>
+        </member>
+        <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchments._catchmentCurrListPool">
+            <summary> Pool of <code>List{ICatchment}</code>, to be reused in the <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchments._catchmentCurr"/> </summary>
+        </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchments._griddedSourceTypeMap">
             <summary>
             Map for gridded data. Set up in initialize and used and cleared in prepare
@@ -8650,6 +9447,11 @@
         <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchments.CurrentTime">
             <summary>
             Time of which all catchments has been updated to.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchments.MinTime">
+            <summary>
+             Minimum time specifies how far back in time the catchment caches values. Set to <see cref="F:System.DateTime.MinValue"/> to not cache values.
             </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.Catchments._catchmentNameMap">
@@ -8693,6 +9495,14 @@
              Prepare Rainfall Runoff models. Sets up dynamic data so that the model is ready for first time step.
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchments.EnableTimeBuffer">
+            <summary>
+            Enable time buffering for all catchments.
+            <para>
+            Required when running adaptive time stepping HD simulations
+            </para>
+            </summary>
+        </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.Catchments.TimeEvent">
             <summary>
              Delegate that is used when triggering a TimeStepPerfomed event.
@@ -8726,6 +9536,16 @@
             Performs time steps until the time is reached
             </summary>
             <param name="stoptime">Time to run until</param>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchments.PerformTimestep">
+            <summary>
+            Perform time step, progressing all catchments with the <see cref="P:DHI.Mike1D.RainfallRunoffModule.Catchments.CurrentTime"/>
+            as their <see cref="P:DHI.Mike1D.RainfallRunoffModule.ICatchment.CurrentTime"/> one time step.
+            <para>
+            Since catchments may have different time steps, it is unknown how many catchments
+            are performing a time step every time this method is called.
+            </para>
+            </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchments.StopRainfallRunoffSimulation">
             <summary>
@@ -8888,11 +9708,6 @@
             Maximum time step step used in RunUntil
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.Catchments.RunController">
-            <summary>
-            Controller used for executing simulation
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.Catchments.Validate">
             <summary>
             Validates the object
@@ -8964,23 +9779,50 @@
              Load a time seris as a catchment
             </summary>
         </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.FilePath">
+            <summary>
+             Set file path of time series
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.#ctor(System.String)">
             <summary>
              Contstructor
             </summary>
             <param name="name"></param>
         </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.Type">
+            <summary>
+            The type of catchment: NAM, Urban A etc
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.TimeOfNextUpdate">
             <summary>
             Return the time of next update. Used for PostTimeStepEvent event in Catchments.
             </summary>
-            <returns></returns>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.TransferToStateVariableTable">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.Initialize(DHI.Mike1D.Generic.IDiagnostics)">
             <summary>
-            This routine stores the calculated variables in variables ready for export. The values in these state variable 
-            corresponds to the values written to the result file. All discharge variables are subject to a unit conversion. 
-            During the calculation discharges are calculated using the unit mm/hour and must therefor be converted into m3/s. 
+             Initialize Rainfall Runoff model. Sets up static data.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.Prepare(System.DateTime,System.DateTime,DHI.Mike1D.RainfallRunoffModule.RRParameters,DHI.Mike1D.Generic.IDiagnostics)">
+            <summary>
+             Prepare Rainfall Runoff model. Sets up dynamic data so that the model is ready for first time step.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.GetRequiredTypes">
+            <summary>
+            Get the type of boundary required by this catchment
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.ApplyBoundary(DHI.Mike1D.BoundaryModule.CatchmentSourceBoundaryTypes,DHI.Mike1D.BoundaryModule.IBoundarySource)">
+            <summary>
+             Apply a boundary to this catchment
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.ApplyBoundary(DHI.Mike1D.BoundaryModule.GlobalSourceBoundaryTypes,DHI.Mike1D.BoundaryModule.GlobalGeoLocatedSource)">
+            <summary>
+             Apply a boundary to this catchment
             </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.Update(System.DateTime)">
@@ -8993,58 +9835,16 @@
             This procedure forwards the calculation with one time step.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.Initialize(DHI.Mike1D.Generic.IDiagnostics)">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.TransferToStateVariableTable">
             <summary>
-             Initialize Rainfall Runoff model. Sets up static data.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.Type">
-            <summary>
-            The type of catchment: NAM, Urban A etc
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.Prepare(System.DateTime,System.DateTime,DHI.Mike1D.RainfallRunoffModule.RRParameters,DHI.Mike1D.Generic.IDiagnostics)">
-            <summary>
-             Prepare Rainfall Runoff model. Sets up dynamic data so that the model is ready for first time step.
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.TimeValueGetterRR(DHI.Mike1D.Generic.IQuantity,DHI.Mike1D.Generic.IQuantity@)">
-            <summary>
-            Get value setter for the specified data quantity
-            </summary>
-            <param name="quantity">Requested Quantity</param>
-            <param name="actualQuantity">Actual quantity. May differ on the description</param>
-            <returns>A value getter delegate that can set the value</returns>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.GetRequiredTypes">
-            <summary>
-            Get the type of boundary required by this catchment
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.ApplyBoundary(DHI.Mike1D.BoundaryModule.CatchmentSourceBoundaryTypes,DHI.Mike1D.BoundaryModule.IBoundarySource)">
-            <summary>
-             Apply a boundary to this catchment
-            </summary>
-            <param name="catchmentSourceBoundaryType"></param>
-            <param name="catchmentSourceBoundary"></param>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.ApplyBoundary(DHI.Mike1D.BoundaryModule.GlobalSourceBoundaryTypes,DHI.Mike1D.BoundaryModule.GlobalGeoLocatedSource)">
-            <summary>
-             Apply a boundary to this catchment
-            </summary>
-            <param name="type"></param>
-            <param name="geoLocatedSource"></param>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.CatchmentFromTimeSeries.FilePath">
-            <summary>
-             Set file path of time series
+            This routine stores the calculated variables in variables ready for export. The values in these state variable 
+            corresponds to the values written to the result file. All discharge variables are subject to a unit conversion. 
+            During the calculation discharges are calculated using the unit mm/hour and must therefor be converted into m3/s. 
             </summary>
         </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.ICatchment">
             <summary>
-             Interface to Rainfall Runoff catchments. Specific catchments can inherit from the 
+             Interface to Rainfall Runoff catchments. Specific catchments can inherit from the
              abstract Catchment class instead of implementing this interface directly.
             </summary>
         </member>
@@ -9058,6 +9858,16 @@
              Prepare Rainfall Runoff model. Sets up dynamic data so that the model is ready for first time step.
             </summary>
         </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ICatchment.InitializePlugins">
+            <summary>
+            Initializes the cathcment plugins.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.ICatchment.PreparePlugins(System.DateTime)">
+            <summary>
+            Prepares the cathcment plugins.
+            </summary>
+        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.ICatchment.Type">
             <summary>
             Type of model used in catchment
@@ -9066,6 +9876,12 @@
         <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchment.Area">
             <summary>
              Total area of catchment
+             Unit: [m2]
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchment.EffectiveArea">
+            <summary>
+             Effective area of catchment, where runoff takes place.
              Unit: [m2]
             </summary>
         </member>
@@ -9080,6 +9896,13 @@
             Return the time of next update. Used for PostTimeStepEvent event in Catchments.
             </summary>
             <returns></returns>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchment.EndTime">
+            <summary>
+            Return the end time of the catchment simulation.
+            This is set during prepare, and the catchment must
+            make sure not to run beyond this time.
+            </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.ICatchment.PerformTimeStep">
             <summary>
@@ -9098,16 +9921,16 @@
         </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchment.CatchmentName">
             <summary>
-             Catchment name. 
+             Catchment name.
              <para>
-             The name is not unique, there may be several catchment models for one catchment, 
+             The name is not unique, there may be several catchment models for one catchment,
              however all catchments with the same name should/must share the same catchment geometry.
              </para>
             </summary>
         </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchment.ModelId">
             <summary>
-             Catchment model ID. Unique id. 
+             Catchment model ID. Unique id.
             </summary>
         </member>
         <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchment.Name">
@@ -9146,15 +9969,17 @@
             Observed data. Used for creating calibration plots and for auto-calibration reference data.
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchment.YearlyRunoff">
-            <summary>
-            Return dictionary of runoff as a function of year
-            </summary>
-        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.ICatchment.ResetBoundaries">
             <summary>
             Remove boundaries applied in previous runs
             </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchment.Runoff">
+            <summary>
+             Total runoff from catchment at present time step.
+             Unit: [m^3/s]
+            </summary>
+             double SumRunoff { get; set; }
         </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.ICatchmentCombined">
             <summary>
@@ -9165,6 +9990,22 @@
         <member name="M:DHI.Mike1D.RainfallRunoffModule.ICatchmentCombined.Initialize(DHI.Mike1D.RainfallRunoffModule.Catchments,DHI.Mike1D.Generic.IDiagnostics)">
             <summary>
              Initialize Rainfall Runoff model. Sets up static data.
+            </summary>
+        </member>
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.ICatchmentSWQ">
+            <summary>
+            Interface for classes that wants to support SWQ calculations
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentSWQ.VolumeOnGroundAdded">
+            <summary>
+            Volume of water added to catchment after a time step.
+            This water will be eventually routed.
+            </summary>
+        </member>
+        <member name="P:DHI.Mike1D.RainfallRunoffModule.ICatchmentSWQ.BoundarySourceRainfall">
+            <summary>
+            Rainfall boundary
             </summary>
         </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.ICatchmentADComponent">
@@ -9359,7 +10200,7 @@
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea._bHasDischarged">
             <summary>
-            Flag specifying if last time step had a positive runof
+            Flag specifying if last time step had a positive runoff
             </summary>
         </member>
         <member name="F:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea._method">
@@ -9474,7 +10315,7 @@
             <summary>
             Number of cells that needs to be defined for this catchment.
             This parameter depends on the time step length and the <see cref="P:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.ConcentrationTime"/>.
-            Initialized ruing prepare
+            Initialized during prepare
             </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.#ctor(System.String)">
@@ -9529,15 +10370,22 @@
             <param name="time">Relative time</param>
             <returns>Relative area</returns>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.TakeTimeStep">
-            <summary>
-            This procedure forwards the Time-Area calculation with one time step.
-            </summary>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.PrepareForTimeStep">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.UpdateStorage">
+            <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.ComputeInitialLossfromSurfaceStorage">
             <summary>
             Compute losses from surface storage
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.UpdateRouting">
+            <inheritdoc />
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.FinalizeTimeStep">
+            <inheritdoc />
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.VolumeInCatchment">
             <inheritdoc />
@@ -9554,7 +10402,7 @@
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.BCOutilRainState">
             <summary>
             This methods updates the rain state, and checks when the next rain state starts 
-            and ends. This is usefull for the jumping procedure.
+            and ends. This is useful for the jumping procedure.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.FindTimeRainStarts(System.DateTime)">
@@ -9570,6 +10418,12 @@
             <summary>
             When state has been updated, this method can be called to update derived/computational variables
             </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.WriteState(DHI.Mike1D.ModelState.ModelStateWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.ReadState(DHI.Mike1D.ModelState.ModelStateReader)">
+            <inheritdoc/>
         </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.CatchmentTimeArea.MethodType">
             <summary>
@@ -9683,6 +10537,12 @@
             <summary>
             Find all catchments with the specified name, and offering the specified quantity.
             Returns null if none found.
+            </summary>
+        </member>
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.RRExtensions.GetOrCreateSWQPlugin(DHI.Mike1D.RainfallRunoffModule.Catchment)">
+            <summary>
+            In the <see cref="F:DHI.Mike1D.RainfallRunoffModule.Catchment.CatchmentPlugins"/>, check if an <see cref="T:DHI.Mike1D.RainfallRunoffModule.ModuleSWQ.SWQPlugin"/> is
+            already there. Otherwise create one and add it.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.RRExtensions.UHMRescaleTimeStep(DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData,System.Int32)">
@@ -9811,63 +10671,24 @@
             <param name="value">Value for quantity</param>
             <returns>True if value found, false if not</returns>
         </member>
-        <member name="T:DHI.Mike1D.RainfallRunoffModule.StateVariables">
+        <member name="T:DHI.Mike1D.RainfallRunoffModule.RRStatFileWriter">
             <summary>
-            Enumerable helper class that provides fast lookup to a set containing StateVariable
+            Class for writing the "RRStat.txt" file.
             </summary>
         </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.StateVariables.#ctor">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.RRStatFileWriter.#ctor(DHI.Mike1D.RainfallRunoffModule.RainfallRunoffData)">
             <summary>
-            Default constructor
+            Constructor
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.StateVariables.Item(DHI.Mike1D.RainfallRunoffModule.IDs)">
+        <member name="M:DHI.Mike1D.RainfallRunoffModule.RRStatFileWriter.WriteRRStatFile(System.DateTime,System.DateTime,DHI.Mike1D.Generic.IDiagnostics)">
             <summary>
-            Accessor
+            Write RR stat file
             </summary>
-            <param name="i"></param>
-            <returns></returns>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.StateVariables.GetEnumerator">
-            <summary>
-            Get enumerator
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.StateVariables.System#Collections#IEnumerable#GetEnumerator">
-            <summary>
-            Get enumerator
-            </summary>
-            <returns></returns>
         </member>
         <member name="T:DHI.Mike1D.RainfallRunoffModule.StateVariable">
             <summary>
             A class that provides linear interpolation between to values of a state variable. 
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.StateVariable.#ctor">
-            <summary>
-            Default constructor
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.StateVariable.#ctor(DHI.Generic.MikeZero.eumItem,System.String)">
-            <summary>
-            Constructor
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.StateVariable.#ctor(DHI.Generic.MikeZero.eumItem,System.String,System.String)">
-            <summary>
-            Constructor
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.StateVariable.#ctor(DHI.Mike1D.Generic.PredefinedQuantity)">
-            <summary>
-            Constructor
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.StateVariable.#ctor(DHI.Mike1D.Generic.PredefinedQuantity,System.Int32)">
-            <summary>
-            Constructor, including a zone number.
             </summary>
         </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.StateVariable.UpdateState(System.Double)">
@@ -9885,30 +10706,9 @@
             Value of the state varibale at at time N
             </summary>
         </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.StateVariable.Act">
-            <summary>
-            The value of the state variable after interpolation (actual value)
-            </summary>
-        </member>
-        <member name="P:DHI.Mike1D.RainfallRunoffModule.StateVariable.Quantity">
-            <summary>
-            Quantity of this state variable
-            </summary>
-        </member>
-        <member name="M:DHI.Mike1D.RainfallRunoffModule.StateVariable.Interpolate(System.Double)">
-            <summary>
-            Perform interpolation
-            </summary>
-            <param name="ratio"></param>
-        </member>
         <member name="M:DHI.Mike1D.RainfallRunoffModule.StateVariable.Initialize">
             <summary>
             Initialize values at time N and actual value (both set equal to the value to time Np1)
-            </summary>
-        </member>
-        <member name="T:DHI.Mike1D.RainfallRunoffModule.IDs">
-            <summary>
-            IDs of state variables.
             </summary>
         </member>
     </members>
