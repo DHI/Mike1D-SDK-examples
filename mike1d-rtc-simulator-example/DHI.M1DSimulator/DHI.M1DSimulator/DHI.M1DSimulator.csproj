@@ -33,60 +33,46 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DHI.Math.Expression, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Math.Expression.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Math.Expression.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.BoundaryModule, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.BoundaryModule.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Mike1D.BoundaryModule.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.ControlModule, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.ControlModule.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Mike1D.ControlModule.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.CrossSectionModule, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.CrossSectionModule.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Mike1D.CrossSectionModule.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.Engine, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.Engine.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Mike1D.Engine.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.Generic, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.Generic.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Mike1D.Generic.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.HDParameterDataAccess, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.HDParameterDataAccess.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Mike1D.HDParameterDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.Mike1DDataAccess, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.Mike1DDataAccess.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Mike1D.Mike1DDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.NetworkDataAccess, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.NetworkDataAccess.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Mike1D.NetworkDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.Optimization, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.Optimization.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Mike1D.Optimization.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.RainfallRunoffModule, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.RainfallRunoffModule.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Mike1D.RainfallRunoffModule.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.ResultDataAccess, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.ResultDataAccess.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Mike1D.ResultDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.SimLauncher, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.SimLauncher.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Mike1D.SimLauncher.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.StructureModule, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <HintPath>..\packages\DHI.Mike1D.16.0.0-rc5\lib\net45\DHI.Mike1D.StructureModule.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\DHI.Mike1D.16.0.0\lib\net45\DHI.Mike1D.StructureModule.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
