@@ -1,20 +1,35 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DHI.M1DSimulator", "DHI.M1DSimulator\DHI.M1DSimulator.csproj", "{CCBFD3B9-23D8-47C5-B0DB-16EBF770F6EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DHI.M1DSimulator.Test", "DHI.M1DSimulator.Test\DHI.M1DSimulator.Test.csproj", "{D1751E55-624F-4FF3-99F2-603680A0044A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CCBFD3B9-23D8-47C5-B0DB-16EBF770F6EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CCBFD3B9-23D8-47C5-B0DB-16EBF770F6EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCBFD3B9-23D8-47C5-B0DB-16EBF770F6EA}.Debug|x64.ActiveCfg = Debug|x64
+		{CCBFD3B9-23D8-47C5-B0DB-16EBF770F6EA}.Debug|x64.Build.0 = Debug|x64
 		{CCBFD3B9-23D8-47C5-B0DB-16EBF770F6EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCBFD3B9-23D8-47C5-B0DB-16EBF770F6EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCBFD3B9-23D8-47C5-B0DB-16EBF770F6EA}.Release|x64.ActiveCfg = Release|x64
+		{CCBFD3B9-23D8-47C5-B0DB-16EBF770F6EA}.Release|x64.Build.0 = Release|x64
+		{D1751E55-624F-4FF3-99F2-603680A0044A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1751E55-624F-4FF3-99F2-603680A0044A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1751E55-624F-4FF3-99F2-603680A0044A}.Debug|x64.ActiveCfg = Debug|x64
+		{D1751E55-624F-4FF3-99F2-603680A0044A}.Debug|x64.Build.0 = Debug|x64
+		{D1751E55-624F-4FF3-99F2-603680A0044A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1751E55-624F-4FF3-99F2-603680A0044A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1751E55-624F-4FF3-99F2-603680A0044A}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
