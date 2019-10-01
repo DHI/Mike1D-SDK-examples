@@ -1,19 +1,22 @@
 clear, clc
-dllpath = 'C:/ ?? /M1DSimulator/DHI.M1D/DHI.M1DSimulator/bin/Debug/';
+dllpath = fullfile(pwd, '.\Release\');
 NET.addAssembly([dllpath 'DHI.M1DSimulator.dll']);
-import System.*; import DHI.M1DSimulator.*
+import System.*; import DHI.M1DSimulator.*; import DHI.Mike.Install.*
 
-modelFilePath = 'C:\MIKEUrban_M1D_model.m1dx';
+MikeImport.SetupLatest();
+
+modelFilePath = '.\MU\RTCExampleBase.m1dx';
 simulator = M1DSimulatorRtc(modelFilePath);
-simulator.RainfallRunoffResultDataFilePath = 'C:\RainEvent.res1d';
-simulator.CatchmentDischargeResultDataFilePath = 'C:\CatchmentDischarge.res1d';
-simulator.ResultBaseFilePath = 'C:\M1DSimulatorExample1.res1d';
+
+% simulator.RainfallRunoffResultDataFilePath = 'C:\RainEvent.res1d';
+% simulator.CatchmentDischargeResultDataFilePath = 'C:\CatchmentDischarge.res1d';
+% simulator.ResultBaseFilePath = 'C:\M1DSimulatorExample1.res1d';
 
 % Add watervolume to result file
 simulator.SetQuantitiesOfResultSpecification(cell2arrayNET({'WaterVolume', 'Discharge'}));
 
 % Set simulation start and end
-from = DateTime(2014, 7, 12, 10, 45, 0); // Original from model: simulator.SimulationStart and simulator.SimulationEnd
+from = DateTime(2014, 7, 12, 10, 45, 0);
 to = DateTime(2014, 7, 12, 10, 55, 0);
 
 simulator.PrepareSimulation(from, to);
@@ -21,13 +24,13 @@ simulator.PrepareSimulation(from, to);
 actionNames = simulator.PidActionIds; % Get action Ids
 
 % Setup PIDs (before running simulation)
-simulator.PrepareSetpointPID('action_PID_onActuatorName', 0.1);
+% simulator.PrepareSetpointPID('action_PID_onActuatorName', 0.1);
 
 % Start simulation
-simulator.RunUntil(DateTime(2014, 7, 12, 10, 50, 0));
-nodeVolume = simulator.ReadNode('nodeName');
-reachTBHBsensor = simulator.ReadSensor('flowsensor');
-simulator.SetSetpoint('action_PID_onActuatorName', 0.2);
+% simulator.RunUntil(DateTime(2014, 7, 12, 10, 50, 0));
+% nodeVolume = simulator.ReadNode('nodeName');
+% reachsensor = simulator.ReadSensor('flowsensor');
+% simulator.SetSetpoint('action_PID_onActuatorName', 0.2);
 
 % Stop simulation and write results
 simulator.RunUntil(to);
