@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DHI.Math.Expression;
+using DHI.Mike1D.ControlModule;
 using DHI.Mike1D.Generic;
 using DHI.Mike1D.Mike1DDataAccess;
 using DHI.Mike1D.Plugins;
@@ -36,13 +37,12 @@ namespace DHI.Mike1D.Examples.Scripts
     {
       // A user function factory can inject custom functions to be used in the MIKE 1D control module
       // This needs only be done once.
-      UserControlFunctionFactory ucff = new UserControlFunctionFactory();
+      UserControlFunctionFactory ucff = new UserControlFunctionFactory(mike1DData.ControlData);
       mike1DData.ControlData.UserFunctionFactories.Add(ucff);
 
-      // Add tables and associate them with an ID. Now we can use the function Table2D, as:
+      // Add tables and associate them with an ID. Then we can use the function Table2D, as:
       //    Table2D('Gate_1Table', [SensorWL], [SensorQ])
-      // Table data could be read from a file or similar, but here we insert
-      // table data directly. 
+      // Table data could be read from a file or similar, but here we insert table data directly. 
       Table2D table = new Table2D();
       table.XAxis       = new double[]   {6.0, 6.5, 6.8, 7.0, 7.2, 7.5, 8.0};
       table.YAxis       = new double[]   {0.7 , 1.0 , 1.3 };
@@ -54,7 +54,7 @@ namespace DHI.Mike1D.Examples.Scripts
                                          {6.85, 6.60, 6.40},   // x = 7.5
                                          {7.00, 6.65, 6.40},   // x = 8.0
                                        };
-      ucff.TableInfos.Add("Gate_1Table", table);
+      mike1DData.ControlData.TableInfos.Add("Gate_1Table", table);
     }
   }
 
@@ -70,15 +70,17 @@ namespace DHI.Mike1D.Examples.Scripts
     /// <summary>
     /// Default constructor
     /// </summary>
-    public UserControlFunctionFactory()
+    /// <param name="controlData"></param>
+    public UserControlFunctionFactory(ControlData controlData)
     {
-      TableInfos = new Dictionary<string, Table2D>();
+      // Reuse TableInfos from control data
+      _tableInfos = controlData.TableInfos;
     }
 
     /// <summary>
     /// Dictionary, where each <see cref="Table2D"/> is identified by a string key.
     /// </summary>
-    public Dictionary<string, Table2D> TableInfos { get; private set; }
+    private Dictionary<string, IAnyTable> _tableInfos;
 
     /// <summary>
     /// Return an IUserFunction for the function name "Table2D"
@@ -112,10 +114,19 @@ namespace DHI.Mike1D.Examples.Scripts
           IExpression<double> argY = TryConvertExpression<double>(name, 2, arguments[2], ref errors);
           // Get the table from the tableid
           string  tableid = ((Constant<string>)arguments[0]).Value;
-          Table2D table;
-          if (!TableInfos.TryGetValue(tableid, out table))
+          Table2D table = null;
+          IAnyTable anytable;
+          if (!_tableInfos.TryGetValue(tableid, out anytable))
           {
-            AddError(ref errors, string.Format("TableLookup: table id not found: '{0}'", tableid));
+            AddError(ref errors, string.Format("{0}: table id not found: '{1}'", name, tableid));
+          }
+          else
+          {
+            table = anytable as Table2D;
+            if (table == null)
+            {
+              AddError(ref errors, string.Format("{0}: table has wrong type of data: '{1}'", name, tableid));
+            }
           }
           // Create and return our control function
           return new ControlFunctionTable2D(table, argX, argY);
@@ -199,8 +210,10 @@ namespace DHI.Mike1D.Examples.Scripts
 
   /// <summary>
   /// 2D table class, handling interpolation in 2D table.
+  /// Implementing IAnyTable to be able to go into:
+  ///     Mike1DData.ControlData.TableInfos
   /// </summary>
-  public class Table2D
+  public class Table2D : IAnyTable
   {
     public double[]  XAxis;
     public double[]  YAxis;
@@ -216,9 +229,9 @@ namespace DHI.Mike1D.Examples.Scripts
       int yInterval = GetInterval(y, YAxis, out yFrac);
       // Bilinear interpolation
       double v00 = TableValues[xInterval - 1, yInterval - 1];
-      double v01 = TableValues[xInterval - 1, yInterval];
+      double v01 = TableValues[xInterval - 1, yInterval    ];
       double v10 = TableValues[xInterval    , yInterval - 1];
-      double v11 = TableValues[xInterval    , yInterval];
+      double v11 = TableValues[xInterval    , yInterval    ];
       double v0  = (1 - yFrac) * v00 + yFrac * v01;
       double v1  = (1 - yFrac) * v10 + yFrac * v11;
       double v   = (1 - xFrac) * v0  + xFrac * v1;
