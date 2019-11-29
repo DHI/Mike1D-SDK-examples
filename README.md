@@ -8,6 +8,7 @@ can be found in sub-branches.
 
 ## Content
 * DHI.Mike1D.Examples: Various C# examples of working with MIKE 1D, plugins and scripts.
+* mike1d-rtc-simulator-example: Example wrapper for getting and setting engine variables during simulation.  
 * bin: Binaries of MIKE 1D, used for building the DHI.Mike1D.Examples.
 * data: A bit of test data to play around with. Used by the examples in DHI.Mike1D.Examples.
 * m1daExamples: Examples of how to build up a MIKE 1D Additional parameter file, to automatically load and configure plugins.

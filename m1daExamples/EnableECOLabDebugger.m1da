@@ -6,7 +6,7 @@
    format_version = 100
    [Plugins]
       [Plugin]
-         AssemblyName = 'DHI.Mike1D.Mike1DDataAccess, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf'
+         AssemblyName = 'DHI.Mike1D.Mike1DDataAccess'
          //ClassName = 'DHI.Mike1D.Mike1DDataAccess.PluginEcoLabNumberChecker'
          ClassName = 'DHI.Mike1D.Mike1DDataAccess.PluginEcoLabDebugger'
          [Arguments]
