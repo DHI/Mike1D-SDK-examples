@@ -1,0 +1,3294 @@
+// Created     : 2019-11-28 14:0:39
+// DLL         : C:\Program Files (x86)\DHI\2020\bin\x64\pfs2004.dll
+// Version     : 18.0.0.13317
+
+[MIKEHYDRO]
+   Version = 29
+   LastRibbonPageIndex = 0
+   RibbonMinmized = false
+   ResultFileCount = 0
+   [Introduction]
+      Touched = true
+   EndSect  // Introduction
+
+   [MH_SimSpec]
+      Touched = true
+      SimulationType = 1
+      ModeOpt = 0
+      [MH_SimModules]
+         Touched = false
+      EndSect  // MH_SimModules
+
+      [MH_SimSpec_Modules_MB]
+         Touched = false
+         IncludeGroundWater = false
+         GlobalRankingAllocation = false
+         IncludeWaterQuality = false
+         UnlimitedResource = false
+         IncludeReservoirSedimentation = false
+         ExecuteEngine_RR = false
+         ExecuteEngine_MB = true
+         Substract_ReservoirArea_And_IrrigationArea_From_CatchmentArea = false
+         ExecuteEngine_RR_Sim = true
+         ExecuteEngine_MB_Sim = true
+         IncludeGroundWater_Sim = true
+         IncludeReservoirSedimentation_Sim = true
+         GlobalRankingAllocation_Sim = true
+         IncludeWaterQuality_Sim = true
+         CarryOverDemand = false
+      EndSect  // MH_SimSpec_Modules_MB
+
+      [MH_SimSpec_Modules_River]
+         Touched = false
+         RainfallRunoff_Data = false
+         RainfallRunoff_Sim = false
+         Hydrodynamic = true
+         IncludeAD_Data = false
+         IncludeAD_Sim = false
+         IncludeWQ_Data = false
+         IncludeWQ_Sim = false
+         IncludeAssimilation_Data = false
+         IncludeAssimilation_Sim = false
+         IncludeST_Data = false
+         IncludeST_Sim = false
+      EndSect  // MH_SimSpec_Modules_River
+
+      [MH_SimSpec_Description]
+         Touched = false
+         SimulationTitle = 'Simulation 1'
+         SimulationDesc = ''
+      EndSect  // MH_SimSpec_Description
+
+      [MH_SimSpec_SimPeriod]
+         Touched = false
+         StartTime = '2002 10 04 00:00:00'
+         EndTime = '2002 10 05 00:00:00'
+      EndSect  // MH_SimSpec_SimPeriod
+
+      [MH_SimSpec_TimeStep]
+         Touched = false
+         Type = 0
+         TimeStep = 30.0
+         LengthType = 0
+         Minimum = 1.0
+         Maximum = 30.0
+         Unit = 1
+         MaximumIncreaseFactor = 2.0
+         UseResidBC_BC = true
+         ResidBC_BC = 0.01
+         ForBC = 0.01
+         UseDelQ = false
+         DelQ = 1.0
+         UseDelQ_Q = true
+         DelQ_Q = 0.01
+         ForQ = 0.01
+         UseDelH = false
+         DelH = 0.01
+         UseDelH_H = true
+         DelH_H = 0.01
+         ForH = 0.01
+         UseCourantHD = false
+         CourantHD = 10.0
+         UseCourantAD = true
+         CourantAD = 1.0
+         TimeStepMultiplierRR = 1
+         [TimeStepFile]
+            Touched = false
+            FILE_NAME = ||
+            ITEM_COUNT = 0
+            ITEM_NUMBERS = 0
+         EndSect  // TimeStepFile
+
+      EndSect  // MH_SimSpec_TimeStep
+
+      [MH_SimSpec_TimeStep_MB]
+         Touched = false
+         TimeStep_MB = 1.0
+         LengthType_MB = 3
+         Multiplier_MB = 1
+         StochasticAnalysis_MB = false
+         UseAnnualUpdating = false
+         ReservoirStorageCurveUpdateFrequency = 1
+         AnnualUpdatingMonth = 1
+         AnnualUpdatingDay = 1
+         TimeStep_RR = 1.0
+         LengthType_RR = 3
+      EndSect  // MH_SimSpec_TimeStep_MB
+
+      [MH_SimSpec_CompControl_River]
+         Touched = false
+         Delta = 0.5
+         Alpha = 1.0
+         Theta = 1.0
+         Eps = 0.0001
+         EnConvSup = false
+         FroudeMax = -1.0
+         FroudeExp = -1.0
+         AltConvSup = false
+         Delhs = 0.01
+         ZetaMin = 0.1
+         MaxIterStruc = 10
+         UseQh = false
+         Delh = 0.1
+         NoIterations = 1
+         MaxBankDepth = 4.0
+         [GridSpaces]
+            Touched = false
+            DhiSEPfsListItemCount = 1
+            GlobalMaxDx = 10000.0
+            [LocalGridSpace_0]
+               Touched = false
+               ObjectID = '87df3453-bb42-4bdf-ac1d-259eb41161f4'
+               BranchID = '7b136259-fef3-4c61-8568-37590449cb1d'
+               MaximumDx = 100.0
+            EndSect  // LocalGridSpace_0
+
+         EndSect  // GridSpaces
+
+         [WaveApproximation]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+            GlobalWaveApproximation = 0
+         EndSect  // WaveApproximation
+
+      EndSect  // MH_SimSpec_CompControl_River
+
+      [MH_SimSpec_CompControl_MB]
+         Touched = false
+         MaxIteration = 150
+         Flow = 1e-05
+         ControlFlow = 0.1
+         Concentration = 0.0001
+      EndSect  // MH_SimSpec_CompControl_MB
+
+      [MH_AD_Decoupling_File]
+         Touched = false
+         HDFileName = ||
+      EndSect  // MH_AD_Decoupling_File
+
+   EndSect  // MH_SimSpec
+
+   [MapConfigurationsPfs]
+      Touched = false
+      [CoordinateSystem]
+         Touched = true
+         X0 = -579.6054851046581
+         X1 = 1735.681939064641
+         Y0 = -583.9888048093532
+         Y1 = 459.0207321595223
+         MapProjection = 'NON-UTM'
+         FeatureProjection = 'NON-UTM'
+         DatumShiftType = 0
+         DatumShiftParams0 = 0.0
+         DatumShiftParams1 = 0.0
+         DatumShiftParams2 = 0.0
+         DatumShiftParams3 = 0.0
+         DatumShiftParams4 = 0.0
+         DatumShiftParams5 = 0.0
+         DatumShiftParams6 = 0.0
+      EndSect  // CoordinateSystem
+
+      [MapProperties]
+         Touched = false
+         ShowLegend = false
+         ShowScalebar = false
+         ShowNorthArrow = false
+      EndSect  // MapProperties
+
+      [BackgroundMap]
+         Touched = false
+         MapVisible = false
+         MapType = 0
+         GoogleMapStyle = 1
+         ShapeFileColorRamp = true
+      EndSect  // BackgroundMap
+
+      [BackgroundLayers]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         LayerTypes = 
+      EndSect  // BackgroundLayers
+
+      [DigitalElevationModel]
+         Touched = false
+         RasterFormat = 0
+         RasterFileName = ||
+         AsciiUnitKey = 1000
+         DEMMapProjection = 'PROJCS["World_Mercator",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],PROJECTION["Mercator"],PARAMETER["False_Easting",0],PARAMETER["False_Northing",0],PARAMETER["Central_Meridian",0],PARAMETER["Standard_Parallel_1",0],UNIT["Meter",1]]'
+         UseForCrossSectionGeneration = false
+         UseForRiverTracingCatchmentDelineation = false
+         SpatialExtent = 0
+         ResampleFactor = 1
+         AssumeInternalUndefinedAreasAsLocalDepressions = true
+         PreprocessedFileName = ||
+         LastDemUpdateDate = '0001 01 01 00:00:00'
+         IsPPDDpropertiesDirty = true
+         UseBilinearInterpolation = false
+         UseHalfCellSize = true
+         Spacing = 10.0
+         MaxNumOfPoints = 100
+         ShowDEM = false
+         UseHalfCellSizePlot = true
+         SpacingPlot = 10.0
+         [DEMSymbologyStylePfs]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            ColorPaletteOption = 1
+            Transparency = 0
+            MzChartRasterType = 0
+            [MIKEZero_Palette_Definition]
+               Palette_Title = 'Palette'
+               Palette_Type = 0
+               Locked = false
+               Topmost_Value = false
+               Nice_Value = true
+               RGB_Delete_Color = 255, 255, 255
+            EndSect  // MIKEZero_Palette_Definition
+
+         EndSect  // DEMSymbologyStylePfs
+
+      EndSect  // DigitalElevationModel
+
+      [WorkingArea]
+         Touched = true
+         IsDefined = true
+         X0 = -537.4618644565193
+         Y0 = -511.55045436
+         X1 = 1805.08832749
+         Y1 = 386.5823816409604
+         [PolygonSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = ''
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolygonFillColor = 16777215
+            PolygonOutlineColor = -16777216
+            PolygonTransparency = 100
+            PolygonThickness = 1
+            PolygonOutlineStyle = 0
+         EndSect  // PolygonSymbology
+
+      EndSect  // WorkingArea
+
+   EndSect  // MapConfigurationsPfs
+
+   [MH_River_Network]
+      Touched = false
+      [Branches]
+         Touched = false
+         DhiSEPfsListItemCount = 1
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = 'BranchType'
+            SymbolFieldTypeCode = 9
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 3
+            [SpecifiedSymbols]
+               Count = 3
+               [SpecifiedSymbolElem_0]
+                  ClassifyType = 3
+                  Label = 'Regular branch'
+                  Value = 'Regular'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -16776961
+                  PolylineThickness = 2
+                  PolylineType = 0
+                  DrawDirectionArrow = true
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_0
+
+               [SpecifiedSymbolElem_1]
+                  ClassifyType = 3
+                  Label = 'LinkChannel branch'
+                  Value = 'LinkChannel'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -5383962
+                  PolylineThickness = 2
+                  PolylineType = 0
+                  DrawDirectionArrow = true
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_1
+
+               [SpecifiedSymbolElem_2]
+                  ClassifyType = 3
+                  Label = 'KinematicRouting branch'
+                  Value = 'KinematicRouting'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -16744448
+                  PolylineThickness = 2
+                  PolylineType = 0
+                  DrawDirectionArrow = true
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_2
+
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -16776961
+            PolylineThickness = 2
+            PolylineType = 0
+            DrawDirectionArrow = true
+            ArrowPosition = 0
+         EndSect  // PolylineSymbology
+
+         [Branch_0]
+            Touched = false
+            ObjectID = '7b136259-fef3-4c61-8568-37590449cb1d'
+            Shape = 'LINESTRING(0 0,1000 0)'
+            ShortName = 'E1'
+            Name = 'Main'
+            TopoID = 'BranchTopoID'
+            FlowDirection = 0
+            BranchType = 0
+            UpStreamConnectionType = 0
+            UpStreamConnRiverNodeID = '00000000-0000-0000-0000-000000000000'
+            UpStreamStorageID = '00000000-0000-0000-0000-000000000000'
+            DownStreamConnectionType = 0
+            DownStreamConnRiverNodeID = '00000000-0000-0000-0000-000000000000'
+            DownStreamStorageID = '00000000-0000-0000-0000-000000000000'
+            UserDefinedChainageList = ''
+            [RiverNodeList]
+               Touched = false
+               DhiSEPfsListItemCount = 0
+            EndSect  // RiverNodeList
+
+            [ReachProperties]
+               Touched = false
+               Name = 'Main'
+               HasFlowLoss = false
+               HasFlowCapacity = false
+               HasMinFlowRequirement = false
+               [FlowLossTimeSeries]
+                  Touched = false
+                  FILE_NAME = ||
+                  ITEM_COUNT = 0
+                  ITEM_NUMBERS = 0
+               EndSect  // FlowLossTimeSeries
+
+               [FlowCapacityTimeSeries]
+                  Touched = false
+                  FILE_NAME = ||
+                  ITEM_COUNT = 0
+                  ITEM_NUMBERS = 0
+               EndSect  // FlowCapacityTimeSeries
+
+               [MinFlowRequirementTimeSeries]
+                  Touched = false
+                  FILE_NAME = ||
+                  ITEM_COUNT = 0
+                  ITEM_NUMBERS = 0
+               EndSect  // MinFlowRequirementTimeSeries
+
+               [HydraulicParameters]
+                  Touched = false
+                  FlowRoutingMethod = 0
+                  DelayK = 0.0
+                  ShapeX = 0.0
+                  WaterLevelMethod = 0
+                  ManningN = 0.0
+                  Width = 0.0
+                  Slope = 0.0
+                  ManningMaxDepth = 0.0
+                  HasHeadLoss = false
+                  [RatingCurveTable]
+                     Touched = false
+                     FILE_NAME = ||
+                     ITEM_COUNT = 0
+                     ITEM_NUMBERS = 0
+                  EndSect  // RatingCurveTable
+
+                  [HeadLossTable]
+                     Touched = false
+                     FILE_NAME = ||
+                     ITEM_COUNT = 0
+                     ITEM_NUMBERS = 0
+                  EndSect  // HeadLossTable
+
+               EndSect  // HydraulicParameters
+
+            EndSect  // ReachProperties
+
+            [LinkChannel]
+               Touched = false
+               Type = 0
+               Datum = 0.0
+               USInvert = 0.0
+               DSInvert = 0.0
+               Branch_XSect = ''
+               TopoID_XSect = ''
+               Chainage_XSect = 0.0
+               DepthWidth = '<CLOB:0>'
+               LevelWidth = '<CLOB:0>'
+               ResisType = 0
+               ResisValue = 20.0
+               HLPosIn = 0.5
+               HLPosOut = 1.0
+               HLPosFO = 1.0
+               HLPosAdd = 0.0
+               HLNegIn = 0.5
+               HLNegOut = 1.0
+               HLNegFO = 1.0
+               HLNegAdd = 0.0
+               AllowRecalc = true
+               NoQh = 25
+               QH_Relations = '<CLOB:0>'
+            EndSect  // LinkChannel
+
+         EndSect  // Branch_0
+
+      EndSect  // Branches
+
+      [UserDefinedChainageVertex]
+         Touched = false
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'X'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 0
+            PointSymbolFillColor = -16776961
+            PointOutlineColor = -16777216
+            PointSize = 6
+            PointOutlineWidth = 1
+            PointStyle = 0
+            BitmapName = ''
+         EndSect  // PointSymboloy
+
+      EndSect  // UserDefinedChainageVertex
+
+      [RiverNodeView]
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = 'RiverNodeType'
+            SymbolFieldTypeCode = 9
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 3
+            [SpecifiedSymbols]
+               Count = 12
+               [SpecifiedSymbolElem_0]
+                  ClassifyType = 3
+                  Label = 'RiverNodeType: Regular'
+                  Value = 'Regular'
+                  IsOthersStyle = false
+                  BitmapName = ''
+                  FillColor = -16776961
+                  OutlineColor = -16776961
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 0
+                  SymbolStyle = 0
+               EndSect  // SpecifiedSymbolElem_0
+
+               [SpecifiedSymbolElem_1]
+                  ClassifyType = 3
+                  Label = 'RiverNodeType: Catchment'
+                  Value = 'Catchment'
+                  IsOthersStyle = false
+                  BitmapName = ''
+                  FillColor = -8372224
+                  OutlineColor = -8372224
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 0
+                  SymbolStyle = 0
+               EndSect  // SpecifiedSymbolElem_1
+
+               [SpecifiedSymbolElem_2]
+                  ClassifyType = 3
+                  Label = 'RiverNodeType: CatchmentPriority'
+                  Value = 'CatchmentPriority'
+                  IsOthersStyle = false
+                  BitmapName = ''
+                  FillColor = -4177920
+                  OutlineColor = -4177920
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 0
+                  SymbolStyle = 0
+               EndSect  // SpecifiedSymbolElem_2
+
+               [SpecifiedSymbolElem_3]
+                  ClassifyType = 3
+                  Label = 'RiverNodeType: CatchmentRoutingMethod'
+                  Value = 'CatchmentRoutingMethod'
+                  IsOthersStyle = false
+                  BitmapName = ''
+                  FillColor = -4177920
+                  OutlineColor = -4177920
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 0
+                  SymbolStyle = 0
+               EndSect  // SpecifiedSymbolElem_3
+
+               [SpecifiedSymbolElem_4]
+                  ClassifyType = 3
+                  Label = 'RiverNodeType: CatchmentRoutingMethodPriority'
+                  Value = 'CatchmentRoutingMethodPriority'
+                  IsOthersStyle = false
+                  BitmapName = ''
+                  FillColor = -4177920
+                  OutlineColor = -4177920
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 0
+                  SymbolStyle = 0
+               EndSect  // SpecifiedSymbolElem_4
+
+               [SpecifiedSymbolElem_5]
+                  ClassifyType = 3
+                  Label = 'RiverNodeType: RoutingMethodPriority'
+                  Value = 'RoutingMethodPriority'
+                  IsOthersStyle = false
+                  BitmapName = ''
+                  FillColor = -23296
+                  OutlineColor = -23296
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 0
+                  SymbolStyle = 0
+               EndSect  // SpecifiedSymbolElem_5
+
+               [SpecifiedSymbolElem_6]
+                  ClassifyType = 3
+                  Label = 'RiverNodeType: Reservoir'
+                  Value = 'Reservoir'
+                  IsOthersStyle = false
+                  BitmapName = 'reservoir'
+                  FillColor = -23296
+                  OutlineColor = -23296
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 1
+                  SymbolStyle = 1
+               EndSect  // SpecifiedSymbolElem_6
+
+               [SpecifiedSymbolElem_7]
+                  ClassifyType = 3
+                  Label = 'RiverNodeType: ReservoirCatchment'
+                  Value = 'ReservoirCatchment'
+                  IsOthersStyle = false
+                  BitmapName = 'reservoir_catchment'
+                  FillColor = -23296
+                  OutlineColor = -23296
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 1
+                  SymbolStyle = 1
+               EndSect  // SpecifiedSymbolElem_7
+
+               [SpecifiedSymbolElem_8]
+                  ClassifyType = 3
+                  Label = 'RiverNodeType: Priority'
+                  Value = 'Priority'
+                  IsOthersStyle = false
+                  BitmapName = ''
+                  FillColor = -32768
+                  OutlineColor = -32768
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 0
+                  SymbolStyle = 0
+               EndSect  // SpecifiedSymbolElem_8
+
+               [SpecifiedSymbolElem_9]
+                  ClassifyType = 3
+                  Label = 'RiverNodeType: RoutingMethod'
+                  Value = 'RoutingMethod'
+                  IsOthersStyle = false
+                  BitmapName = ''
+                  FillColor = -16744448
+                  OutlineColor = -16744448
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 0
+                  SymbolStyle = 0
+               EndSect  // SpecifiedSymbolElem_9
+
+               [SpecifiedSymbolElem_10]
+                  ClassifyType = 3
+                  Label = 'RiverNodeType: Reservoir, RoutingMethod'
+                  Value = 'Reservoir, RoutingMethod'
+                  IsOthersStyle = false
+                  BitmapName = 'reservoir'
+                  FillColor = -23296
+                  OutlineColor = -23296
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 1
+                  SymbolStyle = 1
+               EndSect  // SpecifiedSymbolElem_10
+
+               [SpecifiedSymbolElem_11]
+                  ClassifyType = 3
+                  Label = 'RiverNodeType: Other'
+                  Value = 'Other'
+                  IsOthersStyle = false
+                  BitmapName = ''
+                  FillColor = -16727872
+                  OutlineColor = -16727872
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 0
+                  SymbolStyle = 0
+               EndSect  // SpecifiedSymbolElem_11
+
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 0
+            PointSymbolFillColor = -23296
+            PointOutlineColor = -23296
+            PointSize = 6
+            PointOutlineWidth = 1
+            PointStyle = 0
+            BitmapName = ''
+         EndSect  // PointSymboloy
+
+      EndSect  // RiverNodeView
+
+      [RiverNetworkConnection]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'StartBranchName'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -65536
+            PolylineThickness = 1
+            PolylineType = 0
+            DrawDirectionArrow = true
+            ArrowPosition = 0
+         EndSect  // PolylineSymbology
+
+      EndSect  // RiverNetworkConnection
+
+      [KinematicRoutingMethodList]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+      EndSect  // KinematicRoutingMethodList
+
+      [AlignmentLines]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = 'Type'
+            SymbolFieldTypeCode = 9
+            UseCustomColor = false
+            LabelField = 'Type'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 3
+            [SpecifiedSymbols]
+               Count = 4
+               [SpecifiedSymbolElem_0]
+                  ClassifyType = 3
+                  Label = 'LeftExtent alignment line'
+                  Value = 'LeftExtent'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -16777216
+                  PolylineThickness = 2
+                  PolylineType = 4
+                  DrawDirectionArrow = true
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_0
+
+               [SpecifiedSymbolElem_1]
+                  ClassifyType = 3
+                  Label = 'LeftBank alignment line'
+                  Value = 'LeftBank'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -16776961
+                  PolylineThickness = 2
+                  PolylineType = 4
+                  DrawDirectionArrow = true
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_1
+
+               [SpecifiedSymbolElem_2]
+                  ClassifyType = 3
+                  Label = 'RightBank alignment line'
+                  Value = 'RightBank'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -16744448
+                  PolylineThickness = 2
+                  PolylineType = 4
+                  DrawDirectionArrow = true
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_2
+
+               [SpecifiedSymbolElem_3]
+                  ClassifyType = 3
+                  Label = 'RightExtent alignment line'
+                  Value = 'RightExtent'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -65536
+                  PolylineThickness = 2
+                  PolylineType = 4
+                  DrawDirectionArrow = true
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_3
+
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -23296
+            PolylineThickness = 1
+            PolylineType = 0
+            DrawDirectionArrow = false
+            ArrowPosition = 1
+         EndSect  // PolylineSymbology
+
+      EndSect  // AlignmentLines
+
+      [MH_Cross_Sections]
+         Touched = false
+         CrossSectionsFileName = |.\UnitFlow.xns11|
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'BranchName'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -16777216
+            PolylineThickness = 2
+            PolylineType = 0
+            DrawDirectionArrow = false
+            ArrowPosition = 0
+         EndSect  // PolylineSymbology
+
+      EndSect  // MH_Cross_Sections
+
+      [CrossSectionMapSpanLineSymbology]
+         Touched = false
+         ObjectID = '7ca749ca-860e-410f-9161-7e7a8de6c18c'
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'BranchName'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -65536
+            PolylineThickness = 1
+            PolylineType = 0
+            DrawDirectionArrow = false
+            ArrowPosition = 1
+         EndSect  // PolylineSymbology
+
+      EndSect  // CrossSectionMapSpanLineSymbology
+
+      [Structure]
+         Touched = false
+         [Weirs]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+            [PointSymboloy]
+               Touched = false
+               ShowSymbol = true
+               LabelVisible = false
+               FontSize = 9
+               FontStyle = 0
+               FontColor = -16777216
+               SymbolField = 'AttributeType'
+               SymbolFieldTypeCode = 9
+               UseCustomColor = false
+               LabelField = 'ID'
+               SymbolScope = 0
+               SymbolExpression = ''
+               SymbologyType = 0
+               [SpecifiedSymbols]
+                  Count = 0
+               EndSect  // SpecifiedSymbols
+
+               [GraduatedSizeRange]
+                  SizeFrom = 1
+                  SizeTo = 20
+               EndSect  // GraduatedSizeRange
+
+               [GraduatedColorRamp]
+                  Invert = false
+                  ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+               EndSect  // GraduatedColorRamp
+
+               SymbolStyle = 0
+               PointSymbolFillColor = 16777215
+               PointOutlineColor = -16776961
+               PointSize = 10
+               PointOutlineWidth = 1
+               PointStyle = 1
+               BitmapName = ''
+            EndSect  // PointSymboloy
+
+         EndSect  // Weirs
+
+         [Culverts]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+            [PointSymboloy]
+               Touched = false
+               ShowSymbol = true
+               LabelVisible = false
+               FontSize = 9
+               FontStyle = 0
+               FontColor = -16777216
+               SymbolField = ''
+               SymbolFieldTypeCode = 0
+               UseCustomColor = false
+               LabelField = 'ID'
+               SymbolScope = 0
+               SymbolExpression = ''
+               SymbologyType = 0
+               [SpecifiedSymbols]
+                  Count = 0
+               EndSect  // SpecifiedSymbols
+
+               [GraduatedSizeRange]
+                  SizeFrom = 1
+                  SizeTo = 20
+               EndSect  // GraduatedSizeRange
+
+               [GraduatedColorRamp]
+                  Invert = false
+                  ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+               EndSect  // GraduatedColorRamp
+
+               SymbolStyle = 0
+               PointSymbolFillColor = 16777215
+               PointOutlineColor = -16777216
+               PointSize = 10
+               PointOutlineWidth = 1
+               PointStyle = 1
+               BitmapName = ''
+            EndSect  // PointSymboloy
+
+         EndSect  // Culverts
+
+         [Bridges]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+            [PointSymboloy]
+               Touched = false
+               ShowSymbol = true
+               LabelVisible = false
+               FontSize = 9
+               FontStyle = 0
+               FontColor = -16777216
+               SymbolField = ''
+               SymbolFieldTypeCode = 0
+               UseCustomColor = false
+               LabelField = 'ID'
+               SymbolScope = 0
+               SymbolExpression = ''
+               SymbologyType = 0
+               [SpecifiedSymbols]
+                  Count = 0
+               EndSect  // SpecifiedSymbols
+
+               [GraduatedSizeRange]
+                  SizeFrom = 1
+                  SizeTo = 20
+               EndSect  // GraduatedSizeRange
+
+               [GraduatedColorRamp]
+                  Invert = false
+                  ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+               EndSect  // GraduatedColorRamp
+
+               SymbolStyle = 0
+               PointSymbolFillColor = 16777215
+               PointOutlineColor = -16728064
+               PointSize = 10
+               PointOutlineWidth = 1
+               PointStyle = 1
+               BitmapName = ''
+            EndSect  // PointSymboloy
+
+         EndSect  // Bridges
+
+         [Pumps]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+            [PointSymboloy]
+               Touched = false
+               ShowSymbol = true
+               LabelVisible = false
+               FontSize = 9
+               FontStyle = 0
+               FontColor = -16777216
+               SymbolField = ''
+               SymbolFieldTypeCode = 0
+               UseCustomColor = false
+               LabelField = 'ID'
+               SymbolScope = 0
+               SymbolExpression = ''
+               SymbologyType = 0
+               [SpecifiedSymbols]
+                  Count = 0
+               EndSect  // SpecifiedSymbols
+
+               [GraduatedSizeRange]
+                  SizeFrom = 1
+                  SizeTo = 20
+               EndSect  // GraduatedSizeRange
+
+               [GraduatedColorRamp]
+                  Invert = false
+                  ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+               EndSect  // GraduatedColorRamp
+
+               SymbolStyle = 0
+               PointSymbolFillColor = 16777215
+               PointOutlineColor = -16728064
+               PointSize = 10
+               PointOutlineWidth = 1
+               PointStyle = 1
+               BitmapName = ''
+            EndSect  // PointSymboloy
+
+         EndSect  // Pumps
+
+         [Gates]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+            [PointSymboloy]
+               Touched = false
+               ShowSymbol = true
+               LabelVisible = false
+               FontSize = 9
+               FontStyle = 0
+               FontColor = -16777216
+               SymbolField = ''
+               SymbolFieldTypeCode = 0
+               UseCustomColor = false
+               LabelField = 'ID'
+               SymbolScope = 0
+               SymbolExpression = ''
+               SymbologyType = 0
+               [SpecifiedSymbols]
+                  Count = 0
+               EndSect  // SpecifiedSymbols
+
+               [GraduatedSizeRange]
+                  SizeFrom = 1
+                  SizeTo = 20
+               EndSect  // GraduatedSizeRange
+
+               [GraduatedColorRamp]
+                  Invert = false
+                  ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+               EndSect  // GraduatedColorRamp
+
+               SymbolStyle = 0
+               PointSymbolFillColor = 16777215
+               PointOutlineColor = -65536
+               PointSize = 10
+               PointOutlineWidth = 1
+               PointStyle = 1
+               BitmapName = ''
+            EndSect  // PointSymboloy
+
+         EndSect  // Gates
+
+         [DirectDischarges]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+            [PointSymboloy]
+               Touched = false
+               ShowSymbol = true
+               LabelVisible = false
+               FontSize = 9
+               FontStyle = 0
+               FontColor = -16777216
+               SymbolField = ''
+               SymbolFieldTypeCode = 0
+               UseCustomColor = false
+               LabelField = 'ID'
+               SymbolScope = 0
+               SymbolExpression = ''
+               SymbologyType = 0
+               [SpecifiedSymbols]
+                  Count = 0
+               EndSect  // SpecifiedSymbols
+
+               [GraduatedSizeRange]
+                  SizeFrom = 1
+                  SizeTo = 20
+               EndSect  // GraduatedSizeRange
+
+               [GraduatedColorRamp]
+                  Invert = false
+                  ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+               EndSect  // GraduatedColorRamp
+
+               SymbolStyle = 0
+               PointSymbolFillColor = 16777215
+               PointOutlineColor = -16751616
+               PointSize = 10
+               PointOutlineWidth = 1
+               PointStyle = 1
+               BitmapName = ''
+            EndSect  // PointSymboloy
+
+         EndSect  // DirectDischarges
+
+         [Dambreaks]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+            [PointSymboloy]
+               Touched = false
+               ShowSymbol = true
+               LabelVisible = false
+               FontSize = 9
+               FontStyle = 0
+               FontColor = -16777216
+               SymbolField = ''
+               SymbolFieldTypeCode = 0
+               UseCustomColor = false
+               LabelField = 'ID'
+               SymbolScope = 0
+               SymbolExpression = ''
+               SymbologyType = 0
+               [SpecifiedSymbols]
+                  Count = 0
+               EndSect  // SpecifiedSymbols
+
+               [GraduatedSizeRange]
+                  SizeFrom = 1
+                  SizeTo = 20
+               EndSect  // GraduatedSizeRange
+
+               [GraduatedColorRamp]
+                  Invert = false
+                  ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+               EndSect  // GraduatedColorRamp
+
+               SymbolStyle = 0
+               PointSymbolFillColor = 16777215
+               PointOutlineColor = -16181
+               PointSize = 10
+               PointOutlineWidth = 1
+               PointStyle = 1
+               BitmapName = ''
+            EndSect  // PointSymboloy
+
+         EndSect  // Dambreaks
+
+         [EnergyLosses]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+            [PointSymboloy]
+               Touched = false
+               ShowSymbol = true
+               LabelVisible = false
+               FontSize = 9
+               FontStyle = 0
+               FontColor = -16777216
+               SymbolField = ''
+               SymbolFieldTypeCode = 0
+               UseCustomColor = false
+               LabelField = 'ID'
+               SymbolScope = 0
+               SymbolExpression = ''
+               SymbologyType = 0
+               [SpecifiedSymbols]
+                  Count = 0
+               EndSect  // SpecifiedSymbols
+
+               [GraduatedSizeRange]
+                  SizeFrom = 1
+                  SizeTo = 20
+               EndSect  // GraduatedSizeRange
+
+               [GraduatedColorRamp]
+                  Invert = false
+                  ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+               EndSect  // GraduatedColorRamp
+
+               SymbolStyle = 0
+               PointSymbolFillColor = 16777215
+               PointOutlineColor = -7278960
+               PointSize = 10
+               PointOutlineWidth = 1
+               PointStyle = 1
+               BitmapName = ''
+            EndSect  // PointSymboloy
+
+         EndSect  // EnergyLosses
+
+         [Tabulated]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+            [PointSymboloy]
+               Touched = false
+               ShowSymbol = true
+               LabelVisible = false
+               FontSize = 9
+               FontStyle = 0
+               FontColor = -16777216
+               SymbolField = ''
+               SymbolFieldTypeCode = 0
+               UseCustomColor = false
+               LabelField = 'ID'
+               SymbolScope = 0
+               SymbolExpression = ''
+               SymbologyType = 0
+               [SpecifiedSymbols]
+                  Count = 0
+               EndSect  // SpecifiedSymbols
+
+               [GraduatedSizeRange]
+                  SizeFrom = 1
+                  SizeTo = 20
+               EndSect  // GraduatedSizeRange
+
+               [GraduatedColorRamp]
+                  Invert = false
+                  ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+               EndSect  // GraduatedColorRamp
+
+               SymbolStyle = 0
+               PointSymbolFillColor = 16777215
+               PointOutlineColor = -32768
+               PointSize = 10
+               PointOutlineWidth = 1
+               PointStyle = 1
+               BitmapName = ''
+            EndSect  // PointSymboloy
+
+         EndSect  // Tabulated
+
+      EndSect  // Structure
+
+      [Control]
+         Touched = false
+         [Sensors]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // Sensors
+
+         [Variables]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // Variables
+
+         [PIDParameterList]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // PIDParameterList
+
+         [ControlRules]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // ControlRules
+
+      EndSect  // Control
+
+      [Storages]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'StorageType'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 1
+            PointSymbolFillColor = -65536
+            PointOutlineColor = -65536
+            PointSize = 6
+            PointOutlineWidth = 1
+            PointStyle = 0
+            BitmapName = 'storage'
+         EndSect  // PointSymboloy
+
+      EndSect  // Storages
+
+      [StorageConnections]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'StorageName'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -9216
+            PolylineThickness = 1
+            PolylineType = 0
+            DrawDirectionArrow = false
+            ArrowPosition = 0
+         EndSect  // PolylineSymbology
+
+      EndSect  // StorageConnections
+
+      [RouteTraceLineSymbologyPfs]
+         Touched = false
+         ObjectID = '7ed18ae3-599d-4c83-873d-d0df9d7f6922'
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = ''
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -23296
+            PolylineThickness = 4
+            PolylineType = 0
+            DrawDirectionArrow = false
+            ArrowPosition = 1
+         EndSect  // PolylineSymbology
+
+      EndSect  // RouteTraceLineSymbologyPfs
+
+      [RemoteFlowControlSymbology]
+         Touched = false
+         ObjectID = 'ce418b7c-ee15-4b33-95bc-0b82a6ca0f15'
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -32768
+            PolylineThickness = 1
+            PolylineType = 0
+            DrawDirectionArrow = true
+            ArrowPosition = 0
+         EndSect  // PolylineSymbology
+
+      EndSect  // RemoteFlowControlSymbology
+
+   EndSect  // MH_River_Network
+
+   [CatchmentGroupPfs]
+      Touched = false
+      [MH_Catchment]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [PolygonSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = 'GWModelType'
+            SymbolFieldTypeCode = 9
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolygonFillColor = -8000
+            PolygonOutlineColor = -8372224
+            PolygonTransparency = 50
+            PolygonThickness = 2
+            PolygonOutlineStyle = 0
+         EndSect  // PolygonSymbology
+
+      EndSect  // MH_Catchment
+
+      [MH_CombinedCatchment]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+      EndSect  // MH_CombinedCatchment
+
+      [RiverLinks]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'AreaType'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -16751616
+            PolylineThickness = 3
+            PolylineType = 0
+            DrawDirectionArrow = false
+            ArrowPosition = 0
+         EndSect  // PolylineSymbology
+
+      EndSect  // RiverLinks
+
+      [CatchmentConnectionList]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'ConnectionType'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -16744448
+            PolylineThickness = 1
+            PolylineType = 0
+            DrawDirectionArrow = false
+            ArrowPosition = 1
+         EndSect  // PolylineSymbology
+
+      EndSect  // CatchmentConnectionList
+
+      [DecoupledSimulation]
+         Touched = false
+         ObjectID = 'b855fa3f-a538-4be2-bcd6-492c5b12c386'
+         DecoupleRR_HD = false
+         RR_ResultFile = ||
+      EndSect  // DecoupledSimulation
+
+      [HotstartFiles]
+         Touched = false
+         ObjectID = '41df2bea-31af-4293-828a-52ab3ed94ac3'
+         UseHotstartFiles = false
+         HotstartList = '<CLOB:0>'
+      EndSect  // HotstartFiles
+
+   EndSect  // CatchmentGroupPfs
+
+   [MH_HDParameters]
+      Touched = false
+      [MH_Bed_Resistance]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         GlobalApproach = 0
+         GlobalFormula = 0
+         GlobalResistanceNumber = 20.0
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 0
+            PointSymbolFillColor = -16728064
+            PointOutlineColor = -16744448
+            PointSize = 9
+            PointOutlineWidth = 1
+            PointStyle = 2
+            BitmapName = ''
+         EndSect  // PointSymboloy
+
+      EndSect  // MH_Bed_Resistance
+
+      [HDBedResistanceFactorList]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         IncludeBedResistanceFactor = false
+         FactorType = 1
+         FactorValue = 0.0
+         [BedResistanceFactorTS]
+            Touched = false
+            FILE_NAME = ||
+            ITEM_COUNT = 0
+            ITEM_NUMBERS = 0
+         EndSect  // BedResistanceFactorTS
+
+      EndSect  // HDBedResistanceFactorList
+
+   EndSect  // MH_HDParameters
+
+   [MH_Advection_Dispersion]
+      Touched = false
+      [MH_AD_Components]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+      EndSect  // MH_AD_Components
+
+      [MH_AD_Dispersions]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         DispersionFactor = 0.0
+         Exp = 0.0
+         MinDispCoef = 0.0
+         MaxDispCoef = 100.0
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'DispFactor'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 0
+            PointSymbolFillColor = -65536
+            PointOutlineColor = -16744448
+            PointSize = 9
+            PointOutlineWidth = 1
+            PointStyle = 2
+            BitmapName = ''
+         EndSect  // PointSymboloy
+
+      EndSect  // MH_AD_Dispersions
+
+      [MH_AD_Decays]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [GlobalValues]
+            Count = 0
+         EndSect  // GlobalValues
+
+      EndSect  // MH_AD_Decays
+
+   EndSect  // MH_Advection_Dispersion
+
+   [WaterUserGroupPfs]
+      Touched = false
+      [MH_Water_Users]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = 'WaterUserType'
+            SymbolFieldTypeCode = 9
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 3
+            [SpecifiedSymbols]
+               Count = 2
+               [SpecifiedSymbolElem_0]
+                  ClassifyType = 3
+                  Label = 'RegularUser'
+                  Value = 'RegularUser'
+                  IsOthersStyle = false
+                  BitmapName = 'wateruser'
+                  FillColor = -23296
+                  OutlineColor = -23296
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 1
+                  SymbolStyle = 1
+               EndSect  // SpecifiedSymbolElem_0
+
+               [SpecifiedSymbolElem_1]
+                  ClassifyType = 3
+                  Label = 'IrrigationUser'
+                  Value = 'IrrigationUser'
+                  IsOthersStyle = false
+                  BitmapName = 'irriuser'
+                  FillColor = -23296
+                  OutlineColor = -23296
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 1
+                  SymbolStyle = 1
+               EndSect  // SpecifiedSymbolElem_1
+
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 0
+            PointSymbolFillColor = -16776961
+            PointOutlineColor = -16776961
+            PointSize = 6
+            PointOutlineWidth = 2
+            PointStyle = 0
+            BitmapName = 'wateruser'
+         EndSect  // PointSymboloy
+
+      EndSect  // MH_Water_Users
+
+      [SupplyConnectionSymbology]
+         Touched = false
+         ObjectID = 'ef470032-334a-4aa8-a1df-e77ed965d8ca'
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -32768
+            PolylineThickness = 1
+            PolylineType = 0
+            DrawDirectionArrow = true
+            ArrowPosition = 0
+         EndSect  // PolylineSymbology
+
+      EndSect  // SupplyConnectionSymbology
+
+      [ReturnFlowConnection]
+         Touched = false
+         ObjectID = '24a4cf8d-6386-4b5d-8413-e763270e8b01'
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -32768
+            PolylineThickness = 1
+            PolylineType = 0
+            DrawDirectionArrow = true
+            ArrowPosition = 0
+         EndSect  // PolylineSymbology
+
+      EndSect  // ReturnFlowConnection
+
+      [IrrigationDataPfs]
+         Touched = false
+         [IrrigationMethodListPfs]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // IrrigationMethodListPfs
+
+         [CropListPfs]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // CropListPfs
+
+         [SoilRunoffListPfs]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // SoilRunoffListPfs
+
+      EndSect  // IrrigationDataPfs
+
+   EndSect  // WaterUserGroupPfs
+
+   [ReservoirGroupPfs]
+      Touched = false
+      [MH_Reservoirs]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'Identifier'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 1
+            PointSymbolFillColor = -65536
+            PointOutlineColor = -65536
+            PointSize = 6
+            PointOutlineWidth = 1
+            PointStyle = 0
+            BitmapName = 'reservoir'
+         EndSect  // PointSymboloy
+
+      EndSect  // MH_Reservoirs
+
+   EndSect  // ReservoirGroupPfs
+
+   [HydroPowerGroupPfs]
+      Touched = false
+      [MH_Hydro_Power]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 1
+            PointSymbolFillColor = -16776961
+            PointOutlineColor = -16776961
+            PointSize = 6
+            PointOutlineWidth = 2
+            PointStyle = 0
+            BitmapName = 'hydropower'
+         EndSect  // PointSymboloy
+
+      EndSect  // MH_Hydro_Power
+
+   EndSect  // HydroPowerGroupPfs
+
+   [CalibrationPlotGroup]
+      Touched = false
+      [CalibrationPlot]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+      EndSect  // CalibrationPlot
+
+   EndSect  // CalibrationPlotGroup
+
+   [SedimentTransportGroupPfs]
+      Touched = false
+      [ReservoirSedimentation]
+         Touched = false
+         Density = 2650.0
+         Porosity = 0.4
+         [SedimentFractionList]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // SedimentFractionList
+
+      EndSect  // ReservoirSedimentation
+
+   EndSect  // SedimentTransportGroupPfs
+
+   [WQBasinGroupPfs]
+      Touched = false
+      [WQBasinPfs]
+         Touched = false
+         Clob = '<CLOB:0>'
+      EndSect  // WQBasinPfs
+
+   EndSect  // WQBasinGroupPfs
+
+   [WQRiverGroupPfs]
+      Touched = false
+      [WQRiverPfs]
+         Touched = false
+         Clob = '<CLOB:0>'
+      EndSect  // WQRiverPfs
+
+   EndSect  // WQRiverGroupPfs
+
+   [MHR_Sediment_Transport]
+      Touched = false
+      [Sediment_Transport_GeneralParameters]
+         Touched = false
+         NoFrac = 0
+         MorphUpdate = true
+         MaxConc = 50000.0
+         SkinModel = 0
+         Egiazaroff = false
+         KinVisc = 1e-06
+         d90d50 = 2.0
+      EndSect  // Sediment_Transport_GeneralParameters
+
+      [SedimentFractionsDefinitionsList]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+      EndSect  // SedimentFractionsDefinitionsList
+
+      [MHR_Sediment_Transport_BedParameter]
+         Touched = false
+         Layout = 1
+         GlobalFactor = 0.083
+         GlobalMin = 1.0
+         GlobalMax = 1.0
+         MorphMethod = 1
+         [ActiveLayerThicknessLocalValueList]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // ActiveLayerThicknessLocalValueList
+
+         [MorphologicalLocalValueList]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // MorphologicalLocalValueList
+
+      EndSect  // MHR_Sediment_Transport_BedParameter
+
+      [SedimentTransportPassiveBranchesList]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [Sediment_Transport_PassiveBranchesGeneralParameters]
+            Touched = false
+            Include = false
+         EndSect  // Sediment_Transport_PassiveBranchesGeneralParameters
+
+      EndSect  // SedimentTransportPassiveBranchesList
+
+      [NonScouringBedLevel]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         Include = false
+         GlobalUnlimited = false
+         GlobalLevel = 0.0
+      EndSect  // NonScouringBedLevel
+
+   EndSect  // MHR_Sediment_Transport
+
+   [BoundaryConditionsPfs]
+      Touched = false
+      [Boundary]
+         Touched = false
+         DhiSEPfsListItemCount = 2
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = 'BoundaryType'
+            SymbolFieldTypeCode = 9
+            UseCustomColor = false
+            LabelField = 'BoundaryType'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 3
+            [SpecifiedSymbols]
+               Count = 8
+               [SpecifiedSymbolElem_0]
+                  ClassifyType = 3
+                  Label = 'WaterLevel'
+                  Value = 'WaterLevel'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -5952982
+                  PolylineThickness = 5
+                  PolylineType = 0
+                  DrawDirectionArrow = false
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_0
+
+               [SpecifiedSymbolElem_1]
+                  ClassifyType = 3
+                  Label = 'Closed'
+                  Value = 'Closed'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -29696
+                  PolylineThickness = 5
+                  PolylineType = 0
+                  DrawDirectionArrow = false
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_1
+
+               [SpecifiedSymbolElem_2]
+                  ClassifyType = 3
+                  Label = 'QHRelation'
+                  Value = 'QHRelation'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -16777152
+                  PolylineThickness = 5
+                  PolylineType = 0
+                  DrawDirectionArrow = false
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_2
+
+               [SpecifiedSymbolElem_3]
+                  ClassifyType = 3
+                  Label = 'FreeOutflow'
+                  Value = 'FreeOutflow'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -8372096
+                  PolylineThickness = 5
+                  PolylineType = 0
+                  DrawDirectionArrow = false
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_3
+
+               [SpecifiedSymbolElem_4]
+                  ClassifyType = 3
+                  Label = 'Runoff'
+                  Value = 'Runoff'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -8355712
+                  PolylineThickness = 5
+                  PolylineType = 0
+                  DrawDirectionArrow = false
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_4
+
+               [SpecifiedSymbolElem_5]
+                  ClassifyType = 3
+                  Label = 'Discharge'
+                  Value = 'Discharge'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -4194304
+                  PolylineThickness = 5
+                  PolylineType = 0
+                  DrawDirectionArrow = false
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_5
+
+               [SpecifiedSymbolElem_6]
+                  ClassifyType = 3
+                  Label = 'Rainfall'
+                  Value = 'Rainfall'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -4145152
+                  PolylineThickness = 5
+                  PolylineType = 0
+                  DrawDirectionArrow = false
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_6
+
+               [SpecifiedSymbolElem_7]
+                  ClassifyType = 3
+                  Label = 'Evaporation'
+                  Value = 'Evaporation'
+                  IsOthersStyle = false
+                  PolylineSymbolColor = -4144960
+                  PolylineThickness = 5
+                  PolylineType = 0
+                  DrawDirectionArrow = false
+                  ArrowPosition = 0
+               EndSect  // SpecifiedSymbolElem_7
+
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -5952982
+            PolylineThickness = 5
+            PolylineType = 0
+            DrawDirectionArrow = false
+            ArrowPosition = 0
+         EndSect  // PolylineSymbology
+
+         [Boundary_0]
+            Touched = false
+            ObjectID = 'ae15716e-82c7-4a25-9588-bd03c350470a'
+            Shape = 'LINESTRING(0 0,0 0)'
+            ShortName = ''
+            BranchID = '7b136259-fef3-4c61-8568-37590449cb1d'
+            Chainage = 0.0
+            IsSpan = false
+            ToChainage = 0.0
+            Name = 'Boundary 1'
+            BoundaryType = 1
+            LocationType = 0
+            CatchmentID = '00000000-0000-0000-0000-000000000000'
+            RunoffFlowType = 0
+            HDInclude = true
+            HDInputType = 0
+            HDScale = 1.0
+            HDConstant = 1.0
+            ADInclude = false
+            UseMixing = false
+            MixingCoef = 1.0
+            STInclude = true
+            STBoundaryType = 1
+            STInputType = 0
+            STScale = 1.0
+            STChange = 0.0
+            [HDTS]
+               Touched = false
+               FILE_NAME = ||
+               ITEM_COUNT = 0
+               ITEM_NUMBERS = 0
+            EndSect  // HDTS
+
+            [STTS]
+               Touched = false
+               FILE_NAME = ||
+               ITEM_COUNT = 0
+               ITEM_NUMBERS = 0
+            EndSect  // STTS
+
+            [ADBoundary]
+               Touched = false
+               DhiSEPfsListItemCount = 0
+            EndSect  // ADBoundary
+
+            [QHBoundary]
+               Touched = false
+               DhiSEPfsListItemCount = 0
+            EndSect  // QHBoundary
+
+            [STBoundary]
+               Touched = false
+               DhiSEPfsListItemCount = 0
+            EndSect  // STBoundary
+
+         EndSect  // Boundary_0
+
+         [Boundary_1]
+            Touched = false
+            ObjectID = '471094f7-4f61-4c49-9136-182e22a23f4d'
+            Shape = 'LINESTRING(1000 0,1000 0)'
+            ShortName = ''
+            BranchID = '7b136259-fef3-4c61-8568-37590449cb1d'
+            Chainage = 1000.0
+            IsSpan = false
+            ToChainage = 1000.0
+            Name = 'Boundary 2'
+            BoundaryType = 0
+            LocationType = 0
+            CatchmentID = '00000000-0000-0000-0000-000000000000'
+            RunoffFlowType = 0
+            HDInclude = true
+            HDInputType = 0
+            HDScale = 1.0
+            HDConstant = 1.0
+            ADInclude = false
+            UseMixing = false
+            MixingCoef = 1.0
+            STInclude = true
+            STBoundaryType = 1
+            STInputType = 0
+            STScale = 1.0
+            STChange = 0.0
+            [HDTS]
+               Touched = false
+               FILE_NAME = ||
+               ITEM_COUNT = 0
+               ITEM_NUMBERS = 0
+            EndSect  // HDTS
+
+            [STTS]
+               Touched = false
+               FILE_NAME = ||
+               ITEM_COUNT = 0
+               ITEM_NUMBERS = 0
+            EndSect  // STTS
+
+            [ADBoundary]
+               Touched = false
+               DhiSEPfsListItemCount = 0
+            EndSect  // ADBoundary
+
+            [QHBoundary]
+               Touched = false
+               DhiSEPfsListItemCount = 0
+            EndSect  // QHBoundary
+
+            [STBoundary]
+               Touched = false
+               DhiSEPfsListItemCount = 0
+            EndSect  // STBoundary
+
+         EndSect  // Boundary_1
+
+      EndSect  // Boundary
+
+      [MH_Wind_Friction]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         GlobalWindScalingFactor = 1.0
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'WindScalingFactor'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 0
+            PointSymbolFillColor = -1
+            PointOutlineColor = -16728064
+            PointSize = 11
+            PointOutlineWidth = 2
+            PointStyle = 5
+            BitmapName = ''
+         EndSect  // PointSymboloy
+
+      EndSect  // MH_Wind_Friction
+
+      [MH_Wind_Field]
+         Touched = false
+         ObjectID = '3f5d57d2-66fc-4e96-a824-94896179f26e'
+         IncludeWindShearStress = false
+         WindDirectionType = 1
+         WindDirectionValue = 0.0
+         WindVelocityType = 1
+         WindVelocityValue = 0.0
+         [WindDirectionTS]
+            Touched = false
+            FILE_NAME = ||
+            ITEM_COUNT = 0
+            ITEM_NUMBERS = 0
+         EndSect  // WindDirectionTS
+
+         [WindVelocityTS]
+            Touched = false
+            FILE_NAME = ||
+            ITEM_COUNT = 0
+            ITEM_NUMBERS = 0
+         EndSect  // WindVelocityTS
+
+         [HDWindDirectionList]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // HDWindDirectionList
+
+         [HDWindVelocityList]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // HDWindVelocityList
+
+      EndSect  // MH_Wind_Field
+
+      [GroundWaterLeakage]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         IncludeGWLeakage = false
+         GWHeadType = 0
+         GWHeadValue = 0.0
+         LeakageCoeff = 0.0
+         [GWHeadTS]
+            Touched = false
+            FILE_NAME = ||
+            ITEM_COUNT = 0
+            ITEM_NUMBERS = 0
+         EndSect  // GWHeadTS
+
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'LeakageCoeff'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 0
+            PointSymbolFillColor = -65536
+            PointOutlineColor = -65536
+            PointSize = 6
+            PointOutlineWidth = 1
+            PointStyle = 0
+            BitmapName = ''
+         EndSect  // PointSymboloy
+
+      EndSect  // GroundWaterLeakage
+
+      [MSheLinks]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         IncludeMSheCoupling = false
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'Conductance'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -16777216
+            PolylineThickness = 5
+            PolylineType = 0
+            DrawDirectionArrow = false
+            ArrowPosition = 1
+         EndSect  // PolylineSymbology
+
+      EndSect  // MSheLinks
+
+   EndSect  // BoundaryConditionsPfs
+
+   [InitialConditionsGroupPfs]
+      Touched = false
+      [MH_InitialCondition_State_File]
+         Touched = false
+         UseState = false
+         FolderPath = ||
+         UseSimStart = true
+         DateTime = '2019 01 01 00:00:00'
+      EndSect  // MH_InitialCondition_State_File
+
+      [MH_Initial_Conditions]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         GlobalValueType = 1
+         GlobalLevelType = 1
+         GlobalWaterLevel = 1.0
+         GlobalDischargeType = 0
+         GlobalDischarge = 1.0
+         UseHotStartSolution = false
+         UseLocalValue = true
+         [HotStartFiles]
+         EndSect  // HotStartFiles
+
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'WaterLevel'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 0
+            PointSymbolFillColor = -4144897
+            PointOutlineColor = -16776961
+            PointSize = 9
+            PointOutlineWidth = 1
+            PointStyle = 2
+            BitmapName = ''
+         EndSect  // PointSymboloy
+
+      EndSect  // MH_Initial_Conditions
+
+      [MH_AD_Initial_Conditions]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [GlobalValues]
+            Count = 0
+         EndSect  // GlobalValues
+
+         [HotStartFiles]
+            UseHotStartSolution = false
+            Count = 0
+         EndSect  // HotStartFiles
+
+      EndSect  // MH_AD_Initial_Conditions
+
+      [STInitialCondition]
+         Touched = false
+         [ThicknessGlobal]
+            Touched = false
+            ObjectID = 'ad01df26-cbbf-49d6-ad67-bb2040b44d16'
+            BranchID = '00000000-0000-0000-0000-000000000000'
+            Chainage = 0.0
+            ActiveThick = 1.0
+            PassiveThick = 1.0
+            UsePassiveThick = true
+            [STInitialConditionThicknessPercentageList]
+               Touched = false
+               DhiSEPfsListItemCount = 0
+            EndSect  // STInitialConditionThicknessPercentageList
+
+         EndSect  // ThicknessGlobal
+
+         [STInitialConditionConcentrationLocalValueList]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // STInitialConditionConcentrationLocalValueList
+
+         [STInitialConditionThicknessLocalValueList]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // STInitialConditionThicknessLocalValueList
+
+      EndSect  // STInitialCondition
+
+   EndSect  // InitialConditionsGroupPfs
+
+   [DataAssimilationGroupPfs]
+      Touched = false
+      [DAGeneralParameters]
+         Touched = false
+         DataAssimitionMode = 0
+         FirstUpdateStep = 0
+         EnsembleSize = 200
+         TOF = '2019 07 01 00:00:00'
+         ForecastType = 0
+      EndSect  // DAGeneralParameters
+
+      [DAUpdateParameterList]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 0
+            PointSymbolFillColor = -65536
+            PointOutlineColor = -65536
+            PointSize = 6
+            PointOutlineWidth = 1
+            PointStyle = 0
+            BitmapName = ''
+         EndSect  // PointSymboloy
+
+      EndSect  // DAUpdateParameterList
+
+      [DAEquationList]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+      EndSect  // DAEquationList
+
+      [DAPerturbationParameterList]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+      EndSect  // DAPerturbationParameterList
+
+      [DAStandardDeviationList]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+      EndSect  // DAStandardDeviationList
+
+      [DAObservationDefinitions]
+         Touched = false
+      EndSect  // DAObservationDefinitions
+
+      [DAInputPerturbations]
+         Touched = false
+      EndSect  // DAInputPerturbations
+
+      [DAHotstartFiles]
+         Touched = false
+         GenerateHotStart = false
+         UseHotstart = false
+         HDResultFile = ||
+         ADResultFile = ||
+         HDResultFile = ||
+         RRResultFile = ||
+         ADBndResultFile = ||
+         HDBndResultFile = ||
+         RRBndResultFile = ||
+      EndSect  // DAHotstartFiles
+
+   EndSect  // DataAssimilationGroupPfs
+
+   [UserDefinedVariablesGroupPfs]
+      Touched = false
+      [VariableDefinitionList]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+      EndSect  // VariableDefinitionList
+
+   EndSect  // UserDefinedVariablesGroupPfs
+
+   [ControlRulesGroupPfs]
+      Touched = false
+      [Sensors]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+      EndSect  // Sensors
+
+   EndSect  // ControlRulesGroupPfs
+
+   [ResultSpecificationsGroupPfs]
+      Touched = false
+      [RiverResult]
+         Touched = false
+         UseDefaultNames = false
+         ResultsFileName = 'UnitFlow.res1d'
+         ResultFrequency = 1
+         ResultUnit = 0
+         ADResultsFileName = ''
+         ADResultFrequency = 1
+         ADResultUnit = 0
+         RRResultsFileName = ''
+         RRResultFrequency = 1
+         RRResultUnit = 0
+         WQResultsFileName = ''
+         STResultsFileName = ''
+         STResultFrequency = 1
+         STResultUnit = 0
+      EndSect  // RiverResult
+
+      [WaterManagementResult]
+         Touched = false
+         UseDefaultNames = true
+         ResultFile_RR = ''
+         ResultFile_MB = ''
+         CreateRunoffHotstartFiles = false
+      EndSect  // WaterManagementResult
+
+      [MH_RR_Additional_Results]
+         Touched = false
+         RRaddConf = false
+         RRaddCorr = false
+         RRaddDev = false
+         RRaddGain = false
+         RRaddPercent = '<CLOB:0>'
+      EndSect  // MH_RR_Additional_Results
+
+      [MH_HD_Additional_Results]
+         Touched = false
+         Velocity = false
+         VelocityStruct = false
+         Discharge = false
+         DischargeStruct = false
+         FlowAreaStruct = false
+         VariablesControl = false
+         WLSlope = false
+         FlowArea = false
+         FlowWidth = false
+         Radius = false
+         Resistance = false
+         Conveyance = false
+         Froude = false
+         FloodAreaGrid = false
+         FloodAreaTot = false
+         VolumeGrid = false
+         VolumeTot = false
+         MassErrGrid = false
+         MassErrTot = false
+         AccMassErrTot = false
+         TimeStep = false
+         NRJLevel = false
+         NRJLevelSlope = false
+         TotalShearStress = false
+         HDaddDev = false
+         HDaddCorr = false
+         HDaddGain = false
+         HDaddConf = false
+         HDaddPercent = '<CLOB:0>'
+      EndSect  // MH_HD_Additional_Results
+
+      [MH_AD_Additional_Results]
+         Touched = false
+         TotalMassNo = false
+         GridMassNo = false
+         TotalMassErrNo = false
+         TotalAccMassErrNo = false
+         GridMassErrNo = false
+         GridAccMassErrNo = false
+         TotalOrderDecay = false
+         TotalAccOrderDecNo = false
+         GridOrderDecay = false
+         GridAccOrderDecNo = false
+         ADaddDev = false
+         ADaddCorr = false
+         ADaddGain = false
+         ADaddConf = false
+         ADaddPercent = '<CLOB:0>'
+      EndSect  // MH_AD_Additional_Results
+
+      [MH_ST_Additional_Results]
+         Touched = false
+         BedLevelChange = false
+         TotalShearStress = false
+         SkinShearStress = false
+         d50 = false
+         d90 = false
+         GeometricMeanDiameter = false
+         BedLoadIOF = false
+         SuspendedLoadIOF = false
+         TotalLoadIOF = false
+         Concentration = false
+         TotalLayerThickness = false
+         LayerThicknessTotalActive = false
+         LayerThicknessTotalPassive = false
+         TotalThickness = false
+         ActiveLayerThickness = false
+         PassiveLayerThickness = false
+         TotalMass = false
+         ActiveLayerMass = false
+         PassiveLayerMass = false
+         ActiveLayerDistribution = false
+         PassiveLayerDistribution = false
+         SedimentConcentration = false
+         BedLoadFractional = false
+         SuspendedLoadFractional = false
+         TotalLoadFractional = false
+      EndSect  // MH_ST_Additional_Results
+
+      [MH_Result_State_File]
+         Touched = false
+         SaveState = false
+         DefaultFolder = true
+         FolderPath = |.\UnitFlow.mhydro - State Files\|
+         DefaultName = true
+         FileName = 'StateFile_Simulation 1.state1d'
+         Frequency = 10000
+         Unit = 0
+      EndSect  // MH_Result_State_File
+
+      [MapResult]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+         MapGeneration = false
+         DEMInput = false
+         ApplyDEM = false
+         MapAdditionalFloodedAreas = false
+         MapAdditionalFloodedAreasFilename = ||
+         [MapResultDEMItemList]
+            Touched = false
+            DhiSEPfsListItemCount = 0
+         EndSect  // MapResultDEMItemList
+
+      EndSect  // MapResult
+
+      [TimeSeriesOutputList]
+         Touched = false
+         DhiSEPfsListItemCount = 0
+      EndSect  // TimeSeriesOutputList
+
+   EndSect  // ResultSpecificationsGroupPfs
+
+   [LoadBasinPfs]
+      Touched = false
+      Clob = '<CLOB:0>'
+   EndSect  // LoadBasinPfs
+
+   [ResultSymbologyGroup]
+      Touched = false
+      ObjectID = '01ae1f0a-06fd-41f4-849a-910089c9e963'
+      [MBBranch]
+         Touched = false
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -16776961
+            PolylineThickness = 2
+            PolylineType = 0
+            DrawDirectionArrow = true
+            ArrowPosition = 0
+         EndSect  // PolylineSymbology
+
+      EndSect  // MBBranch
+
+      [MBNode]
+         Touched = false
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = 'Symbol'
+            SymbolFieldTypeCode = 9
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 3
+            [SpecifiedSymbols]
+               Count = 5
+               [SpecifiedSymbolElem_0]
+                  ClassifyType = 3
+                  Label = 'Node: RIVER_NODE'
+                  Value = 'RIVER_NODE'
+                  IsOthersStyle = false
+                  BitmapName = ''
+                  FillColor = -32768
+                  OutlineColor = -65536
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 0
+                  SymbolStyle = 0
+               EndSect  // SpecifiedSymbolElem_0
+
+               [SpecifiedSymbolElem_1]
+                  ClassifyType = 3
+                  Label = 'Node: WATERUSER_NODE'
+                  Value = 'WATERUSER_NODE'
+                  IsOthersStyle = false
+                  BitmapName = 'wateruser'
+                  FillColor = -23296
+                  OutlineColor = -23296
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 1
+                  SymbolStyle = 1
+               EndSect  // SpecifiedSymbolElem_1
+
+               [SpecifiedSymbolElem_2]
+                  ClassifyType = 3
+                  Label = 'Node: WATERUSER_IRRIGATION_NODE'
+                  Value = 'WATERUSER_IRRIGATION_NODE'
+                  IsOthersStyle = false
+                  BitmapName = 'irriuser'
+                  FillColor = -23296
+                  OutlineColor = -23296
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 1
+                  SymbolStyle = 1
+               EndSect  // SpecifiedSymbolElem_2
+
+               [SpecifiedSymbolElem_3]
+                  ClassifyType = 3
+                  Label = 'Node: HYDROPOWER_NODE'
+                  Value = 'HYDROPOWER_NODE'
+                  IsOthersStyle = false
+                  BitmapName = 'hydropower'
+                  FillColor = -23296
+                  OutlineColor = -23296
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 1
+                  SymbolStyle = 1
+               EndSect  // SpecifiedSymbolElem_3
+
+               [SpecifiedSymbolElem_4]
+                  ClassifyType = 3
+                  Label = 'Node: RESERVOIR_NODE'
+                  Value = 'RESERVOIR_NODE'
+                  IsOthersStyle = false
+                  BitmapName = 'reservoir'
+                  FillColor = -23296
+                  OutlineColor = -23296
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 1
+                  SymbolStyle = 1
+               EndSect  // SpecifiedSymbolElem_4
+
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 0
+            PointSymbolFillColor = -65536
+            PointOutlineColor = -65536
+            PointSize = 6
+            PointOutlineWidth = 0
+            PointStyle = 0
+            BitmapName = ''
+         EndSect  // PointSymboloy
+
+      EndSect  // MBNode
+
+      [MBCatchment]
+         Touched = false
+         [PolygonSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolygonFillColor = -8000
+            PolygonOutlineColor = -8372224
+            PolygonTransparency = 50
+            PolygonThickness = 2
+            PolygonOutlineStyle = 0
+         EndSect  // PolygonSymbology
+
+      EndSect  // MBCatchment
+
+      [RiverReach]
+         Touched = false
+         [PolylineSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'Name'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedThicknessRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedThicknessRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolylineSymbolColor = -16776961
+            PolylineThickness = 2
+            PolylineType = 0
+            DrawDirectionArrow = true
+            ArrowPosition = 0
+         EndSect  // PolylineSymbology
+
+      EndSect  // RiverReach
+
+      [RiverGridPoint]
+         Touched = false
+         [PointSymboloy]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = 'GridPointType'
+            SymbolFieldTypeCode = 9
+            UseCustomColor = false
+            LabelField = 'GridPointType'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 3
+            [SpecifiedSymbols]
+               Count = 2
+               [SpecifiedSymbolElem_0]
+                  ClassifyType = 3
+                  Label = 'Grid point: QPoint'
+                  Value = 'QPoint'
+                  IsOthersStyle = false
+                  BitmapName = ''
+                  FillColor = -65536
+                  OutlineColor = -65536
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 0
+                  SymbolStyle = 0
+               EndSect  // SpecifiedSymbolElem_0
+
+               [SpecifiedSymbolElem_1]
+                  ClassifyType = 3
+                  Label = 'Grid point: HPoint'
+                  Value = 'HPoint'
+                  IsOthersStyle = false
+                  BitmapName = ''
+                  FillColor = -16776961
+                  OutlineColor = -16776961
+                  PointSize = 6
+                  OutlineThickness = 1
+                  PointSymbolType = 0
+                  SymbolStyle = 0
+               EndSect  // SpecifiedSymbolElem_1
+
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedSizeRange]
+               SizeFrom = 1
+               SizeTo = 20
+            EndSect  // GraduatedSizeRange
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            SymbolStyle = 0
+            PointSymbolFillColor = -65536
+            PointOutlineColor = -23296
+            PointSize = 6
+            PointOutlineWidth = 0
+            PointStyle = 0
+            BitmapName = ''
+         EndSect  // PointSymboloy
+
+      EndSect  // RiverGridPoint
+
+      [RiverCatchment]
+         Touched = false
+         [PolygonSymbology]
+            Touched = false
+            ShowSymbol = true
+            LabelVisible = false
+            FontSize = 9
+            FontStyle = 0
+            FontColor = -16777216
+            SymbolField = ''
+            SymbolFieldTypeCode = 0
+            UseCustomColor = false
+            LabelField = 'ID'
+            SymbolScope = 0
+            SymbolExpression = ''
+            SymbologyType = 0
+            [SpecifiedSymbols]
+               Count = 0
+            EndSect  // SpecifiedSymbols
+
+            [GraduatedColorRamp]
+               Invert = false
+               ColorRamp = '-8388480:0;-16776961:20;-16734554:40;-16711936:60;-256:80;-65536:100'
+            EndSect  // GraduatedColorRamp
+
+            PolygonFillColor = -8000
+            PolygonOutlineColor = -8372224
+            PolygonTransparency = 50
+            PolygonThickness = 2
+            PolygonOutlineStyle = 0
+         EndSect  // PolygonSymbology
+
+      EndSect  // RiverCatchment
+
+   EndSect  // ResultSymbologyGroup
+
+   [D0Counter]
+      Touched = false
+      Seed = 0
+   EndSect  // D0Counter
+
+   [D1Counter]
+      Touched = false
+      Seed = 1
+   EndSect  // D1Counter
+
+   [D2Counter]
+      Touched = false
+      Seed = 0
+   EndSect  // D2Counter
+
+   [TSPlot]
+      Touched = false
+      DhiSEPfsListItemCount = 0
+   EndSect  // TSPlot
+
+EndSect  // MIKEHYDRO
+
+[SYSTEM]
+   ResultRootFolder = |.\|
+   UseCustomResultFolder = false
+   CustomResultFolder = ||
+EndSect  // SYSTEM
+

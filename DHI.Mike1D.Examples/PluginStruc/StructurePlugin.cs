@@ -169,7 +169,7 @@ namespace DHI.Mike1D.Examples.PluginStruc
       for (int i = 0; i < _myStructures.Count; i++)
       {
         MyStructure myStructure = _myStructures[i];
-        myStructure.WeirCoefficient = Math.Max(_myStructuresWeirCoefficients[0] + 0.5*Math.Sin(2*Math.PI*hours/2), 0.4);
+        myStructure.WeirCoefficient = System.Math.Max(_myStructuresWeirCoefficients[0] + 0.5*System.Math.Sin(2*System.Math.PI*hours/2), 0.4);
       }
     }
 

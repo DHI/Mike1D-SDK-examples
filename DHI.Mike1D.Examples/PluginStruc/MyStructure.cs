@@ -117,16 +117,16 @@ namespace DHI.Mike1D.Examples.PluginStruc
       if ((y/x) <= (2.0/3.0))
       {
         // Free overflow
-        _q = WeirCoefficient*CrestWidth*Math.Pow(x, 1.5);
-        _dqdhUpstream = 1.5*WeirCoefficient*CrestWidth*Math.Sqrt(x);
+        _q = WeirCoefficient*CrestWidth*System.Math.Pow(x, 1.5);
+        _dqdhUpstream = 1.5*WeirCoefficient*CrestWidth*System.Math.Sqrt(x);
         _dqdhDownstream = 0.0;
       }
       else
       {
         // Submerged flow
-        double coefficient2 = 1.5*Math.Sqrt(3)*WeirCoefficient;
-        _q = coefficient2*CrestWidth*y*Math.Sqrt(x - y);
-        double helpVar = coefficient2*CrestWidth/(2*Math.Sqrt(x - y));
+        double coefficient2 = 1.5*System.Math.Sqrt(3)*WeirCoefficient;
+        _q = coefficient2*CrestWidth*y*System.Math.Sqrt(x - y);
+        double helpVar = coefficient2*CrestWidth/(2*System.Math.Sqrt(x - y));
         _dqdhUpstream = helpVar*y;
         _dqdhDownstream = helpVar*(2*x - 3*y);
       }

@@ -39,6 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\DHI.Generic.MikeZero.EUM.dll</HintPath>
     </Reference>
+    <Reference Include="DHI.Math.Expression, Version=17.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="DHI.Mike.Install, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\DHI.Mike.Install.dll</HintPath>
@@ -46,6 +49,10 @@
     <Reference Include="DHI.Mike1D.BoundaryModule, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\DHI.Mike1D.BoundaryModule.dll</HintPath>
+    </Reference>
+    <Reference Include="DHI.Mike1D.ControlModule, Version=17.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\DHI.Mike1D.ControlModule.dll</HintPath>
     </Reference>
     <Reference Include="DHI.Mike1D.CrossSectionModule, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -115,11 +122,13 @@
     <Compile Include="ResultDataExamples.cs" />
     <Compile Include="RunExamples.cs" />
     <Compile Include="Scripts\AdditionalOutput.cs" />
+    <Compile Include="Scripts\ControllerScripts.cs" />
     <Compile Include="Scripts\HonmaWeirCoefficient.cs" />
     <Compile Include="Scripts\InitialWaterLevel.cs" />
     <Compile Include="Scripts\PowerPlantEnergyOutput.cs" />
     <Compile Include="Scripts\ScriptParameters.cs" />
     <Compile Include="Scripts\SetupParameters.cs" />
+    <Compile Include="Scripts\ControlFunctionTable2D.cs" />
     <Compile Include="Scripts\StructureScripts.cs" />
     <Compile Include="UserDataExamples.cs" />
   </ItemGroup>
