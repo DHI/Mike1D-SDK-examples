@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using DHI.Math.Expression;
 using DHI.Mike1D.ControlModule;
 using DHI.Mike1D.Generic;
@@ -40,12 +42,17 @@ namespace DHI.Mike1D.Examples.Scripts
       UserControlFunctionFactory ucff = new UserControlFunctionFactory(mike1DData.ControlData);
       mike1DData.ControlData.UserFunctionFactories.Add(ucff);
 
-      // Add tables and associate them with an ID. Then we can use the function Table2D, as:
-      //    Table2D('Gate_1Table', [SensorWL], [SensorQ])
+      // Define table data, so can use the function Table2D, as for example:
+      //    Table2D('Gate_1Table_1', [SensorWL], [SensorQ])
+      // Below are shown two ways of defining table data:
+      // 1) Add table data by creating the table2D class in code
+      // 2) Read table data from csv file.
+
+      // 1) Add table by creating table class manually and associate them with an ID. 
       // Table data could be read from a file or similar, but here we insert table data directly. 
       Table2D table = new Table2D();
-      table.XAxis       = new double[]   {6.0, 6.5, 6.8, 7.0, 7.2, 7.5, 8.0};
-      table.YAxis       = new double[]   {0.7 , 1.0 , 1.3 };
+      table.XAxis = new double[] { 6.0, 6.5, 6.8, 7.0, 7.2, 7.5, 8.0 };
+      table.YAxis = new double[] { 0.7, 1.0, 1.3 };
       table.TableValues = new double[,]{ {6.00, 6.00, 6.00},   // x = 6.0
                                          {6.40, 6.30, 6.20},   // x = 6.5
                                          {6.50, 6.40, 6.30},   // x = 6.8
@@ -54,8 +61,124 @@ namespace DHI.Mike1D.Examples.Scripts
                                          {6.85, 6.60, 6.40},   // x = 7.5
                                          {7.00, 6.65, 6.40},   // x = 8.0
                                        };
-      mike1DData.ControlData.TableInfos.Add("Gate_1Table", table);
+      mike1DData.ControlData.TableInfos.Add("Gate_1Table_1", table);
+
+      // 2) Read table data from file. It assumes a file called ControlTables.txt exists in the folder.
+      ReadControlTableFile(mike1DData, "ControlTables.txt");
     }
+
+    /// <summary>
+    /// Read table data from table file. Table must contain:
+    ///
+    /// tableID; xCount; yCount
+    /// x-header having xCount values
+    /// y-header having yCount values
+    /// yCount lines (rows) having xCount values (columns)
+    /// </summary>
+    public static void ReadControlTableFile(Mike1DData mike1DData, string tableFile)
+    {
+      // Text split character.
+      char[] splitChar = new char[] { ';' };
+
+      // Check if file exists
+      if (System.IO.File.Exists(tableFile))
+      {
+        StreamReader sr = new StreamReader(tableFile);
+
+        while (true)
+        {
+          string line;
+
+          // Read table header. On the form: TableId;xCount;yCount
+          if ((line = ReadLine(sr)) == null)
+          {
+            // End-of-file met, done reading file, close file and return.
+            sr.Close();
+            return; 
+          }
+          // Split table header line
+          string[] parts = line.Split(splitChar, StringSplitOptions.RemoveEmptyEntries);
+          if (parts.Length != 3)                           throw new Exception("Could not read table header line: It must have the form 'TableId;xCount;yCount'. Line: "+line);
+          string tableId = parts[0].Trim();
+          int xCount;
+          int yCount;
+          if (!int.TryParse(parts[1].Trim(), out xCount))  throw new Exception("Could not read table header line: xCount not recognized. It must have the form 'TableId;xCount;yCount'. Line: " + line);
+          if (!int.TryParse(parts[2].Trim(), out yCount))  throw new Exception("Could not read table header line: yCount not recognized. It must have the form 'TableId;xCount;yCount'. Line: " + line);
+
+          // Create table
+          Table2D table = new Table2D(xCount, yCount);
+
+          // Read X header row
+          if ((line = ReadLine(sr)) == null)               throw new Exception(string.Format("Premature end-of-file when reading table {0}, X header row", tableId));
+          parts = line.Split(splitChar, StringSplitOptions.RemoveEmptyEntries);
+          if (parts.Length < xCount) throw new Exception(string.Format("Number of values mismatch reading table {0}, X header row. Found {1} values, expected {2}", tableId, parts.Length, xCount));
+          for (int icol = 0; icol < xCount; icol++)
+          {
+            double val;
+            if (!double.TryParse(parts[icol].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out val))
+              throw new Exception(string.Format("X header value in table {0}, column {1} is invalid: {2}", tableId, icol + 1, parts[icol]));
+            table.XAxis[icol] = val;
+          }
+
+          // Read Y header row
+          if ((line = ReadLine(sr)) == null)               throw new Exception(string.Format("Premature end-of-file when reading table {0}, Y header row", tableId));
+          parts = line.Split(splitChar, StringSplitOptions.RemoveEmptyEntries);
+          if (parts.Length < yCount)                       throw new Exception(string.Format("Number of values mismatch reading table {0}, Y header row. Found {1} values, expected {2}", tableId, parts.Length, yCount));
+          for (int irow = 0; irow < yCount; irow++)
+          {
+            double val;
+            if (!double.TryParse(parts[irow].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out val))
+              throw new Exception(string.Format("Y header value in table {0}, column {1} is invalid: {2}", tableId, irow + 1, parts[irow]));
+            table.YAxis[irow] = val;
+          }
+
+          // Read table values, loop over all rows
+          for (int irow = 0; irow < yCount; irow++)
+          {
+            // For reach row, read line and column values
+            if ((line = ReadLine(sr)) == null)             throw new Exception(string.Format("Premature end-of-file when reading table {0}, row {1} missing", tableId, irow+1));
+            parts = line.Split(splitChar, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length < xCount)                     throw new Exception(string.Format("Number of values mismatch reading table {0}, row {1}. Found {2} values, expected {3}", tableId, irow + 1, parts.Length, xCount));
+            for (int icol = 0; icol < xCount; icol++)
+            {
+              double val;
+              if (!double.TryParse(parts[icol].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out val))
+                throw new Exception(string.Format("Value in table {0}, row {1}, column {2} is invalid: {3}", tableId, irow + 1, icol+1, parts[icol]));
+              table.TableValues[icol, irow] = val;
+            }
+          }
+          // Done reading table, add to MIKE1D data.
+          mike1DData.ControlData.TableInfos.Add(tableId, table);
+        }
+      }
+    }
+
+    /// <summary>
+    /// Read line from reader, skip and remove comments and empty lines
+    /// </summary>
+    /// <returns>line content, or null at end-of-file</returns>
+    public static string ReadLine(StreamReader reader)
+    {
+      while (true)
+      {
+        // Read one line from file
+        string line = reader.ReadLine();
+        // Check for end-of-file
+        if (line == null)
+          return null;
+        line = line.Trim();
+        // Skip empty lines and lines starting with //
+        if (line == string.Empty || line.StartsWith("//"))
+          continue;
+        // Remove comments within line
+        int commentIndex = line.IndexOf("//", StringComparison.OrdinalIgnoreCase);
+        if (commentIndex >= 0)
+          line = line.Substring(0, commentIndex).TrimEnd();
+        // return line
+        return line;
+      }
+    }
+
   }
 
 
@@ -215,6 +338,23 @@ namespace DHI.Mike1D.Examples.Scripts
   /// </summary>
   public class Table2D : IAnyTable
   {
+    /// <summary>
+    /// Constructor, arrays must be explicitly assigned
+    /// </summary>
+    public Table2D()
+    {
+    }
+
+    /// <summary>
+    /// Constructor, creating arrays of specified size
+    /// </summary>
+    public Table2D(int n, int m)
+    {
+      XAxis       = new double[n];
+      YAxis       = new double[m];
+      TableValues = new double[n, m];
+    }
+
     public double[]  XAxis;
     public double[]  YAxis;
     public double[,] TableValues;
