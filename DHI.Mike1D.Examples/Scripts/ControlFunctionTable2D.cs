@@ -80,8 +80,11 @@ namespace DHI.Mike1D.Examples.Scripts
       // Text split character.
       char[] splitChar = new char[] { ';' };
 
+      // Search for tableFile relative to the MIKE 1D setup file.
+      FilePath tablePath = new FilePath(tableFile, mike1DData.Connection.FilePath);
+
       // Check if file exists
-      if (System.IO.File.Exists(tableFile))
+      if (System.IO.File.Exists(tablePath.FullFilePath))
       {
         StreamReader sr = new StreamReader(tableFile);
 
