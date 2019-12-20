@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DHI.Mike1D.Examples</RootNamespace>
     <AssemblyName>DHI.Mike1D.Examples</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -35,69 +35,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DHI.Generic.MikeZero.EUM, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Generic.MikeZero.EUM.dll</HintPath>
-    </Reference>
-    <Reference Include="DHI.Math.Expression, Version=17.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="DHI.Mike.Install, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Mike.Install.dll</HintPath>
-    </Reference>
-    <Reference Include="DHI.Mike1D.BoundaryModule, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Mike1D.BoundaryModule.dll</HintPath>
-    </Reference>
-    <Reference Include="DHI.Mike1D.ControlModule, Version=17.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Mike1D.ControlModule.dll</HintPath>
-    </Reference>
-    <Reference Include="DHI.Mike1D.CrossSectionModule, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Mike1D.CrossSectionModule.dll</HintPath>
-    </Reference>
-    <Reference Include="DHI.Mike1D.Engine, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Mike1D.Engine.dll</HintPath>
-    </Reference>
-    <Reference Include="DHI.Mike1D.Generic, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Mike1D.Generic.dll</HintPath>
-    </Reference>
-    <Reference Include="DHI.Mike1D.HDParameterDataAccess, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Mike1D.HDParameterDataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="DHI.Mike1D.Mike1DDataAccess, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Mike1D.Mike1DDataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="DHI.Mike1D.NetworkDataAccess, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Mike1D.NetworkDataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="DHI.Mike1D.RainfallRunoffModule, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Mike1D.RainfallRunoffModule.dll</HintPath>
-    </Reference>
-    <Reference Include="DHI.Mike1D.ResultDataAccess, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Mike1D.ResultDataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="DHI.Mike1D.SimLauncher, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Mike1D.SimLauncher.dll</HintPath>
-    </Reference>
-    <Reference Include="DHI.Mike1D.StructureModule, Version=15.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\DHI.Mike1D.StructureModule.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.6.1.12217, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -128,6 +65,17 @@
     <Compile Include="Scripts\ControlFunctionTable2D.cs" />
     <Compile Include="Scripts\StructureScripts.cs" />
     <Compile Include="UserDataExamples.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DHI.Mike.Install">
+      <Version>1.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="DHI.Mike1D">
+      <Version>18.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="NUnit">
+      <Version>3.12.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
