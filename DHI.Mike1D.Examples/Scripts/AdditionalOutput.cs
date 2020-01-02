@@ -39,6 +39,23 @@ namespace DHI.Mike1D.Examples.Scripts
     }
 
     /// <summary>
+    /// Set flag such that results are written at exact time matching output interval specification.
+    /// When output time does not match engine time, interpolation in time is applied.
+    /// <para>
+    /// This is relevant when running with adaptive or tabulated time stepping.
+    /// </para>
+    /// </summary>
+    [Script]
+    public void SetInterpolationFlag(Mike1DData mike1DData)
+    {
+      foreach (ResultSpecification resSpec in mike1DData.ResultSpecifications)
+      {
+        resSpec.Interpolate = true;
+      }
+    }
+
+
+    /// <summary>
     /// Make a user defined output file that outputs mass transport in a specified set of links and weirs
     /// <para>
     /// Method called when Mike1DData object has been loaded.
