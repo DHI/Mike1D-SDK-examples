@@ -54,6 +54,19 @@ namespace DHI.Mike1D.Examples.Scripts
       }
     }
 
+    /// <summary>
+    /// Disable various outputs, based on their output id.
+    /// </summary>
+    [Script]
+    public void DisableOutput(Mike1DData mike1DData)
+    {
+      // Remove default RR results
+      mike1DData.ResultSpecifications.RemoveAll(item => item.ID == "DefaultRRResults");
+      // Remove additional NAM RR results
+      mike1DData.ResultSpecifications.RemoveAll(item => item.ID == "AdditionalNAMRRResults");
+      // Remove Catchment Discharge results
+      mike1DData.ResultSpecifications.RemoveAll(item => item.ID == "CatchmentDischargeRRResults");
+    }
 
     /// <summary>
     /// Make a user defined output file that outputs mass transport in a specified set of links and weirs
