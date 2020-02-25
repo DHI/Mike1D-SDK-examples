@@ -24,19 +24,19 @@ maximum resistance *M<sub>max</sub>=40*)
 on a reach with name *MyReach* from chainage *1000* to *2000* add a line:
 
 ```cs
-AddFormula(FormulaType.Velocity, 0.01, 0.01, 10, 40, "MyReach", 1000, 2000);
+AddFormula(FormulaType.Velocity, 0.05, 1.0, 10, 40, "MyReach", 1000, 2000);
 ```
 
 To apply the same formula on the whole reach use a simplified method:
 
 ```cs
-AddFormula(FormulaType.Velocity, 0.01, 0.01, 10, 40, "MyReach");
+AddFormula(FormulaType.Velocity, 0.05, 1.0, 10, 40, "MyReach");
 ```
 
 If the formula needs to be applied globally then add a line:
 
 ```cs
-AddFormula(FormulaType.Velocity, 0.01, 0.01, 10, 40);
+AddFormula(FormulaType.Velocity, 0.05, 1.0, 10, 40);
 ```
 
 As in MIKE 11 there are three predefined formula types are:
@@ -61,4 +61,5 @@ AddTable(velocityValues, resistanceValues, "MyReach", 1000, 2000);
 
 As the name suggests the array *velocityValues* contains velocity values in
 unit m/s and the array *resistanceValues* contains Manning's *M* resistance
-values in unit m<sup>1/3</sup>/s.
+values in unit m<sup>1/3</sup>/s. Outside the bounds of the *velocityValues* array, 
+the nearest *resistanceValues* is used. 
