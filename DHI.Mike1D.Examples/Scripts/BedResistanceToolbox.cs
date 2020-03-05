@@ -54,17 +54,17 @@ namespace Scripts
       //
       // on a reach with name MyReach from chainage 1000 to 2000 add a line:
       // -----------------------
-      // AddFormula(FormulaType.Velocity, 0.01, 0.01, 10, 40, "MyReach", 1000, 2000);
+      // AddFormula(FormulaType.Velocity, 0.05, 1.0, 10, 40, "MyReach", 1000, 2000);
       // -----------------------
 
       // To apply the same formula on the whole reach use a simplified method:
       // -----------------------
-      // AddFormula(FormulaType.Velocity, 0.01, 0.01, 10, 40, "MyReach");
+      // AddFormula(FormulaType.Velocity, 0.05, 1.0, 10, 40, "MyReach");
       // -----------------------
 
       // If the formula needs to be applied globally then add a line:
       // -----------------------
-      // AddFormula(FormulaType.Velocity, 0.01, 0.01, 10, 40);
+      // AddFormula(FormulaType.Velocity, 0.05, 1.0, 10, 40);
       // -----------------------
 
       // The velocity dependence of bed resistance using a velocity-resistance table:
