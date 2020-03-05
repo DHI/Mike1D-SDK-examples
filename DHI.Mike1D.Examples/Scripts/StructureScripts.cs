@@ -11,7 +11,7 @@ namespace DHI.Mike1D.Examples.Scripts
   {
     /// <summary>
     /// The Underflow gate has a couple of parameters to stabilize the transition between
-    /// the different flow regimes. This script methods sets these paramters for all UnderFlowGate
+    /// the different flow regimes. This script methods sets these parameters for all UnderFlowGate
     /// structures.
     /// </summary>
     [Script]
@@ -29,5 +29,27 @@ namespace DHI.Mike1D.Examples.Scripts
         }
       }
     }
+
+    /// <summary>
+    /// The EnergyLoss structure solves a set of energy-loss equations using an iterative approach.
+    /// This can be somewhat unstable. A number of iterative methods have been implemented,
+    /// and choosing another method can make an unstable energy-loss structure stable.
+    /// </summary>
+    [Script]
+    public void UpdateEnergyLossSolverMethod(Mike1DData mike1DData)
+    {
+      foreach (IStructure structure in mike1DData.Network.StructureCollection.Structures)
+      {
+        EnergyLoss energyLoss = structure as EnergyLoss;
+        if (energyLoss != null)
+        {
+          // The Mike11Mod method keeps upstream and downstream energy level constant, regardless
+          // of actual flow through the structure.
+          energyLoss.SolverMethod = EnergyLoss.EnergyLossSolverMethod.Mike11Mod;
+        }
+      }
+    }
+
+
   }
 }
