@@ -66,6 +66,7 @@
     <Compile Include="Scripts\SetupParameters.cs" />
     <Compile Include="Scripts\ControlFunctionTable2D.cs" />
     <Compile Include="Scripts\StructureScripts.cs" />
+    <Compile Include="Scripts\SWMM5IntFile.cs" />
     <Compile Include="UserDataExamples.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +74,10 @@
       <Version>1.0.0</Version>
     </PackageReference>
     <PackageReference Include="DHI.Mike1D">
-      <Version>18.0.0</Version>
+      <Version>18.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="DHI.MikeCore">
+      <Version>18.1.0</Version>
     </PackageReference>
     <PackageReference Include="NUnit">
       <Version>3.12.0</Version>
