@@ -39,7 +39,9 @@ namespace DHI.Mike1D.Examples.Scripts
         foreach (CatchmentResultFile crFile in mike1DData.BoundaryData.CatchmentResultFiles)
         {
           if (crFile.FilePath.ExtensionIs(".txt")) // Only for SWMM5 interface files
+          {
             UpdateCatchmentConnections(mike1DData, crFile.FilePath, diagnostics);
+          }
         }
 
         // For backwards compatibility (prior to release 2020)
@@ -49,6 +51,28 @@ namespace DHI.Mike1D.Examples.Scripts
           UpdateCatchmentConnections(mike1DData, mike1DData.RainfallRunoffResultDataFilePath, diagnostics);
         }
       }
+
+
+      // Save to .res1d - set to true, if you want this to happen
+      if (false)
+      {
+        foreach (CatchmentResultFile crFile in mike1DData.BoundaryData.CatchmentResultFiles)
+        {
+          if (crFile.FilePath.ExtensionIs(".txt")) // Only for SWMM5 interface files
+          {
+            ConvertToRes1D(crFile.FilePath.FullFilePath);
+          }
+        }
+
+        // For backwards compatibility (prior to release 2020)
+        if (mike1DData.RainfallRunoffResultDataFilePath != null &&
+            mike1DData.RainfallRunoffResultDataFilePath.ExtensionIs(".txt")) // Only for SWMM5 interface files
+        {
+          ConvertToRes1D(mike1DData.RainfallRunoffResultDataFilePath.FullFilePath);
+        }
+      }
+
+
     }
 
     /// <summary>
@@ -96,6 +120,23 @@ namespace DHI.Mike1D.Examples.Scripts
       string msgs = string.Format("Updating Catchment Connections {0}, skipped {1} - for file: {2}", countCreated, countSkipped, rrFile.Path);
       Console.Out.WriteLine(msgs);
       diagnostics.Info(msgs);
+    }
+
+    /// <summary>
+    /// Method to convert any supported result data file (CRF/PRF/SWMM5) to res1d.
+    /// </summary>
+    private static void ConvertToRes1D(string filename)
+    {
+      // load result file
+      IResultData resultData = new ResultData();
+      resultData.Connection = Connection.Create(filename);
+      Diagnostics resultDiagnostics = new Diagnostics("Example");
+      resultData.Load(resultDiagnostics);
+
+      // Save to res1d
+      resultData.Connection.BridgeName         = "res1d";
+      resultData.Connection.FilePath.Extension = "res1d";
+      resultData.Save();
     }
   }
 
