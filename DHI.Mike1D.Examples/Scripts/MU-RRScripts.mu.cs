@@ -60,7 +60,7 @@ namespace DHI.Mike1D.AmeliaBridge
           // Retrieve Model A parameter set matching "ModelAParameterSet" column value.
           msm_HParA catchmentParameters = bridge.DataSource.Get<msm_HParA>(modelAParId);
           // Create a Model A catchment
-          ICatchmentTimeAreaData cta = rrDataFactory.PopulateRunoffA(msmCatchment, catchmentParameters, (1-impervFraction) * msmCatchment.Area.GetValueOrDefault());
+          ICatchmentTimeAreaData cta = rrDataFactory.PopulateRunoffA(msmCatchment, catchmentParameters, impervFraction * msmCatchment.Area.GetValueOrDefault());
           // Give the catchment a new name, so it does not collide with the original catchment model.
           cta.ModelId += "-Imperv";
           // Add the new Model A catchment to MIKE 1D.
