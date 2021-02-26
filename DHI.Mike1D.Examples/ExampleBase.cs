@@ -2,8 +2,10 @@ using System;
 using System.IO;
 using DHI.Mike1D.CrossSectionModule;
 using DHI.Mike1D.Examples.PluginStruc;
+using DHI.Mike1D.Examples.Scripts;
 using DHI.Mike1D.Generic;
 using DHI.Mike1D.Mike1DDataAccess;
+using DHI.Mike1D.ResultDataAccess;
 using NUnit.Framework;
 
 namespace DHI.Mike1D.Examples
@@ -173,5 +175,44 @@ namespace DHI.Mike1D.Examples
       Mike1DBridge.Save(controller.Mike1DData);
     }
 
+    [Test]
+    public void ResultDataConvertSWMM5InfToRes1D()
+    {
+      string filename = @"C:\Work\Support\SS_RDII_2YR.txt";
+
+      // Register bridge to MIKE 1D ResultData
+      ResultBridgeFactories.AddFactory("swmmInterfaceFile", new SWMM5InterfaceFileBridgeFactory(true));
+
+      // load result file
+      IResultData resultData = new ResultData();
+      resultData.Connection = Connection.Create(filename);
+      resultData.Connection.BridgeName = "swmmInterfaceFile";
+      Diagnostics resultDiagnostics = new Diagnostics("Example");
+      resultData.Load(resultDiagnostics);
+
+      // Save to res1d
+      resultData.Connection.BridgeName = "res1d";
+      resultData.Connection.FilePath.Extension = "res1d";
+      resultData.Save();
+
+
+    }
+
+    [Test]
+    public void ResultDataConvertCRFToRes1D()
+    {
+      string filename = @"C:\Work\Support\SS_RDII_2YR.CRF";
+
+      // load result file
+      IResultData resultData = new ResultData();
+      resultData.Connection            = Connection.Create(filename);
+      Diagnostics resultDiagnostics = new Diagnostics("Example");
+      resultData.Load(resultDiagnostics);
+
+      // Save to res1d
+      resultData.Connection.BridgeName         = "res1d";
+      resultData.Connection.FilePath.Extension = "res1d";
+      resultData.Save();
+    }
   }
 }

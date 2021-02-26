@@ -143,7 +143,7 @@ namespace DHI.Mike1D.Examples.Scripts
   /// <summary>
   /// Factory for creating SWMM5 Interface File Bridge on the fly
   /// </summary>
-  public class SWMM5IntFileBridgeFactory : IResultBridgeFactory
+  public class SWMM5InterfaceFileBridgeFactory : IResultBridgeFactory
   {
     // Flag indicating whether to store as RR (catchment data) or HD (node data)
     private bool _asRR;
@@ -151,7 +151,7 @@ namespace DHI.Mike1D.Examples.Scripts
     /// <summary>
     /// Constructor, specifying whether to store as RR or HD
     /// </summary>
-    public SWMM5IntFileBridgeFactory(bool asRR)
+    public SWMM5InterfaceFileBridgeFactory(bool asRR)
     {
       _asRR = asRR;
     }
