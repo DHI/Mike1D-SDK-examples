@@ -66,6 +66,7 @@
     <Compile Include="Scripts\ScriptParameters.cs" />
     <Compile Include="Scripts\SetupParameters.cs" />
     <Compile Include="Scripts\ControlFunctionTable2D.cs" />
+    <Compile Include="Scripts\StateRunExample.cs" />
     <Compile Include="Scripts\StructureScripts.cs" />
     <Compile Include="Scripts\SWMM5IntFile.cs" />
     <Compile Include="UserDataExamples.cs" />
