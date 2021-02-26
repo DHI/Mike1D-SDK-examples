@@ -25,7 +25,7 @@ namespace DHI.Mike1D.Examples
       // to call it as the first thing in that method using the MIKE libraries. Often this can be achieved
       // by having this code in the static constructor.
       // This is not required by plugins and scripts, only by standalone applications using MIKE 1D components
-      if (!DHI.Mike.Install.MikeImport.Setup(18, DHI.Mike.Install.MikeProducts.Mike1D))
+      if (!DHI.Mike.Install.MikeImport.Setup(19, DHI.Mike.Install.MikeProducts.Mike1D))
         throw new Exception("Could not find a MIKE installation");
     }
     
@@ -132,7 +132,8 @@ namespace DHI.Mike1D.Examples
       CrossSectionData csData = csDataFactory.Open(Connection.Create(xns11Filepath), diagnostics);
 
       // Add cross section
-      AddCrossSection(csData);
+      CreateAndAddOpenCrossSection(csData);
+      CreateAndAddCircularCrossSection(csData);
 
       // Save the cross section as a new file name
       csData.Connection.FilePath.FileNameWithoutExtension += "-csAdd";
@@ -161,7 +162,7 @@ namespace DHI.Mike1D.Examples
           throw new Exception("Loading errors, aborting");
 
         // Add an additional cross section
-        AddCrossSection(controller.Mike1DData.CrossSections);
+        CreateAndAddOpenCrossSection(controller.Mike1DData.CrossSections);
 
         // Change the output file name, so we can compare results with/without change
         controller.Mike1DData.ResultSpecifications[0].Connection.FilePath.FileNameWithoutExtension += "-csAdd";
@@ -198,10 +199,10 @@ namespace DHI.Mike1D.Examples
 
 
     /// <summary>
-    /// Adds a new cross section to the CrossSectionData object
+    /// Create a new open cross section and add it to the CrossSectionData object
     /// </summary>
     /// <param name="csData">Cross section data object</param>
-    public static void AddCrossSection(CrossSectionData csData)
+    public static void CreateAndAddOpenCrossSection(CrossSectionData csData)
     {
       // Note: Raw data must be ordered from left to right in order for hydraulic radius to be processed correctly
 
@@ -216,13 +217,13 @@ namespace DHI.Mike1D.Examples
 
       // Create a number of points
       CrossSectionPointList points = new CrossSectionPointList();
-      points.Add(new CrossSectionPoint(-1.0, 2.0));
-      points.Add(new CrossSectionPoint(0.0, 1.0));
-      points.Add(new CrossSectionPoint(0.0, 0.0));
-      points.Add(new CrossSectionPoint(1.0, 0.0));
-      points.Add(new CrossSectionPoint(1.0, 1.0));
-      points.Add(new CrossSectionPoint(2.0, 2.0));
-      points.Add(new CrossSectionPoint(3.0, 2.0)); // dummy point, outside right levee bank marker
+      points.Add(new CrossSectionPoint(-1.0, 2.0){DistributedResistance = 2});
+      points.Add(new CrossSectionPoint(0.0, 1.0) {DistributedResistance = 2});
+      points.Add(new CrossSectionPoint(0.0, 0.0) {DistributedResistance = 1});
+      points.Add(new CrossSectionPoint(1.0, 0.0) {DistributedResistance = 1});
+      points.Add(new CrossSectionPoint(1.0, 1.0) {DistributedResistance = 1});
+      points.Add(new CrossSectionPoint(2.0, 2.0) {DistributedResistance = 2});
+      points.Add(new CrossSectionPoint(3.0, 2.0) {DistributedResistance = 2}); // dummy point, outside right levee bank marker
       // Sets the markers at left/right side and lowest point.
       builder.SetRawPoints(points);
       builder.SetLeftLeveeBank(points[0]);
@@ -236,6 +237,51 @@ namespace DHI.Mike1D.Examples
       flowResistance.Formulation = ResistanceFormulation.Relative;
       builder.SetFlowResistance(flowResistance);
       builder.SetRadiusType(RadiusType.ResistanceRadius);
+
+      // Get cross section from builder
+      CrossSectionLocated cs = builder.GetCrossSection();
+      cs.TopoID = "1";
+
+      // Calculates the processed levels, storage areas, radii, etc, ie, fill in all 
+      // ProcessedXXX properties.
+      cs.BaseCrossSection.CalculateProcessedData();
+
+      // Validates the data. The constraints are that the levels and the areas after sorting
+      // must be monotonically increasing.
+      IDiagnostics diagnostics = cs.Validate();
+      if (diagnostics.ErrorCountRecursive > 0)
+      {
+        throw new Exception(String.Format("Number of errors: {0}", diagnostics.Errors.Count));
+      }
+
+      // Add the cross section
+      csData.Add(cs);
+
+    }
+    /// <summary>
+    /// Create a new circular cross section and add it to the CrossSectionData object
+    /// </summary>
+    /// <param name="csData">Cross section data object</param>
+    public static void CreateAndAddCircularCrossSection(CrossSectionData csData)
+    {
+
+      // Creates a class representing a cross section with raw data attached.
+      CrossSectionFactory builder = new CrossSectionFactory();
+      builder.BuildCircular(2);
+
+      // Defines the location of the current cross section. The Z-coordinate
+      // is the bottom level of the cross section (unless defined by the
+      // raw data (the open cross sections)).
+      builder.SetLocation(new ZLocation("pipe A", 10) { Z = 0 });
+
+      // Set flow resistance
+      FlowResistance flowResistance = new FlowResistance();
+      flowResistance.ResistanceDistribution = ResistanceDistribution.ExponentVarying;
+      flowResistance.ResistanceValue = 75;
+      flowResistance.ResistanceTopValue = 85;
+      flowResistance.ExpDepExponent = 1.5;
+      flowResistance.Formulation = ResistanceFormulation.Manning_M;
+      builder.SetFlowResistance(flowResistance);
 
       // Get cross section from builder
       CrossSectionLocated cs = builder.GetCrossSection();
