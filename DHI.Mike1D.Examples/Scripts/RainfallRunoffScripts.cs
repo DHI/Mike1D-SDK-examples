@@ -9,7 +9,13 @@ namespace DHI.Mike1D.Examples.Scripts
 {
 
   /// <summary>
-  /// Various scripts for Rainfall Runoff modelling.
+  /// Various scripts for Rainfall Runoff modeling.
+  /// <para>
+  /// In most cases only one script methods is to be applied.
+  /// The other methods can either be deleted, or just disabled by removing the
+  /// [script]
+  /// attribute in front of the method.
+  /// </para>
   /// </summary>
   public class RainfallRunoffScripts
   {
@@ -31,6 +37,35 @@ namespace DHI.Mike1D.Examples.Scripts
         }
       }
     }
+
+
+    /// <summary>
+    /// Create a Combined Catchment containing all other catchments,
+    /// effectively making one catchment summing up Total Runoff for all other catchments.
+    /// </summary>
+    [Script]
+    public void CreateSumTotalRunoffCatchment(Mike1DData mike1DData)
+    {
+      CatchmentCombined sumTotalRunoffCatchment = new CatchmentCombined("SumAllCatchments")
+      {
+        ScaleByArea = false,
+        Area        = 1,
+      };
+      double minTimestep = double.MaxValue;
+      double maxTimestep = double.MinValue;
+      foreach (ICatchment catchment in mike1DData.RainfallRunoffData.Catchments)
+      {
+        if (!(catchment is CatchmentCombined))
+        {
+          sumTotalRunoffCatchment.AddNewCatchment(catchment.ModelId, 1.0);
+          minTimestep = System.Math.Min(minTimestep, catchment.TimeStep.TotalSeconds);
+          maxTimestep = System.Math.Max(maxTimestep, catchment.TimeStep.TotalSeconds);
+        }
+      }
+      sumTotalRunoffCatchment.TimeStep = TimeSpan.FromSeconds(minTimestep);
+      mike1DData.RainfallRunoffData.Catchments.Add(sumTotalRunoffCatchment);
+    }
+
 
     /// <summary>
     /// Set Catchment Discharge time step to 30 minutes.
