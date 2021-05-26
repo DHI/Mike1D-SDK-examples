@@ -1,19 +1,34 @@
-# Download and install IronPython
-#   http://ironpython.net/download/
-#
-# Run from command line like (for the 2.7 version): 
-#   "c:\Program Files (x86)\IronPython 2.7\ipy64.exe" ResultDataExtract.py
-# Then check which command line arguments are required (or check below)
-
 import sys
+
+#region .NET imports
+
 import clr
-from math import *
-import array
 
-#===========================================================
-# Various helper functions
+clr.AddReference("System")
+import System
+from System import Array, StringComparer
 
-# Print usage of tool.
+# The SetupLatest method will make your script find the MIKE assemblies at runtime.
+# This is required for MIKE Version 2019 (17.0) and onwards. For previous versions, the
+# next three lines must be removed.
+clr.AddReference("DHI.Mike.Install, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf")
+from DHI.Mike.Install import MikeImport, MikeProducts
+products = list(MikeImport.InstalledProducts())
+product = products[0]
+MikeImport.Setup(product);
+
+clr.AddReference("DHI.Mike1D.ResultDataAccess")
+clr.AddReference("DHI.Mike1D.Generic")
+clr.AddReference("DHI.Generic.MikeZero.DFS")
+clr.AddReference("DHI.Generic.MikeZero.EUM")
+from DHI.Mike1D.ResultDataAccess import ResultData, ResultDataSearch, Filter, DataItemFilterName, ItemTypeGroup
+from DHI.Mike1D.Generic import Diagnostics, Connection
+from DHI.Generic.MikeZero import eumUnit, eumItem, eumQuantity
+from DHI.Generic.MikeZero.DFS import DfsFactory, DfsBuilder, DfsSimpleType, DataValueType, StatType
+
+#endregion .NET imports
+
+
 def PrintUsage():
     usageStr = """
 Usage: Extracts data from network result files to text file
@@ -29,7 +44,7 @@ Where: ExtractPoints is one or more of:
     catchment:TotalRunoff:Catchment_2
         Extracts total runoff from catchment Catchment_2
 
-The delimiter in the [extractPoints] can be changed to another character, in case id's 
+The delimiter in the [extractPoints] can be changed to another character, in case id's
 contain semicolons, e.g. using questionmark ?
     node?WaterLevel?hole:116
         Extracts water level from node with id hole:116
@@ -48,410 +63,800 @@ To check which nodes/reaches/catchments are available, leave out the rest
 To check which quantities are available on a node/reach/catchment, use '-' as quantity
     ipy.exe ResultDataExtract.py DemoBase.res1d out.txt reach:-:VIDAA-NED
 
-The ResultDataExtract supports a variety of network and RR result files, i.e 
+The ResultDataExtract supports a variety of network and RR result files, i.e
     res1d         : MIKE 1D network/RR result files
     res11         : MIKE 11 network/RR result files
     prf, trf      : MOUSE network result files
     crf, nrf, nof : MOUSE RR result files
 """
-    print usageStr
+    print(usageStr)
 
 
-# Find a given quantity from an IRes1DDataSet
-def FindQuantity(dataSet, quantityId):
-    numItems = dataSet.DataItems.Count;
-    for j in range(numItems):
-        if (StringComparer.OrdinalIgnoreCase.Equals(dataSet.DataItems[j].Quantity.Id, quantityId)):
-            return dataSet.DataItems[j];
-    return None;
+#region Enums
 
-# Print out quantities on IRes1DDataSet
-def PrintAllQuantities():
-    for j in range (resultData.Quantities.Count):
-        print "'%s'"  % (resultData.Quantities[j].Id);
-    return None;
-
-# Print out all quantities
-def PrintQuantities(dataSet):
-    numItems = dataSet.DataItems.Count;
-    for j in range(numItems):
-        print "'%s'"  % (dataSet.DataItems[j].Quantity.Id);
-    return None;
+class Constants(object):
+    ALL_CHAINAGES = -999
 
 
-# Find a given quantity on the node with the given nodeId
-def FindNodeQuantity(quantityToFind, nodeId):
-    node = searcher.FindNode(nodeId);
-    if (node != None):
-        if (quantityToFind == "-"):
-            PrintQuantities(node);
-            sys.exit();
-        dataItem = FindQuantity(node, quantityToFind);
-        if (dataItem != None):
-            dataItems.append(dataItem);
-            elmtIndex.append(0);
+class LocationType(object):
+    REACH = 'Reach'
+    NODE = 'Node'
+    CATCHMENT = 'Catchment'
+
+
+class OutputFileType(object):
+    TXT = 'txt'
+    CSV = 'csv'
+    DFS0 = 'dfs0'
+    ALL = '-'
+
+#endregion Enums
+
+#region Command line parsing
+
+class ParsedArgument(object):
+    """Class storing information about a parsed argument"""
+
+    def __init__(self,
+            locationType, quantityId, locationId, chainage,
+            printAllLocations, printQuantities, cannotHandleArgument):
+
+        self.locationType = locationType
+        self.quantityId = quantityId
+        self.locationId = locationId
+        self.chainage = chainage
+        self.printAllLocations = printAllLocations
+        self.printQuantities = printQuantities
+        self.cannotHandleArgument = cannotHandleArgument
+
+
+class CommandLineParser(object):
+    """Class for parsing command line arguments"""
+
+    def __init__(self, arguments):
+        self.arguments = arguments
+        self.parsedArguments = []
+        self.resFileName = None
+        self.outFileName = None
+        self.outFileType = None
+
+        self.printUsage = False
+        self.printAllQuantities = False
+        self.cannotHandleArgument = False
+
+        self.Parse()
+
+    def Parse(self):
+        arguments = self.arguments
+        argumentsCount = len(arguments)
+
+        if argumentsCount <= 1:
+            self.printUsage = True
+            return
+
+        self.ParseResultFileName()
+
+        if 2 <= argumentsCount <= 3:
+            self.printAllQuantities = True
+            return
+
+        self.ParseOutputFileName()
+
+        # Parse command line arguments
+        for i in range(3, argumentsCount):
+            argument = arguments[i]
+            cannotHandleArgument = False
+            parsedArgument = None
+
+            if argument.lower().startswith("reach"):
+                parsedArgument = self.ParseLocation(i, LocationType.REACH, hasChainage=True)
+
+            elif argument.lower().startswith("node"):
+                parsedArgument = self.ParseLocation(i, LocationType.NODE)
+
+            elif argument.lower().startswith("catchment"):
+                parsedArgument = self.ParseLocation(i, LocationType.CATCHMENT)
+
+            else:
+                print("Could not handle argument %i, %s" % (i, argument))
+                cannotHandleArgument = True
+
+            self.parsedArguments.append(parsedArgument)
+            self.cannotHandleArgument = cannotHandleArgument
+
+            if (cannotHandleArgument or
+                parsedArgument.printAllLocations or
+                parsedArgument.cannotHandleArgument):
+                break
+
+
+    def ParseResultFileName(self):
+        self.resFileName = self.arguments[1]
+
+    def ParseOutputFileName(self):
+        outFileName = self.arguments[2]
+
+        # Figure out output file type from extension
+        outFileType = OutputFileType.TXT
+        if outFileName.lower().endswith(".txt"):
+            outFileType = OutputFileType.TXT
+
+        if outFileName.lower().endswith(".csv"):
+            outFileType = OutputFileType.CSV
+
+        if outFileName.lower().endswith(".dfs0"):
+            outFileType = OutputFileType.DFS0
+
+        if outFileName.lower().endswith("-"):
+            outFileType = OutputFileType.ALL
+
+        self.outFileName = outFileName
+        self.outFileType = outFileType
+
+    def ParseLocation(self, i, locationType, hasChainage=False):
+        argument = self.arguments[i]
+        quantityId = None
+        locationId = None
+        chainage = Constants.ALL_CHAINAGES
+        printAllLocations = False
+        printQuantities = False
+        cannotHandleArgument = False
+
+        parts = self.GetPartsOfArgument(argument, locationType)
+        partsCount = len(parts)
+
+        if partsCount < 3:
+            printAllLocations = True
+
+        elif partsCount == 3:
+            # All grid points in reach
+            quantityId = parts[1]
+            locationId = parts[2]
+
+        elif partsCount == 4 and hasChainage:
+            # Search for chainage
+            quantityId = parts[1]
+            locationId = parts[2]
+            chainage = 0
+
+            if self.IsFloat(parts[3]):
+                chainage = float(parts[3])
+            else:
+                # Could not parse chainage, so it is probably an id with a splitChar in it
+                locationId  = parts[2] + splitChar + parts[3]
         else:
-            print "Could not find quantity '%s' in node '%s'. Available quantities:"  % (quantityToFind, nodeId);
-            dataItem = PrintQuantities(node);
-            sys.exit();
-    else:
-        print "Could not find node '%s'"  % (nodeId);
-        sys.exit();
+            cannotHandleArgument = True
+            nParts = '3 or 4' if hasChainage else '3'
+            print("%s argument must have %s parts: Could not handle argument %i, %s" % (locationType, nParts, i, argument))
 
-# Find a given quantity on the catchment with the given catchId
-def FindCatchmentQuantity(quantityToFind, catchId):
-    catchment = searcher.FindCatchment(catchId);
-    if (catchment != None):
-        if (quantityToFind == "-"):
-            PrintQuantities(catchment);
-            sys.exit();
-        dataItem = FindQuantity(catchment, quantityToFind);
-        if (dataItem != None):
-            dataItems.append(dataItem);
-            elmtIndex.append(0);
+        if locationId == '-':
+            printAllLocations = True
+        if quantityId == '-':
+            printQuantities = True
+
+        return ParsedArgument(locationType, quantityId, locationId, chainage, printAllLocations, printQuantities, cannotHandleArgument)
+
+    def GetPartsOfArgument(self, argument, locationType):
+        parts = []
+        splitCharPosition = len(locationType)
+        if len(argument) > splitCharPosition:
+            splitChar = argument[splitCharPosition]
+            parts = argument.split(splitChar, splitCharPosition-1)
+        return parts
+
+    def IsFloat(self, value):
+        try:
+            float(value)
+            return True
+        except:
+            return False
+
+#endregion Command line parsing
+
+#region Result finder
+
+class DataEntry(object):
+    """Class storing a Mike1D data item and a corresponding element index"""
+
+    def __init__(self, dataItem, elementIndex):
+        self.dataItem = dataItem
+        self.elementIndex = elementIndex
+
+
+class ResultFinder(object):
+    """Class storing a Mike1D data item and a corresponding element index"""
+
+    def __init__(self, filename, useFilter=None, outputDataItem=True):
+        # Load result file
+        self.diagnostics = Diagnostics("Loading file")
+        self.resultData = ResultData()
+        self.resultData.Connection = Connection.Create(filename)
+        self.useFilter = useFilter
+        self.outputDataItem = outputDataItem
+
+        if useFilter:
+            self.SetupFilter()
         else:
-            print "Could not find quantity '%s' in catchment '%s'. Available quantities:"  % (quantityToFind, catchId);
-            dataItem = PrintQuantities(catchment);
-            sys.exit();
-    else:
-        print "Could not find catchment '%s'"  % (catchId);
-        sys.exit();
+            self.Load()
 
-# Find a given quantity on the reach with the given reachId
-# If chainage is -999, all grid points are selected. Otherwise
-# the grid point closest to the given chainage is used.
-def FindReachQuantity(quantityToFind, reachId, chainage):
-    # There can be more than one reach with this reachId, check all
-    reaches = searcher.FindReaches(reachId);
-    if (reaches.Count == 0):
-        print "Could not find reach '%s'"  % (reachId);
-        sys.exit();
-    if (quantityToFind == "-"):
-        PrintQuantities(reaches[0]);
-        sys.exit();
-        
-    diCount = 0;
-    if (chainage == -999):
+        # Searcher is helping to find reaches, nodes and catchments
+        self.searcher = ResultDataSearch(self.resultData)
+
+    def SetupFilter(self):
+        """
+        Setup the filter for result data object.
+        """
+        if not self.useFilter:
+            return
+
+        self.resultData.LoadHeader(True, self.diagnostics)
+
+        self.dataFilter = Filter()
+        self.dataSubFilter = DataItemFilterName(self.resultData)
+        self.dataFilter.AddDataItemFilter(self.dataSubFilter)
+
+        self.resultData.Parameters.Filter = self.dataFilter
+
+    def Load(self):
+        """
+        Load the data from the result file into memory
+        """
+        if self.useFilter:
+            self.resultData.LoadData(self.diagnostics)
+        else:
+            self.resultData.Load(self.diagnostics)
+
+    def AddLocation(self, locationType, locationId):
+        if locationType == LocationType.REACH:
+            self.AddReach(locationId)
+
+        if locationType == LocationType.NODE:
+            self.AddNode(locationId)
+
+        if locationType == LocationType.CATCHMENT:
+            self.AddCatchment(locationId)
+
+    def AddReach(self, reachId):
+        self.dataSubFilter.Reaches.Add(reachId)
+
+    def AddNode(self, nodeId):
+        self.dataSubFilter.Nodes.Add(nodeId)
+
+    def AddCatchment(self, catchmentId):
+        self.dataSubFilter.Catchments.Add(catchmentId)
+
+    def FindQuantity(self, dataSet, quantityId):
+        """
+        Find a given quantity from an IRes1DDataSet
+        """
+        numItems = dataSet.DataItems.Count
+        dataItems = list(dataSet.DataItems)
+        for j in range(numItems):
+            dataItem = dataItems[j]
+            if StringComparer.OrdinalIgnoreCase.Equals(dataItem.Quantity.Id, quantityId):
+                return dataItem
+        return None
+
+    def FindQuantityInLocation(self, locationType, quantityId, locationId, chainage=Constants.ALL_CHAINAGES):
+        data = None
+
+        if locationType == LocationType.REACH:
+            if chainage == Constants.ALL_CHAINAGES:
+                data = self.FindReachQuantityAllChainages(quantityId, locationId)
+            else:
+                data = self.FindReachQuantity(quantityId, locationId, chainage)
+
+        if locationType == LocationType.NODE:
+            data = self.FindNodeQuantity(quantityId, locationId)
+
+        if locationType == LocationType.CATCHMENT:
+            data = self.FindCatchmentQuantity(quantityId, locationId)
+
+        return data
+
+    def FindReachQuantityAllChainages(self, quantityId, reachId):
+        # There can be more than one reach with this reachId, check all
+        reaches = self.searcher.FindReaches(reachId)
+        if reaches.Count == 0:
+            print("Could not find reach '%s'"  % (reachId))
+            return None
+
+        dataEntries = []
         # All elements of all reaches having that quantity
         for reach in reaches:
-            dataItem = FindQuantity(reach, quantityToFind);
-            if (dataItem != None):
-                for j in range(dataItem.NumberOfElements):
-                    dataItems.append(dataItem);
-                    elmtIndex.append(j);
-                    diCount += 1;
-    else:
+            dataItem = self.FindQuantity(reach, quantityId)
+            if dataItem == None:
+                continue
+
+            for j in range(dataItem.NumberOfElements):
+                dataEntry = self.ConvertDataItemElementToList(dataItem, j)
+                dataEntries.append(dataEntry)
+
+        if len(dataEntries) == 0:
+            print("Could not find quantity '%s' on reach '%s'."  % (quantityId, reachId))
+
+        return dataEntries
+
+    def FindReachQuantity(self, quantityId, reachId, chainage):
+        """
+        Find a given quantity on the reach with the given reachId.
+        The grid point closest to the given chainage is used.
+        """
+        # There can be more than one reach with this reachId, check all
+        reaches = self.searcher.FindReaches(reachId)
+        if reaches.Count == 0:
+            print("Could not find reach '%s'"  % (reachId))
+            return None
+
         # Find grid point closest to given chainage
-        minDist = 999999;
-        minDataItem = None;
-        minElmtIndex = -1;
+        minDist = 999999
+        minDataItem = None
+        minElmtIndex = -1
         for reach in reaches:
-            dataItem = FindQuantity(reach, quantityToFind);
-            if (dataItem != None):
+            dataItem = self.FindQuantity(reach, quantityId)
+            if dataItem != None:
                 # Loop over all grid points in reach dataItem
                 for j in range(dataItem.NumberOfElements):
-                    dist = abs(reach.GridPoints[dataItem.IndexList[j]].Chainage-chainage);
-                    if (dist < minDist):
-                        minDist = dist;
-                        minDataItem = dataItem;
+                    indexList = list(dataItem.IndexList)
+                    gridPoints = list(reach.GridPoints)
+                    dist = abs(gridPoints[indexList[j]].Chainage-chainage)
+                    if dist < minDist:
+                        minDist = dist
+                        minDataItem = dataItem
                         minElmtIndex = j
-        if (minDataItem != None):
-            dataItems.append(minDataItem);
-            elmtIndex.append(minElmtIndex);
-            diCount += 1;
-    if (diCount == 0):
-        print "Could not find quantity '%s' on reach '%s'. Available quantities:"  % (quantityToFind,reachId);
-        dataItem = PrintQuantities(reach);
-        sys.exit();
 
-def PrintAllReaches():
-    for j in range (resultData.Reaches.Count):
-        reach = resultData.Reaches[j];
-        gridPoints = reach.GridPoints;
-        print "%-30s (%9.2f - %9.2f)"  % ("'%s'" % reach.Name, gridPoints[0].Chainage, gridPoints[gridPoints.Count - 1].Chainage);
-def PrintAllNodes():
-    for j in range (resultData.Nodes.Count):
-        node = resultData.Nodes[j];
-        print "%s"  % ("'%s'" % node.Id);
-def PrintAllCatchments():
-    for j in range (resultData.Catchments.Count):
-        catchment = resultData.Catchments[j];
-        print "%s"  % ("'%s'" % catchment.Id);
+        if minDataItem == None:
+            print("Could not find quantity '%s' on reach '%s'."  % (quantityId, reachId))
 
-def is_float(value):
-  try:
-    float(value)
-    return True
-  except:
-    return False
+        return [self.ConvertDataItemElementToList(dataItem, minElmtIndex)]
 
-#===========================================================
+    def FindNodeQuantity(self, quantityId, nodeId):
+        """
+        Find a given quantity on the node with the given nodeId
+        """
+        node = self.searcher.FindNode(nodeId)
 
-# The SetupLatest method will make your script find the MIKE assemblies at runtime.
-# This is required for MIKE Version 2019 (17.0) and onwards. For previous versions, the 
-# next three lines must be removed.
-clr.AddReference("DHI.Mike.Install");
-from DHI.Mike.Install import MikeImport, MikeProducts
-MikeImport.SetupLatest(MikeProducts.MikeCore)
+        if node == None:
+            print("Could not find node '%s'"  % (nodeId))
+            return None
 
-clr.AddReference("DHI.Mike1D.ResultDataAccess");
-clr.AddReference("DHI.Mike1D.Generic");
-clr.AddReference("DHI.Generic.MikeZero.DFS");
-clr.AddReference("DHI.Generic.MikeZero.EUM");
-clr.AddReference("System");
-import System
-from System import Array, StringComparer
-from DHI.Mike1D.ResultDataAccess import *
-from DHI.Mike1D.Generic import *
-from DHI.Generic.MikeZero import eumUnit, eumItem, eumQuantity
-from DHI.Generic.MikeZero.DFS import *
+        dataItem = self.FindQuantity(node, quantityId)
+        if dataItem == None:
+            print("Could not find quantity '%s' in node '%s'."  % (quantityId, nodeId))
 
-# To use invariant culture (always dots)
-#System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+        return [self.ConvertDataItemElementToList(dataItem, 0)]
 
-if (len(sys.argv) <= 1):
-    PrintUsage();
-    sys.exit();
+    def FindCatchmentQuantity(self, quantityId, catchId):
+        """
+        Find a given quantity on the catchment with the given catchId
+        """
+        catchment = self.searcher.FindCatchment(catchId)
+        if catchment == None:
+            print("Could not find catchment '%s'"  % (catchId))
+            return None
 
+        dataItem = self.FindQuantity(catchment, quantityId)
+        if dataItem == None:
+            print("Could not find quantity '%s' in catchment '%s'."  % (quantityId, catchId))
 
-resfilename = sys.argv[1];
-if (len(sys.argv) >= 3):
-  outfilename = sys.argv[2];
+        return [self.ConvertDataItemElementToList(dataItem, 0)]
 
-# Load result file
-diagnostics = Diagnostics("Loading file");
-resultData = ResultData();
-resultData.Connection = Connection.Create(resfilename);
-resultData.Load(diagnostics);
+    def PrintAllQuantities(self):
+        """
+        Print out quantities on IRes1DDataSet
+        """
+        print("Available quantity IDs:")
+        resultData = self.resultData
+        quantities = list(resultData.Quantities)
+        for quantity in quantities:
+            print("  %s"  % (quantity.Id))
 
-if (len(sys.argv) == 2 or len(sys.argv) == 3):
-    print "All quantities in file:"
-    PrintAllQuantities();
-    sys.exit();
+    def PrintQuantities(self, locationType, locationId, chainage=0):
+        dataSet = None
 
-# Searcher is helping to find reaches, nodes and catchments
-searcher = ResultDataSearch(resultData);
+        if locationType == LocationType.REACH:
+            dataSet = self.searcher.FindReaches(locationId)[0]
 
-# Vectors with DataItems and element-indeces to extract
-dataItems = [];
-elmtIndex = [];
+        if locationType == LocationType.NODE:
+            dataSet = self.searcher.FindNode(locationId)
 
-# Parse command line arguments
-for i in range(3,sys.argv.Count):
-    str = sys.argv[i];
-    failed = False;
-    if (str.lower().startswith("reach")):
-        partsCount = 0;
-        if (len(str) > 5):
-            splitChar = str[5];
-            parts = str.split(splitChar,4);
-            partsCount = parts.Count;
-        if (partsCount < 3):
-            PrintAllReaches();
-            sys.exit();
-        elif (partsCount == 3):
-            # All grid points in reach
-            quantityToFind = parts[1];
-            reachId        = parts[2];
-            if (reachId == '-'):
-                PrintAllReaches();
-                sys.exit();
-            FindReachQuantity(quantityToFind, reachId, -999);
-        elif (partsCount == 4):
-            # Search for chainage
-            quantityToFind = parts[1];
-            reachId        = parts[2];
-            chainage = 0;
-            if (reachId == '-'):
-                PrintAllReaches();
-                sys.exit();
-            if (is_float(parts[3])):
-                FindReachQuantity(quantityToFind, reachId, float(parts[3]));
-            else: # could not parse chainage, so it is probably an id with a splitChar in it
-                reachId  = parts[2] + splitChar + parts[3];
-                FindReachQuantity(quantityToFind, reachId, -999);
+        if locationType == LocationType.CATCHMENT:
+            dataSet = self.searcher.FindCatchment(locationId)
+
+        if dataSet is None:
+            return
+
+        dataItems = list(dataSet.DataItems)
+        for dataItem in dataItems:
+            print("'%s'" % dataItem.Quantity.Id)
+
+    def PrintAllLocations(self, locationType):
+        if locationType == LocationType.NODE:
+            self.PrintAllNodes()
+
+        if locationType == LocationType.REACH:
+            self.PrintAllReaches()
+
+        if locationType == LocationType.CATCHMENT:
+            self.PrintAllCatchments()
+
+    def PrintAllReaches(self):
+        resultData = self.resultData
+        for j in range (resultData.Reaches.Count):
+            reach = list(resultData.Reaches)[j]
+            gridPoints = list(reach.GridPoints)
+            startChainage = gridPoints[0].Chainage
+            endChainage = gridPoints[-1].Chainage
+            print("'%-30s (%9.2f - %9.2f)'" % (reach.Name, startChainage, endChainage))
+
+    def PrintAllNodes(self):
+        resultData = self.resultData
+        for j in range (resultData.Nodes.Count):
+            node = list(resultData.Nodes)[j]
+            print("'%s'" % node.Id)
+
+    def PrintAllCatchments(self):
+        resultData = self.resultData
+        for j in range (resultData.Catchments.Count):
+            catchment = list(resultData.Catchments)[j]
+            print("'%s'" % catchment.Id)
+
+    def ConvertDataItemElementToList(self, dataItem, elementIndex):
+        """
+        Convert dataItem element to list of numbers.
+        """
+        if self.outputDataItem:
+            return DataEntry(dataItem, elementIndex)
+
+        if dataItem is None:
+            return None
+
+        data = []
+        for j in range(dataItem.NumberOfTimeSteps):
+            data.append(dataItem.GetValue(j, elementIndex))
+        return data
+
+    def GetTimes(self, toTicks=True):
+        """
+        Get a list of times
+        """
+        timesList = list(self.resultData.TimesList)
+        if toTicks:
+            return list(map(lambda x: x.Ticks, timesList))
         else:
-            print "Reach argument must have 3 or 4 parts: Could not handle argument %i, %s" % (i,sys.argv[i]);
-            sys.exit();
-    elif (str.lower().startswith("node")):
-        partsCount = 0;
-        if (len(str) > 4):
-            splitChar = str[4];
-            parts = str.split(splitChar,3);
-            partsCount = parts.Count;
-        if (partsCount < 3):
-            PrintAllNodes();
-            sys.exit();
-        if (partsCount == 3):
-            quantityToFind = parts[1];
-            nodeId         = parts[2];
-            if (nodeId == "-"):
-                PrintAllNodes();
-                sys.exit();
-            FindNodeQuantity(quantityToFind, nodeId);
-        else:
-            print "Node argument must have 3 parts: Could not handle argument %i, %s" % (i,sys.argv[i]);
-            sys.exit();
-    elif (str.lower().startswith("catchment")):
-        partsCount = 0;
-        if (len(str) > 9):
-            splitChar = str[9];
-            parts = str.split(splitChar,3);
-            partsCount = parts.Count;
-        if (partsCount < 3):
-            PrintAllCatchments();
-            sys.exit();
-        if (partsCount == 3):
-            quantityToFind = parts[1];
-            catchId        = parts[2]
-            if (catchId == '-'):
-                PrintAllCatchments();
-                sys.exit();
-            FindCatchmentQuantity(quantityToFind, catchId);
-        else:
-            print "Catchment argument must have 3 parts: Could not handle argument %i, %s" % (i,sys.argv[i]);
-            sys.exit();
-    else:
-        failed = True;
-    if (failed):
-        print "Could not handle argument %i, %s" % (i,sys.argv[i]);
-        sys.exit();
+            return timesList
 
-numtimes = resultData.NumberOfTimeSteps;
+#endregion Result finder
 
-# Figure out output file type from extension
-outFileType = 0; # txt file
-if (outfilename.ToLower().EndsWith(".txt")):
-    outFileType = 0; # txt file
-if (outfilename.ToLower().EndsWith(".csv")):
-    outFileType = 1; # csv file
-if (outfilename.ToLower().EndsWith(".dfs0")):
-    outFileType = 2; # dfs0 file
+#region Extractor classes
 
-# Write results to new file
+class Extractor(object):
+    """Base class for data extractors to specified file format"""
 
-if (outFileType <= 1):
-    # Write to text file
-    header1Format = "%-20s";
-    header2Format = "%15s";
-    #chainageFormat = "%15.2f";
-    chainageFormat = "%15s";
-    chainageFormatcs = "{0,15:0.00}";
-    #dataFormat = "%15.6f";
-    dataFormat = "%15s";
-    dataFormatcs = "{0,15:0.000000}";
-    # Only differences between txt and csv are the format specifyers
-    if (outFileType == 1): # Change format specifyers for csv output.
-        header1Format = "%s;";
-        header2Format = "%s;";
-        #chainageFormat = "%.2f;";
-        chainageFormat = "%s;";
-        chainageFormatcs = "{0:g}";
-        #dataFormat = "%.6g;";
-        dataFormat = "%s;";
-        dataFormatcs = "{0:g}";
+    def __init__(self, outFileName, outputData, resultData, timeStepSkippingNumber=1):
+        self.outFileName = outFileName
+        self.outputData = outputData
+        self.resultData = resultData
+        self.timeStepSkippingNumber = timeStepSkippingNumber
 
-    f = open(outfilename, 'w');
+    @staticmethod
+    def Create(outFileType, outFileName, outputData, resultData, timeStepSkippingNumber=1):
+        if outFileType == OutputFileType.TXT:
+            return ExtractorTxt(outFileName, outputData, resultData, timeStepSkippingNumber)
 
-    # Write header
+        elif outFileType == OutputFileType.CSV:
+            return ExtractorCsv(outFileName, outputData, resultData, timeStepSkippingNumber)
 
-    # Type line
-    f.write(header1Format % "Type");
-    for j in range (dataItems.Count):
-        if   (dataItems[j].ItemTypeGroup == ItemTypeGroup.NodeItem):
-            f.write(header2Format % "Node"),
-        elif (dataItems[j].ItemTypeGroup == ItemTypeGroup.ReachItem):
-            f.write(header2Format % "Reach"),
-        elif (dataItems[j].ItemTypeGroup == ItemTypeGroup.CatchmentItem):
-            f.write(header2Format % "Catchment"),
-        else:
-            f.write(header2Format % dataItems[j].ItemTypeGroup);
-    f.write("\n");
-    # Quantity line
-    f.write(header1Format % "Quantity")
-    for j in range (dataItems.Count):
-        f.write(header2Format % dataItems[j].Quantity.Id),
-    f.write("\n");
-    # Name line
-    f.write(header1Format % "Name"),
-    for j in range (dataItems.Count):
-        if   (dataItems[j].ItemTypeGroup == ItemTypeGroup.NodeItem):
-            f.write(header2Format % resultData.Nodes[dataItems[j].NumberWithinGroup].Id),
-        elif (dataItems[j].ItemTypeGroup == ItemTypeGroup.ReachItem):
-            f.write(header2Format % resultData.Reaches[dataItems[j].NumberWithinGroup].Name),
-        elif (dataItems[j].ItemTypeGroup == ItemTypeGroup.CatchmentItem):
-            f.write(header2Format % resultData.Catchments[dataItems[j].NumberWithinGroup].Id),
-        else:
-            f.write(header2Format % "-"),
-    f.write("\n");
-    # Chainage line
-    f.write(header1Format % "Chainage"),
-    for j in range (dataItems.Count):
-        dataItem = dataItems[j];
-        elmti = elmtIndex[j];
-        if (dataItem.ItemTypeGroup == ItemTypeGroup.ReachItem):
-            f.write(chainageFormat % System.String.Format(chainageFormatcs, resultData.Reaches[dataItem.NumberWithinGroup].GridPoints[dataItem.IndexList[elmti]].Chainage)),
-        else:
-            f.write(header2Format % "-"),
-    f.write("\n");
+        elif outFileType == OutputFileType.DFS0:
+            return ExtractorDfs0(outFileName, outputData, resultData, timeStepSkippingNumber)
 
-    # Write data
-    for i in range(numtimes):
-		    # If you want to only output every 60th time step, uncomment below two lines.
-        #if (i % 60 != 0):
-				#    continue;
-        f.write(header1Format  % (resultData.TimesList[i].ToString("yyyy-MM-dd HH:mm:ss"))),
-        for j in range (dataItems.Count):
-            f.write(dataFormat % System.String.Format(dataFormatcs, dataItems[j].GetValue(i,elmtIndex[j]))),
-        f.write("\n");
-    f.close();
+        elif outFileType == OutputFileType.ALL:
+            return ExtractorAll(outFileName, outputData, resultData, timeStepSkippingNumber)
 
-else:
+        return None
 
-    # Write to dfs0 file
 
-    factory = DfsFactory();
-    builder = DfsBuilder.Create("ResultDataExtractor-script", "MIKE SDK", 100);
+class ExtractorAll(object):
+    """Class which extracts data into all supported file formats"""
 
-    # Set up file header
-    builder.SetDataType(1);
-    builder.SetGeographicalProjection(factory.CreateProjectionUndefined());
-    builder.SetTemporalAxis(factory.CreateTemporalNonEqCalendarAxis(eumUnit.eumUsec, resultData.StartTime));
-    builder.SetItemStatisticsType(StatType.NoStat);
+    def __init__(self, outFileName, outputData, resultData, timeStepSkippingNumber=1):
+        self.allExtractors = [
+            ExtractorTxt(outFileName.replace(".-", ".txt"), outputData, resultData, timeStepSkippingNumber),
+            ExtractorCsv(outFileName.replace(".-", ".csv"), outputData, resultData, timeStepSkippingNumber),
+            ExtractorDfs0(outFileName.replace(".-", ".dfs0"), outputData, resultData, timeStepSkippingNumber)
+        ]
 
-    # Set up items
-    for j in range (dataItems.Count): 
-        dataItem = dataItems[j];
-        elmti = elmtIndex[j];
-        if   (dataItem.ItemTypeGroup == ItemTypeGroup.NodeItem):
-            itemName = "Node:%s:%s" % (dataItem.Quantity.Id, resultData.Nodes[dataItem.NumberWithinGroup].Id);
-        elif (dataItem.ItemTypeGroup == ItemTypeGroup.ReachItem):
-            reach = resultData.Reaches[dataItem.NumberWithinGroup]
-            itemName = "reach:%s:%s:%.3f" % (dataItem.Quantity.Id, reach.Name,reach.GridPoints[dataItem.IndexList[elmti]].Chainage);
-        elif (dataItem.ItemTypeGroup == ItemTypeGroup.CatchmentItem):
-            catchment = resultData.Catchments[dataItem.NumberWithinGroup]
-            itemName = "catchment:%s:%s" % (dataItem.Quantity.Id, catchment.Id);
-        else:
-            itemName = "%s:%s:%s" % (dataItem.ItemTypeGroup, dataItem.Quantity.Id, dataItem.Id);
-        item = builder.CreateDynamicItemBuilder();
-        item.Set(itemName, dataItem.Quantity.EumQuantity, DfsSimpleType.Float);
-        item.SetValueType(DataValueType.Instantaneous);
-        item.SetAxis(factory.CreateAxisEqD0());
-        builder.AddDynamicItem(item.GetDynamicItemInfo());
+    def Export(self):
+        for extractor in self.allExtractors:
+            extractor.Export()
 
-    # Create file
-    builder.CreateFile(outfilename);
-    dfsfile = builder.GetFile();
 
-    # Write data to file
-    val = Array.CreateInstance(System.Single, 1)
-    for i in range(numtimes):
-		    # If you want to only output every 60th time step, uncomment below two lines.
-        #if (i % 60 != 0):
-				#    continue;
-        time = resultData.TimesList[i].Subtract(resultData.StartTime).TotalSeconds;
-        for j in range (dataItems.Count):
-            val[0] = dataItems[j].GetValue(i,elmtIndex[j]);
-            dfsfile.WriteItemTimeStepNext(time, val);
-    dfsfile.Close();
+class ExtractorTxt(Extractor):
+    """Class which extracts data to text file"""
 
+    def Export(self):
+        self.f = open(self.outFileName, 'w')
+        self.SetOutputFormat()
+        self.WriteItemType()
+        self.WriteQuantity()
+        self.WriteName()
+        self.WriteChainage()
+        self.WriteDataItems()
+        self.f.close()
+
+    def SetOutputFormat(self):
+        self.header1Format = "%-20s"
+        self.header2Format = "%15s"
+        self.chainageFormat = "%15s"
+        self.chainageFormatcs = "{0,15:0.00}"
+        self.dataFormat = "%15s"
+        self.dataFormatcs = "{0,15:0.000000}"
+
+    def WriteItemType(self):
+        outputData, f = self.outputData, self.f
+        header1Format, header2Format = self.header1Format, self.header2Format
+
+        f.write(header1Format % "Type")
+        for dataEntry in outputData:
+            itemTypeGroup = dataEntry.dataItem.ItemTypeGroup
+
+            if itemTypeGroup == ItemTypeGroup.ReachItem:
+                f.write(header2Format % "Reach")
+
+            elif itemTypeGroup == ItemTypeGroup.NodeItem:
+                f.write(header2Format % "Node")
+
+            elif itemTypeGroup == ItemTypeGroup.CatchmentItem:
+                f.write(header2Format % "Catchment")
+
+            else:
+                f.write(header2Format % itemTypeGroup)
+        f.write("\n")
+
+    def WriteQuantity(self):
+        outputData, f = self.outputData, self.f
+        header1Format, header2Format = self.header1Format, self.header2Format
+
+        f.write(header1Format % "Quantity")
+        for dataEntry in outputData:
+            f.write(header2Format % dataEntry.dataItem.Quantity.Id),
+        f.write("\n")
+
+    def WriteName(self):
+        outputData, f = self.outputData, self.f
+        resultData = self.resultData
+        header1Format, header2Format = self.header1Format, self.header2Format
+
+        f.write(header1Format % "Name"),
+        nodes = list(resultData.Nodes)
+        reaches = list(resultData.Reaches)
+        catchments = list(resultData.Catchments)
+        for dataEntry in outputData:
+            dataItem = dataEntry.dataItem
+            itemTypeGroup = dataItem.ItemTypeGroup
+            numberWithinGroup = dataItem.NumberWithinGroup
+
+            if itemTypeGroup == ItemTypeGroup.ReachItem:
+                f.write(header2Format % reaches[numberWithinGroup].Name),
+
+            elif itemTypeGroup == ItemTypeGroup.NodeItem:
+                f.write(header2Format % nodes[numberWithinGroup].Id),
+
+            elif itemTypeGroup == ItemTypeGroup.CatchmentItem:
+                f.write(header2Format % catchments[numberWithinGroup].Id),
+
+            else:
+                f.write(header2Format % "-"),
+        f.write("\n")
+
+    def WriteChainage(self):
+        outputData, f = self.outputData, self.f
+        resultData = self.resultData
+        header1Format, header2Format = self.header1Format, self.header2Format
+        chainageFormat, chainageFormatcs = self.chainageFormat, self.chainageFormatcs
+
+        f.write(header1Format % "Chainage"),
+        for dataEntry in outputData:
+            dataItem = dataEntry.dataItem
+            elementIndex = dataEntry.elementIndex
+
+            if dataItem.ItemTypeGroup != ItemTypeGroup.ReachItem or dataItem.IndexList is None:
+                f.write(header2Format % "-"),
+                continue
+
+            indexList = list(dataItem.IndexList)
+            reaches = list(resultData.Reaches)
+            gridPoints = list(reaches[dataItem.NumberWithinGroup].GridPoints)
+            gridPointIndex = indexList[elementIndex]
+            f.write(chainageFormat % System.String.Format(chainageFormatcs, gridPoints[gridPointIndex].Chainage)),
+
+        f.write("\n")
+
+    def WriteDataItems(self):
+        outputData, f = self.outputData, self.f
+        resultData = self.resultData
+        header1Format, dataFormat, dataFormatcs = self.header1Format, self.dataFormat, self.dataFormatcs
+
+        times = list(resultData.TimesList)
+        # Write data
+        for timeStepIndex in range(resultData.NumberOfTimeSteps):
+            if (timeStepIndex % self.timeStepSkippingNumber != 0):
+                continue
+
+            time = times[timeStepIndex]
+            f.write(header1Format  % (time.ToString("yyyy-MM-dd HH:mm:ss"))),
+            for dataEntry in outputData:
+                dataItem = dataEntry.dataItem
+                elementIndex = dataEntry.elementIndex
+                value = dataItem.GetValue(timeStepIndex, elementIndex)
+                f.write(dataFormat % System.String.Format(dataFormatcs, value)),
+            f.write("\n")
+
+
+class ExtractorCsv(ExtractorTxt):
+    """Class which extracts data to comma separated value (CSV) file"""
+
+    separator = ';'
+
+    def SetOutputFormat(self):
+        self.header1Format = "%s;"
+        self.header2Format = "%s;"
+        self.chainageFormat = "%s;"
+        self.chainageFormatcs = "{0:g}"
+        self.dataFormat = "%s;"
+        self.dataFormatcs = "{0:g}"
+
+    def WriteItemType(self):
+        # Write CSV separator type
+        self.f.write("sep=%s\n" % self.separator)
+        ExtractorTxt.WriteItemType(self)
+
+
+class ExtractorDfs0(Extractor):
+    """Class which extracts data to dfs0 file format"""
+
+    def Export(self):
+        self.factory = DfsFactory()
+        self.builder = self.CreateDfsBuilder()
+        self.DefineDynamicDataItems()
+        self.WriteDataItems()
+
+    def CreateDfsBuilder(self):
+        resultData = self.resultData
+        factory = self.factory
+
+        builder = DfsBuilder.Create("ResultDataExtractor-script", "MIKE SDK", 100)
+
+        # Set up file header
+        builder.SetDataType(1)
+        builder.SetGeographicalProjection(factory.CreateProjectionUndefined())
+        builder.SetTemporalAxis(factory.CreateTemporalNonEqCalendarAxis(eumUnit.eumUsec, resultData.StartTime))
+        builder.SetItemStatisticsType(StatType.NoStat)
+
+        return builder
+
+    def DefineDynamicDataItems(self):
+        outputData = self.outputData
+        resultData = self.resultData
+        builder = self.builder
+
+        for dataEntry in outputData:
+            dataItem = dataEntry.dataItem
+            elementIndex = dataEntry.elementIndex
+
+            quantity = dataItem.Quantity
+            itemTypeGroup = dataItem.ItemTypeGroup
+            numberWithinGroup = dataItem.NumberWithinGroup
+
+            reaches = list(resultData.Reaches)
+            nodes = list(resultData.Nodes)
+            catchments = list(resultData.Catchments)
+
+            if itemTypeGroup == ItemTypeGroup.ReachItem:
+                reach = reaches[numberWithinGroup]
+                gridPointIndex = dataItem.IndexList[elementIndex]
+                gridPoints = list(reach.GridPoints)
+                chainage = gridPoints[gridPointIndex].Chainage
+                itemName = "reach:%s:%s:%.3f" % (quantity.Id, reach.Name, chainage)
+
+            elif itemTypeGroup == ItemTypeGroup.NodeItem:
+                node = nodes[numberWithinGroup]
+                itemName = "node:%s:%s" % (quantity.Id, node.Id)
+
+            elif itemTypeGroup == ItemTypeGroup.CatchmentItem:
+                catchment = catchments[numberWithinGroup]
+                itemName = "catchment:%s:%s" % (quantity.Id, catchment.Id)
+
+            else:
+                itemName = "%s:%s:%s" % (itemTypeGroup, quantityId, dataItem.Id)
+
+            item = builder.CreateDynamicItemBuilder()
+            item.Set(itemName, dataItem.Quantity.EumQuantity, DfsSimpleType.Float)
+            item.SetValueType(DataValueType.Instantaneous)
+            item.SetAxis(self.factory.CreateAxisEqD0())
+            builder.AddDynamicItem(item.GetDynamicItemInfo())
+
+    def WriteDataItems(self):
+        outputData = self.outputData
+        resultData = self.resultData
+        builder = self.builder
+
+        # Create file
+        builder.CreateFile(self.outFileName)
+        dfsfile = builder.GetFile()
+        times = list(resultData.TimesList)
+
+        # Write data to file
+        val = Array.CreateInstance(System.Single, 1)
+        for timeStepIndex in range(resultData.NumberOfTimeSteps):
+            if (timeStepIndex % self.timeStepSkippingNumber != 0):
+                continue
+
+            time = times[timeStepIndex].Subtract(resultData.StartTime).TotalSeconds
+            for dataEntry in outputData:
+                dataItem = dataEntry.dataItem
+                elementIndex = dataEntry.elementIndex
+
+                val[0] = dataItem.GetValue(timeStepIndex, elementIndex)
+                dfsfile.WriteItemTimeStepNext(time, val)
+
+        dfsfile.Close()
+
+#endregion Extractor classes
+
+
+def Main(arguments):
+    parser = CommandLineParser(arguments)
+
+    # Print usage of the tool if there are no arguments
+    if parser.printUsage:
+        PrintUsage()
+        return
+
+    # Setup result finder
+    resultFinder = ResultFinder(parser.resFileName, useFilter=True)
+
+    # Print all quantities if there are no quantities specified for output
+    if parser.printAllQuantities:
+        print("All quantities in file:")
+        resultFinder.PrintAllQuantities()
+        return
+
+    if parser.cannotHandleArgument:
+        return
+
+    # Create a location filter, which is used to load a result file
+    for p in parser.parsedArguments:
+        locationType, locationId, chainage  = p.locationType, p.locationId, p.chainage
+
+        if p.printAllLocations:
+            print("Available %s names in file:" % locationType)
+            resultFinder.PrintAllLocations(locationType)
+            return
+
+        if p.printQuantities:
+            print("Available %s quantities in %s:" % (locationType, locationId))
+            resultFinder.PrintQuantities(locationType, locationId, chainage)
+            return
+
+        resultFinder.AddLocation(locationType,  locationId)
+
+    # Load the actual data into memory
+    resultFinder.Load()
+
+    # Create a list of Mike1D data items based on parsed arguments
+    outputData = []
+    for p in parser.parsedArguments:
+        locationType, quantityId, locationId, chainage  = p.locationType, p.quantityId, p.locationId, p.chainage
+
+        dataEntries = resultFinder.FindQuantityInLocation(locationType, quantityId, locationId, chainage)
+        for dataEntry in dataEntries:
+            outputData.append(dataEntry)
+
+    # Export the data in a wanted format
+    exporter = Extractor.Create(parser.outFileType, parser.outFileName, outputData, resultFinder.resultData)
+    exporter.Export()
+
+
+if __name__ == "__main__":
+    Main(sys.argv)
