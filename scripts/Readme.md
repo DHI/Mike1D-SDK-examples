@@ -1,13 +1,19 @@
-# MIKE 1D SDK Script 
+MIKE 1D SDK Scripts
+==========================
 
-Scripts ending with .py are IronPython scripts. To run these scripts, you must download and install IronPython
+Scripts ending with .py can be run with [IronPython][IronPython]
+or [Python][Python] with [pythonnet][pythonnet] package.
 
-http://ironpython.net/download/
+The scripts can be run from command line as:
 
-The scripts can be run from command line like (for the 2.7 version): 
+```bash
+python.exe ResultDataExtract.py
 ```
-"c:\Program Files (x86)\IronPython 2.7\ipy64.exe" ResultDataExtract.py
-```
+
 This command line can be put in a batch (.bat) file.
 
-Most scripts needs additional parameters. Please examine each script for details.
+Most scripts need additional parameters. Please examine each script for details.
+
+[IronPython]: https://ironpython.net/
+[Python]: https://www.python.org
+[pythonnet]: https://pypi.org/project/pythonnet/
