@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using DHI.Mike1D.Generic;
 using DHI.Mike1D.ResultDataAccess;
+using NUnit.Framework;
 
 namespace DHI.Mike1D.Examples
 {
@@ -141,6 +143,81 @@ namespace DHI.Mike1D.Examples
           }
         }
       }
+
+    }
+
+
+    /// <summary>
+    /// Example modifying data in a specific reach and a specific node
+    /// </summary>
+    [Test]
+    public void ModifyReachValues()
+    {
+      string resultFilepath = System.IO.Path.Combine(ExampleBase.ExampleRoot, @"Results\vida96-3.res1d");
+
+      // load a result file
+      IResultData resultData = new ResultData();
+      resultData.Connection = Connection.Create(resultFilepath);
+      Diagnostics resultDiagnostics = new Diagnostics("Example");
+      resultData.Load(resultDiagnostics);
+
+      if (resultDiagnostics.ErrorCountRecursive > 0)
+      {
+        // Do some error reporting
+        throw new Exception("File could not be loaded");
+      }
+
+      Quantity wlQuantity = Quantity.Create(PredefinedQuantity.WaterLevel);
+
+      // The ResultDataSearch helps doing searching of results efficiently
+      ResultDataSearch searcher = new ResultDataSearch(resultData);
+
+      // Find all branches named "VIDAA-NED" - there are three, due to junction splits
+      IList<IRes1DReach> reaches = searcher.FindReaches("VIDAA-NED");
+
+      foreach (IRes1DReach reach in reaches)
+      {
+        // Find the water level data item, and update the water level with 0.2 between
+        // chainage 7000 and 1000 for all time steps
+
+        IDataItem wlData = reach.GetDataItem(wlQuantity);
+
+        for (int i = 0; i < wlData.NumberOfElements; i++)
+        {
+          // Index of grid point where element value i belongs to
+          int igp = wlData.IndexList[i];
+          // Chainage of grid point where element value i belongs to
+          double gpChainage = reach.GridPoints[igp].Chainage;
+          if (7000 < gpChainage && gpChainage < 10000)
+          {
+            // Update for all time steps
+            for (int j = 0; j < wlData.NumberOfTimeSteps; j++)
+            {
+              float val = wlData.TimeData.GetValue(j, i);
+              val += 0.2f;
+              wlData.TimeData.SetValue(j, i, val);
+            }
+          }
+        }
+
+        // Also check if the end-node is on this span
+        if (7000 < reach.LocationSpan.EndChainage && reach.LocationSpan.EndChainage < 10000)
+        {
+          IDataItem wlNodeData = resultData.Nodes[reach.EndNodeIndex].GetDataItem(wlQuantity);
+          // Update for all time steps
+          for (int j = 0; j < wlNodeData.NumberOfTimeSteps; j++)
+          {
+            // In a node there is only one element value, so i = 0
+            float val = wlNodeData.TimeData.GetValue(j, 0);
+            val += 0.2f;
+            wlNodeData.TimeData.SetValue(j, 0, val);
+          }
+        }
+      }
+
+      // Save file with a new name
+      resultData.Connection.FilePath.FileNameWithoutExtension += "-testModify";
+      resultData.Save();
 
     }
   }

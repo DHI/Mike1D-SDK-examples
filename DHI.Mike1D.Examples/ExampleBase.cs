@@ -20,7 +20,7 @@ namespace DHI.Mike1D.Examples
     /// <summary>
     /// Path to the data folder.
     /// </summary>
-    public static string ExampleRoot = @"C:\Work\DHIGitHub\Mike1D-SDK-examples\data\";
+    public static string ExampleRoot = @"C:\Work\GitHub\Mike1D-SDK-examples\data\";
 
     /// <summary>
     /// Static constructor, setting up search paths for MIKE assemblies
