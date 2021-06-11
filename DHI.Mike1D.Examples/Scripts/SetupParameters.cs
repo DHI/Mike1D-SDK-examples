@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DHI.Mike1D.Generic;
 using DHI.Mike1D.Mike1DDataAccess;
+using DHI.Mike1D.NetworkDataAccess;
 using DHI.Mike1D.Plugins;
 
 namespace DHI.Mike1D.Examples.Scripts
 {
   public class SetupParameters
   {
+
     /// <summary>
     /// Method called when Mike1DData object has been loaded.
     /// </summary>
@@ -90,5 +88,27 @@ namespace DHI.Mike1D.Examples.Scripts
 
     }
 
+    /// <summary>
+    /// Script to update maximum number of grid points
+    /// in a link to no more than 7 grid points.
+    /// 
+    /// This only works if there are reach-global cross sections
+    /// (urban like setup) or there are very few cross sections.
+    /// When cross sections are specified along the reach,
+    /// there will always be grid points at cross section locations,
+    /// regardless of the value of MaximumDx.
+    /// </summary>
+    [Script]
+    public void UpdateMaxDx(Mike1DData mike1DData)
+    {
+      int maxNumGridPoints = 7;
+
+      foreach (IReach reach in mike1DData.Network.Reaches)
+      {
+        if (System.Math.Round(reach.LocationSpan.Length() / reach.MaximumDx) > maxNumGridPoints)
+          // Add 1e-3 to avoid rounding error issues.
+          reach.MaximumDx = reach.LocationSpan.Length() / maxNumGridPoints + 1e-3;
+      }
+    }
   }
 }
