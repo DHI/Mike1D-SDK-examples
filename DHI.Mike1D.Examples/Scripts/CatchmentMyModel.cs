@@ -145,6 +145,7 @@ namespace DHI.Mike1D.Examples.Scripts
   /// </summary>
   public class CatchmentMyModel : Catchment
   {
+    // Quantities for various outputs from this catchment. Used in the Initialize method.
     public static IQuantity DepthQuantity = new Quantity("CDepth", "Depth of water", eumItem.eumIStorageDepth, eumUnit.eumUmeter);
     public static IQuantity SLossQuantity = new Quantity("CStorageDepth", "Storage Depth", eumItem.eumIStorageDepth, eumUnit.eumUmeter);
     public static IQuantity WLossQuantity = new Quantity("CWettingDepth", "Wetting Depth", eumItem.eumIStorageDepth, eumUnit.eumUmeter);

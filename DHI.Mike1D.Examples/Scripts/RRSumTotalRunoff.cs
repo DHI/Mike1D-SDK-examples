@@ -10,7 +10,7 @@ namespace DHI.Mike1D.Examples.Scripts
 {
   /// <summary>
   /// Script class that makes a catchment that sums Total Runoff
-  /// for all catchments
+  /// for all catchments in the setup
   /// </summary>
   public class RRSumTotalRunoff
   {
@@ -49,6 +49,8 @@ namespace DHI.Mike1D.Examples.Scripts
 
       // Setup writer to write total runoff to csv file
       writer = new StreamWriter("SumTotalRunoff.csv");
+      writer.WriteLine("sep=;");
+
       sumTotalRunoffCatchment.PostTimeStepEvent +=
         delegate (DateTime time)
         {
