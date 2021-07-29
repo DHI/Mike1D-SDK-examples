@@ -19,11 +19,11 @@ namespace DHI.M1DSimulator
         protected ProxyUtil M1DEngine; // Access to M1D engine variables
 
         // Stored M1D engine variable 'getters'
-        private Dictionary<string, IDoubleGetter> _nodeGetters = new Dictionary<string, IDoubleGetter>();
+        private Dictionary<string, Func<double>> _nodeGetters = new Dictionary<string, Func<double>>();
         private Dictionary<string, IVectorGetter<double>> _reachGetters = new Dictionary<string, IVectorGetter<double>>();
         private Dictionary<string, int> _reachPoints = new Dictionary<string, int>();
-        private Dictionary<string, IDoubleGetter> _reachStructureGetters = new Dictionary<string, IDoubleGetter>();
-        private Dictionary<string, DDoubleTimeGetter> _catchmentGetters = new Dictionary<string, DDoubleTimeGetter>();
+        private Dictionary<string, Func<double>> _reachStructureGetters = new Dictionary<string, Func<double>>();
+        private Dictionary<string, Func<DateTime, double>> _catchmentGetters = new Dictionary<string, Func<DateTime, double>>();
         private Dictionary<string, BoundaryItemRRResult> _catchmentRes1DGetters = new Dictionary<string, BoundaryItemRRResult>();
 
         /// <inheritdoc />
@@ -61,7 +61,7 @@ namespace DHI.M1DSimulator
             if (!_nodeGetters.ContainsKey(node + quantity))
                 AddNodeGetter(new[] { node }, quantity);
 
-            return _nodeGetters[node + quantity].GetValue();
+            return _nodeGetters[node + quantity]();
         }
 
         public double[] ReadNodes(IEnumerable<string> nodes, string quantity = "WaterVolume")
@@ -99,7 +99,7 @@ namespace DHI.M1DSimulator
                 {
                     //var gridPoint = engineReach.GridPoints[gridPointIndex];
                     //var getter = M1DEngine.Getter(engineReach, 1, ParseQuantity(quantity));
-                    IDoubleGetter reachGetter = M1DEngine.Getter(engineReach, gridPointIndex, ParseQuantity(quantity));
+                    var reachGetter = M1DEngine.Getter(engineReach, gridPointIndex, ParseQuantity(quantity));
                     if (reachGetter != null)
                         _reachStructureGetters[getterKey] = reachGetter;
                 }
@@ -131,7 +131,7 @@ namespace DHI.M1DSimulator
             if (!_reachStructureGetters.ContainsKey(reach + quantity))
                 AddStructureReachGetter(new[] { reach }, quantity);
 
-            return _reachStructureGetters[reach + quantity].GetValue();
+            return _reachStructureGetters[reach + quantity]();
         }
 
         public bool IsStructureReach(string reachName)
@@ -191,7 +191,7 @@ namespace DHI.M1DSimulator
                 {
                     if (catchment.TimeOffers().Contains(q))
                     {
-                        DDoubleTimeGetter catchmentGetter = catchment.TimeValueGetter(q);
+                        var catchmentGetter = catchment.TimeValueGetter(q);
                         var getterKey = catchment.CatchmentName + quantity;
                         if (!_catchmentGetters.ContainsKey(getterKey))
                             _catchmentGetters.Add(getterKey, catchmentGetter);
