@@ -10,22 +10,29 @@ From within the MIKE+ GUI go to the "Simulation" tab, select "MIKE 1D engine con
 
 | Option name | Value type | Value|
 |-------------|------------|------|
-| m1dscript   | Text       | <path-of>myM1DScript.cs |
+| m1dscript   | Text       | [path-of]myM1DScript.cs |
 
-It is possible to provide parameters to the script through these "Custom options". If defining a custom option with the name `csvFile` on the form:
+If the Value only contains the name of the script, the script must reside in the same folder as the MIKE+ setup (.mupp) file. 
+It may also contain a relative or absolute path, where the relative path is relative to the MIKE+ setup (.mupp) file. 
+ 
+It is possible to provide parameters to the script through these "Custom options". 
+If the script reads a CSV file and a weir coefficient, you can define the following custom options:
  
 | Option name | Value type | Value|
 |-------------|------------|------|
 |	csvFile     |  Text      | <path-and-name-of>.csv |
+|	weirCoeff   |  Double    | 3.2 |
 
-Then this option can be read from the script with the following code:
+Then these options can be read from the script with the following code:
 
 ```
 [Script]
 public void Initialize(Mike1DData mike1DData, IDiagnostics diagnostics)
 {
-  // The csvFile custom option.
+  // The csvFile custom option - having value of null if not specified for this simulation
   string csvFileName = mike1DData.AdditionalData.TryGetValue<string>("csvFile", null);
+  // The weir coefficient, using 2.0 as "default" value (if not specified for this simulation)
+  double weirCoeff = mike1DData.AdditionalData.TryGetValue<double>("weirCoeff", 2.0);
 }
 ```
 
