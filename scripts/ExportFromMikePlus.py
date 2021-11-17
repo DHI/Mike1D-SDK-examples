@@ -4,28 +4,11 @@ from Mike+ setup file (mupp/slite) to Mike1D m1dx file.
 """
 
 import clr
-import sys
 
 clr.AddReference("DHI.Mike.Install, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c513450b5d0bf0bf")
 from DHI.Mike.Install import MikeImport, MikeProducts
 
-
-def SetupMikePlusInstallation():
-    products = list(MikeImport.InstalledProducts())
-    for product in products:
-        if product.Product == MikeProducts.MikePlus:
-            break
-
-    if product.Product != MikeProducts.MikePlus:
-        print("Could not find Mike+ installation")
-        sys.exit()
-
-    print('Using product: ' + product.Product)
-    MikeImport.Setup(product)
-    print('Found MIKE in: ' + MikeImport.ActiveProduct().InstallRoot)
-
-
-SetupMikePlusInstallation()
+MikeImport.SetupLatest(MikeProducts.MikePlus)
 
 clr.AddReference("DHI.Mike1D.Generic")
 from DHI.Mike1D.Generic import Connection, FilePath, Diagnostics
