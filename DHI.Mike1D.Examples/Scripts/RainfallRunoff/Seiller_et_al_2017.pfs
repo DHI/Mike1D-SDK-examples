@@ -1,0 +1,105 @@
+// Created     : 2020-05-27 14:2:50
+// DLL         : C:\Program Files (x86)\DHI\2020\bin\x64\pfs2004.dll
+// Version     : 18.2.0.14139
+
+[RRDefinitions]
+
+     [GlobalVariables]
+	  hotstartFile = 'string','c:\RR_hotstart.res1d'
+	  globalCoeficient = 'double', 3.14
+     EndSect  // GlobalVariables
+   [ModelDefinition]
+      ModelName = 'HM62095'
+      [Parameter]
+        ParameterName = 'cmso'
+        DefaultValue = 108.0336
+       EndSect  //Parameter
+	   [Parameter]
+        ParameterName = 'crof'
+        DefaultValue = 117.3324
+       EndSect  //Parameter
+	   [Parameter]
+        ParameterName = 'csib'
+        DefaultValue = 0.1585
+       EndSect  //Parameter
+	   [Parameter]
+        ParameterName = 'drqi'
+        DefaultValue = 46.8222
+       EndSect  //Parameter
+	  [Parameter]
+        ParameterName = 'drsi'
+        DefaultValue = 298.3279
+       EndSect  //Parameter
+	   
+	   [Parameter]
+        ParameterName = 'mrin'
+        DefaultValue = 174.9990
+       EndSect  //Parameter
+	   
+	   [Parameter]
+        ParameterName = 'rtpc'
+        DefaultValue = 10.4254
+       EndSect  //Parameter
+	   
+	   [Parameter]
+        ParameterName = 'trpc'
+        DefaultValue = 31.7656
+       EndSect  //Parameter
+	   
+	   [StateVariable]
+         id = 'Rbf'
+	     Name = 'Rbf'
+	     eumItem = 100000
+	     eumUnit = 1000
+	     DefaultValue = 145.1284
+        EndSect  // StateVariable
+		
+		[StateVariable]
+         id = 'Rif'
+	     Name = 'Rif'
+	     eumItem = 100000
+	     eumUnit = 1000
+	     DefaultValue = 0.0060
+        EndSect  // StateVariable
+		
+		[StateVariable]
+         id = 'Rof'
+	     Name = 'Rof'
+	     eumItem = 100000
+	     eumUnit = 1000
+	     DefaultValue = 0.4231
+        EndSect  // StateVariable
+		
+		[StateVariable]
+         id = 'So'
+	     Name = 'So'
+	     eumItem = 100000
+	     eumUnit = 1000
+	     DefaultValue = 30.1549
+        EndSect  // StateVariable
+		
+   EndSect  // ModelDefinition
+
+      [Catchment]
+	   name = 'Catchment_1'
+	   area = 199.1
+	   modelId = 'HM62095'
+	   useHotStartFile = true
+	   [Parameters]
+	     cmso = 108.03360000000001
+	     crof = 117.33240000000001
+	     csib = 0.1585
+	     drqi = 46.8222
+		 drsi = 298.3279
+         mrin = 174.999
+         rtpc = 10.4254
+		 trpc = 31.7656      
+		 EndSect  // Parameters
+		[StateVariables] 
+		  Rbf = 145.1284, 145.1284
+		  Rif = 0.0060, 0.0060
+          Rof = 0.4231, 0.4231
+          So = 30.1549, 30.1549
+		 EndSect  // StateVariables		 
+	  EndSect  // Catchment
+EndSect  // RRDefinitions
