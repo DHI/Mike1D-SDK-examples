@@ -58,13 +58,16 @@
     <Compile Include="Scripts\AdditionalOutput.cs" />
     <Compile Include="Scripts\AdditionalParameter.cs" />
     <Compile Include="Scripts\BedResistanceToolbox.cs" />
-    <Compile Include="Scripts\CatchmentMyModel.cs" />
+    <Compile Include="Scripts\CatchmentBufferCleanup.cs" />
     <Compile Include="Scripts\ControllerScripts.cs" />
     <Compile Include="Scripts\HonmaWeirCoefficient.cs" />
     <Compile Include="Scripts\HTMLSummaryScripts.cs" />
     <Compile Include="Scripts\InitialWaterLevel.cs" />
     <Compile Include="Scripts\PowerPlantEnergyOutput.cs" />
     <Compile Include="Scripts\RainfallRunoffScripts.cs" />
+    <Compile Include="Scripts\RainfallRunoff\ModelBExample.cs" />
+    <Compile Include="Scripts\RainfallRunoff\Seiller_et_al_2017.cs" />
+    <Compile Include="Scripts\RainfallRunoff\Templage.cs" />
     <Compile Include="Scripts\RRSumTotalRunoff.cs" />
     <Compile Include="Scripts\ScriptParameters.cs" />
     <Compile Include="Scripts\SetupParameters.cs" />
@@ -88,6 +91,7 @@
       <Version>3.12.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

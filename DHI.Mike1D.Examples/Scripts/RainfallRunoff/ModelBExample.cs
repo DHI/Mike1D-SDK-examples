@@ -1,4 +1,22 @@
-﻿using System;
+﻿/*
+ * This script shows how to make a user written custom hydrological catchment model.
+ * It contains a catchment model somewhat similar to the Kinematic Wave (Model B) Catchment.
+ *
+ * The hydraulic model calculations take place in the CatcmentMyModel class,
+ * in the methods UpdateStorage and UpdateRouting.
+ *
+ * The simulation setup is updated with a few additional catchments, all setup and parameters
+ * specified in code.
+ *
+ * For a more flexible approach, the catchment setup could be stored in a text file or similar,
+ * which is then read as part of this script.
+ *
+ * The script file contains two classes:
+ * - CatchmentMyModelScript: Sets up user written catchment model and adds it to the simulation
+ * - CatcmentMyModel: A user written catchment model, somewhat similar to the Kinematic Wave catchment model.
+ */
+
+using System;
 using System.Collections.Generic;
 using DHI.Generic.MikeZero;
 using DHI.Mike1D.BoundaryModule;
@@ -7,18 +25,8 @@ using DHI.Mike1D.Mike1DDataAccess;
 using DHI.Mike1D.Plugins;
 using DHI.Mike1D.RainfallRunoffModule;
 
-
-/*
- * This script file contains two classes:
- *
- * - CatchmentMyModelScript: Sets up user written catchment model and adds it to the simulation
- *
- * - CatcmentMyModel: A user written catchment model, somewhat similar to the Kinematic Wave catchment model.
- */
-
 namespace DHI.Mike1D.Examples.Scripts
 {
-
 
   /// <summary>
   /// Script class. Methods marked with the <code>[script]</code>

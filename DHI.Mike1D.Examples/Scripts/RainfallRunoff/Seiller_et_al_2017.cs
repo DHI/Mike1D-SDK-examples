@@ -1,3 +1,29 @@
+/*
+ * This script shows how to make a user written custom hydrological catchment model,
+ * where the hydrology is based on
+ *   https://www.sciencedirect.com/science/article/abs/pii/S0022169417304535?via%3Dihub
+ *
+ * The hydraulic model calculations take place in the SellierCatchment class,
+ * in the methods UpdateStorage and UpdateRouting. 
+ *
+ * Information of each catchment is loaded from a .pfs file. The name and path of this file can
+ * be specified in MIKE+, in "Simulation" - "MIKE 1D Engine Configuration" - "Custom options";
+ * insert an option with the name "SeillerPFS" as a string, and enter the file name
+ * (relative to MIKE+ setup file (.mupp)). If not specified there, it will look for the file 
+ * Seiller_et_al_2017.pfs, which must exist next the the setup file.
+ *
+ * The Seiller_et_al_2017.pfs currently specifies only one catchment.
+ *
+ * If a catchment in the SeillerPFS file is also defined in the MIKE 1D simulation (MIKE+),
+ * the existing catchment will be replaced. Otherwise a new catchment is added to the simulation.
+ *
+ * This script file contains the following classes:
+ *
+ * - SellierCatchmentScript: Sets up the user written catchments
+ * - SellierCatchment: The user written catchment model
+ * - StateVariable: Handles state of the catchment model
+ * - HelperFunctions: Reads parameters from PFS file and other convenient functions
+ */
 
 using System;
 using System.IO;
@@ -11,139 +37,106 @@ using DHI.Mike1D.Plugins;
 using DHI.Mike1D.RainfallRunoffModule;
 
 
-/*
- * This script file contains two classes:
- *
- * - CatchmentMyModelScript: Sets up user written catchment model and adds it to the simulation
- *
- * - CatcmentMyModel: A user written catchment model
- */
-
-namespace DHI.Mike1D.Catchments.Scripts
+namespace DHI.Mike1D.Catchments.Scripts.RRSeiller
 {
+
     /// <summary>
     /// Script class. Methods marked with the <code>[script]</code>
     /// attribute will be executed when the MIKE 1D engine is running
     /// </summary>
-    public class CatchmentMyModelScript
+    public class SellierCatchmentScript
     {
         // Conversion from mm/h to m/s
         
 
         /// <summary>
         /// prepare all models and catchments.
-
         /// </summary>
         [Script(Order = 1)]
         
         public void AddModifyCatchments(Mike1DData mike1DData)
         {
+            // Try read SeillerPFS file name from AddtionalData, otherwise use default name
+            string pfsPath;
+            if (!mike1DData.AdditionalData.TryGetValue("SeillerPFS", out pfsPath))
+                pfsPath = "Seiller_et_al_2017.pfs";
+
+            FilePath pfsFilePath = new FilePath(pfsPath, mike1DData.Connection.FilePath);
+            if (!File.Exists(pfsFilePath.FullFilePath))
+                throw new FileNotFoundException(pfsFilePath.Path);
+
+            IDictionary<string, string> stringParams = null;
+            IDictionary<string, double> doubleParams = null;
+            HelperFunctions.LoadGlobalParameters(pfsFilePath.FullFilePath, out stringParams, out doubleParams);
+
             // add infiltration
             mike1DData.ResultSpecifications[0].What.Add(Quantity.Create(PredefinedQuantity.TotalInfiltration));
-           
-           
+
+            // record all existing quantities from the result-specification, to not add them twice
             IDictionary<string, IQuantity> existingQuantities = new Dictionary<string, IQuantity>();
             foreach (var quantity in mike1DData.ResultSpecifications[0].What)
             {
                 existingQuantities.Add(quantity.Id, quantity);
             }
-            
-            //var pfsPath = "UserModel.pfs";
-            var pfsPath = @"c:\UserModel.pfs";
-            var path1 = new DHI.Mike1D.Generic.FilePath(pfsPath);
 
-            IDictionary<string, string> stringParams = null;
-            IDictionary<string, double> doubleParams = null;
-            HelperFunctions.LoadGloubalParameters(pfsPath, out stringParams, out doubleParams);
-
-            IDictionary<string, ModelStructure> modelStructures = HelperFunctions.LoadModelStructures(pfsPath);
-            foreach (var model in modelStructures.Values)
+            // Add quantities to the result specification, use a dummy catchment to get all quantities
+            var scDummy = new SellierCatchment("dummy");
+            foreach (var stateVariable in scDummy.StateVariables.Values)
             {
-                foreach (var stateVariable in model.StateVariables.Values)
+                if (!existingQuantities.ContainsKey(stateVariable.Id))
                 {
-                    if (!existingQuantities.ContainsKey(stateVariable.Id))
-                    {
-                        existingQuantities.Add(stateVariable.Id, new Quantity(stateVariable.Id, stateVariable.Name, stateVariable.Item, stateVariable.Unit));
-                        mike1DData.ResultSpecifications[0].What.Add(existingQuantities[stateVariable.Id]);
-                    }
-                    stateVariable.StateQuantity = existingQuantities[stateVariable.Id];
+                    existingQuantities.Add(stateVariable.Id, stateVariable.StateQuantity);
+                    mike1DData.ResultSpecifications[0].What.Add(stateVariable.StateQuantity);
                 }
+                stateVariable.StateQuantity = existingQuantities[stateVariable.Id];
             }
 
-            var filePath = @"c:\RR_hotstart.res1d";
+            // Load hotstart data, if present
+            RRHotstartFiles hotstartFiles = null;
             if (stringParams.ContainsKey("hotstartFile"))
             {
-                filePath = stringParams["hotstartFile"];
-            }
-            HotstartInfo hotstartInfo = null;
-            var path = new DHI.Mike1D.Generic.FilePath(filePath);
-            if (File.Exists(filePath))
-            {
-                hotstartInfo = new HotstartInfo(path, mike1DData.SimulationStart);
-            }
-            var myModels = HelperFunctions.LoadCatchments(pfsPath);
-
-            RRHotstartFiles hotstartFiles = null;
-            IDiagnostics diag = new Diagnostics("Hotstart");
-            var param = new RRParameters();
-            if (hotstartInfo != null)
-            {
-                param.HotstartInfos.Add(hotstartInfo);
-                hotstartFiles = RRHotstartFiles.Create(param, diag);
+                string filePath = stringParams["hotstartFile"];
+                FilePath path = new FilePath(filePath, mike1DData.Connection.FilePath);
+                if (File.Exists(path.FullFilePath))
+                {
+                    var hotstartInfo = new HotstartInfo(path, mike1DData.SimulationStart);
+                    var param = new RRParameters();
+                    param.HotstartInfos.Add(hotstartInfo);
+                    IDiagnostics diag = new Diagnostics("Hotstart");
+                    hotstartFiles = RRHotstartFiles.Create(param, diag);
+                }
             }
 
-            var typedModels = new List<GenericCatchmentModel>();
+            // Create new catchments from PFS file
+            var myModels = HelperFunctions.LoadCatchments(pfsFilePath.FullFilePath);
 
-            //one Catchment Area
+            // Apply hotstart values to catchments
             foreach (var model in myModels)
             {
-                string catchType = model.ModelId;
-                GenericCatchmentModel typedModel = null;
-
-                switch (catchType)
-                {
-                    case "HM62095":
-                        typedModel = new TestModel(model.CatchmentName);
-                        break;
-                }
-                typedModel.PopulateFromModelStructure(modelStructures[catchType]);
-                HelperFunctions.CopyUserCatchmentData(model, typedModel);
-                typedModel.UseHotStartFile = true;
+                model.UseHotStartFile = true;
                 if (hotstartFiles != null)
                 {
-                    typedModel.ApplyHotStart(hotstartFiles);
+                    model.ApplyHotStart(hotstartFiles);
                 }
-                typedModels.Add(typedModel);
             }
 
-            foreach (var myModel in typedModels)
+            // Add catchment to setup, remove any existing catchment with the same name
+            foreach (var myModel in myModels)
             {
-                //myModel.TimeStep = TimeSpan.FromSeconds(60);
                 var catchment = mike1DData.RainfallRunoffData.Catchments.Find(myModel.CatchmentName);
                 if (catchment != null)
                 {
                     HelperFunctions.CopyMikeCatchmentData(catchment, myModel);
-                    //myModel.Area = 2.5;
                     mike1DData.RainfallRunoffData.Catchments.Remove(catchment);
                 }
-               
                 mike1DData.RainfallRunoffData.Catchments.Add(myModel);
-            }
-
-            foreach (ICatchment catchment in mike1DData.RainfallRunoffData.Catchments)
-            {
-                var modelType = catchment.ModelId;
-                var type = catchment.Type();
-            }
-
-            foreach (var quantity in mike1DData.ResultSpecifications[0].What)
-            {
-                var id = quantity.Id;
             }
         }
     }
 
     /// <summary>
+    /// User written catchment implementation
+    ///
     /// For every time step, the following methods are called:
     /// <code>
     /// PrepareForTimeStep()
@@ -152,68 +145,65 @@ namespace DHI.Mike1D.Catchments.Scripts
     /// FinalizeTimeStep()
     /// CalculateStatistics()
     /// </code>
-    /// </para>
     /// </summary>
-    public class GenericCatchmentModel : Catchment
+    public class SellierCatchment : Catchment
     {
-        const double mmph2mps = 1 / 3.6 * 1e-6;
-
-        // Quantities for various outputs from this catchment. Used in the Initialize method.
-        public static IQuantity DepthQuantity = new Quantity("CDepth", "Depth of water", eumItem.eumIStorageDepth, eumUnit.eumUmeter);
-        public static IQuantity SLossQuantity = new Quantity("CStorageDepth", "Storage Depth", eumItem.eumIStorageDepth, eumUnit.eumUmeter);
-        public List<CatchmentSourceBoundaryTypes> UsedCatchmentSourceBoundaryTypes { get; internal set; } //TODO - use this variable
-        public IList<GlobalSourceBoundaryTypes> UsedGlobalSourceBoundaryTypes { get; internal set; } //TODO - use this variable
-
         /// <summary>
         /// Create new catchment, given its <paramref name="name"/>.
         /// The <see cref="ICatchment.ModelId"/> will equal the name.
         /// </summary>
-        public GenericCatchmentModel(string name) : base(name)
-        {
-
-        }
+        public SellierCatchment(string name) : base(name) { Init(); }
 
         /// <summary>
         /// Create new catchment, given its <paramref name="modelId"/> and <paramref name="name"/>.
         /// </summary>
-        public GenericCatchmentModel(string modelId, string name) : base(modelId, name)
+        public SellierCatchment(string modelId, string name) : base(modelId, name) { Init(); }
+
+        /// <summary>
+        /// Some default initialization
+        /// </summary>
+        private void Init()
         {
+            _stateVariables.Add("Rbf", RbfState);
+            _stateVariables.Add("Rif", RifState);
+            _stateVariables.Add("Rof", RofState);
+            _stateVariables.Add("So", SoState);
+            TimeStep = TimeSpan.FromMinutes(1);
         }
 
-        private IDictionary<string, double> _parameters = new Dictionary<string, double>();
-        private IDictionary<string, StateVariable> _stateVariables = new Dictionary<string, StateVariable>();
-
-        public virtual void SetSurfaceParameters()
-        {
-            Surface.WettingCapacity = 0.05e-3;
-            Surface.StorageCapacity = 2.0e-3;
-            Surface.Infiltration = new Horton() { F0 = 2 * mmph2mps, Fc = 0.5 * mmph2mps, Kwet = 0.0015, Kdry = 3.0e-5 };
-        }
-
+        /// <summary>
+        /// Apply hotstart values to catchment, reading results from a previous simulation.
+        /// </summary>
         public void ApplyHotStart(RRHotstartFiles hotstartFiles)
         {
             try
             {
                 var h = hotstartFiles.GetCatchmentData(CatchmentName);
-                var cont = h.ResultData.Quantities.Count;
-                double val = 0;
-                foreach (StateVariable variable in StateVariables.Values)
+                if (h != null)
                 {
-                    try
+                    double val = 0;
+                    foreach (StateVariable variable in StateVariables.Values)
                     {
-                        if (h.GetValue(variable.StateQuantity, out val))
+                        try
                         {
-                            variable.StateValue = val;
+                            if (h.GetValue(variable.StateQuantity, out val))
+                            {
+                                variable.StateValue = val;
+                            }
+                            else
+                            {
+                                variable.StateValue = variable.DefaultValue;
+                            }
                         }
-                        else
+                        catch
                         {
                             variable.StateValue = variable.DefaultValue;
                         }
                     }
-                    catch
-                    {
-                        variable.StateValue = variable.DefaultValue;
-                    }
+                }
+                else
+                {
+                    ResetDefaultStates();
                 }
             }
             catch
@@ -222,23 +212,14 @@ namespace DHI.Mike1D.Catchments.Scripts
             }
         }
 
+        /// <summary>
+        /// Reset all states to their default value
+        /// </summary>
         public void ResetDefaultStates()
         {
             foreach (var stateVariable in StateVariables.Values)
             {
                 stateVariable.StateValue = stateVariable.DefaultValue;
-            }
-        }
-
-        public void PopulateFromModelStructure(ModelStructure modelStructure)
-        {
-            foreach (var parameter in modelStructure.Parameters)
-            {
-                Parameters.Add(parameter.Key, parameter.Value);
-            }
-            foreach (var stateVariable in modelStructure.StateVariables)
-            {
-                StateVariables.Add(stateVariable.Key, (StateVariable)stateVariable.Value.Clone());
             }
         }
 
@@ -248,53 +229,53 @@ namespace DHI.Mike1D.Catchments.Scripts
         /// </summary>
         public override string Type()
         {
-            return "Generic";
+            return "Sellier";
         }
 
         #region Catchment paramters
-        //// This region contains setup parameters for this catchment model,
-        //// i.e. parameters provided initially and used through the simulation.
+        // This region contains setup parameters for this catchment model,
+        // i.e. parameters provided initially and used through the simulation.
 
-        public CatchmentSurface _surface = new CatchmentSurface();
-
-        public CatchmentSurface Surface
-        {
-            get { return _surface; }
-            set { _surface = value; }
-        }
-
-        public IDictionary<string, double> Parameters
-        {
-            get { return _parameters; }
-        }
-
-
+        public double cmso;
+        public double crof;
+        public double csib;
+        public double drqi;
+        public double drsi;
+        public double mrin;
+        public double rtpc;
+        public double trpc;
 
         #endregion
 
         #region State variables
-        //// This region contains state variables for this catchment model,
-        //// i.e. variables that change with each time-step in the model.
+        // This region contains state variables for this catchment model,
+        // i.e. variables that change with each time-step in the model.
 
+        public StateVariable RbfState = new StateVariable("Rbf", "Rbf", eumItem.eumIDischarge, eumUnit.eumUm3PerSec);
+        public StateVariable RifState = new StateVariable("Rif", "Rif", eumItem.eumIDischarge, eumUnit.eumUm3PerSec);
+        public StateVariable RofState = new StateVariable("Rof", "Rof", eumItem.eumIDischarge, eumUnit.eumUm3PerSec);
+        public StateVariable SoState  = new StateVariable("So",  "So" , eumItem.eumIItemUndefined, eumUnit.eumUUnitUndefined);
+
+        /// <summary>
+        /// All state variables, indexed by their id.
+        /// </summary>
         public IDictionary<string, StateVariable> StateVariables
         {
             get { return _stateVariables; }
         }
+        private IDictionary<string, StateVariable> _stateVariables = new Dictionary<string, StateVariable>();
 
         #endregion
 
         #region Helper variables
         // Various helper variables using during evaluation of the catchment runoff
 
-        /// <summary> Effective time step in [s] </summary>
-        public double _effectiveTimeStepSeconds;
         /// <summary> Actual rainfall. Unit: [m/s]</summary>
-        public double _actualRainfall;
+        private double _actualRainfall;
         /// <summary> Potential evaporation. Actual evaporation is limited to water on surface. Unit: [m/s] </summary>
-        public double _potentialEvaporation;
+        private double _potentialEvaporation;
 
         #endregion
-
 
         ///<summary>
         /// Initialize Rainfall Runoff model. Sets up static data.
@@ -309,20 +290,18 @@ namespace DHI.Mike1D.Catchments.Scripts
             // A catchment must offer TotalRunOff and NetRainfall.
             // The rest is for convenience and result verifications.
 
-            SetSurfaceParameters();
-
             _offers = new List<IQuantity>();
 
             _offerDelegates = new List<Func<double>>();
 
-            //// predefined offers
+            // predefined offers
             _offers.Add(Quantity.Create(PredefinedQuantity.TotalRunOff));
             _offerDelegates.Add(() => (_runoff + _additionalFlow));
 
             _offers.Add(Quantity.Create(PredefinedQuantity.NetRainfall));
             _offerDelegates.Add(() => (_actualRainfall - _potentialEvaporation));
 
-            //// user defined offers
+            // user defined offers
             foreach (var stateVariable in StateVariables)
             {
                 _offers.Add(stateVariable.Value.StateQuantity);
@@ -342,7 +321,7 @@ namespace DHI.Mike1D.Catchments.Scripts
         /// <summary>
         /// Get a list of boundary types required by this catchment
         /// </summary>
-        public override IList<CatchmentSourceBoundaryTypes> GetRequiredTypes() //TODO - do it more general
+        public override IList<CatchmentSourceBoundaryTypes> GetRequiredTypes()
         {
             var res = new List<CatchmentSourceBoundaryTypes>();
 
@@ -358,7 +337,7 @@ namespace DHI.Mike1D.Catchments.Scripts
         /// <summary>
         /// Apply Catchment boundaries to this catchment
         /// </summary>
-        public override void ApplyBoundary(CatchmentSourceBoundaryTypes catchmentSourceBoundaryType, IBoundarySource catchmentSourceBoundary) //TODO - do it more general
+        public override void ApplyBoundary(CatchmentSourceBoundaryTypes catchmentSourceBoundaryType, IBoundarySource catchmentSourceBoundary)
         {
             switch (catchmentSourceBoundaryType)
             {
@@ -376,7 +355,7 @@ namespace DHI.Mike1D.Catchments.Scripts
         /// <summary>
         /// Apply global boundaries to this catchment
         /// </summary>
-        public override void ApplyBoundary(GlobalSourceBoundaryTypes type, GlobalGeoLocatedSource geoLocatedSource) //TODO - do it more general
+        public override void ApplyBoundary(GlobalSourceBoundaryTypes type, GlobalGeoLocatedSource geoLocatedSource)
         {
             switch (type)
             {
@@ -393,6 +372,14 @@ namespace DHI.Mike1D.Catchments.Scripts
 
         #endregion
 
+        ///<summary>
+        /// Prepare Rainfall Runoff model. Sets up dynamic data so that the model is ready for first time step.
+        ///</summary>
+        public override void Prepare(DateTime simulationStartTime, DateTime simulationEndTime, RRParameters rrpars, IDiagnostics diagnostics)
+        {
+            base.Prepare(simulationStartTime, simulationEndTime, rrpars, diagnostics);
+            UpdateRouting(true);
+        }
 
         #region Time stepping routines
 
@@ -404,10 +391,6 @@ namespace DHI.Mike1D.Catchments.Scripts
             // Update time for this time step. If timestep is dynamic, be sure to 
             // calculate _effectiveTimeStep before calling UpdateTime
             UpdateTime();
-            _effectiveTimeStepSeconds = _effectiveTimeStep.TotalSeconds;
-
-            // Transfer current state to Old
-            _surface.DepthOld = _surface.Depth;
         }
 
         /// <summary>
@@ -416,16 +399,12 @@ namespace DHI.Mike1D.Catchments.Scripts
         protected override void UpdateStorage()
         {
             UpdateForcings();
-
-            // Storage calculations is handled by the _surface class
-            _surface.PerformTimeStep(_effectiveTimeStepSeconds, _actualRainfall, _potentialEvaporation);
         }
 
         /// <summary>
         /// This routine updates the boundary/forcing values of rainfall, evaporation etc
-        /// This is default implementation
         /// </summary>
-        internal virtual void UpdateForcings()
+        private void UpdateForcings()
         {
             if (_boundarySourceRainfall != null)
                 _actualRainfall = _boundarySourceRainfall.GetAccumulatedValue(_timeOld, _timeNew) / (_effectiveTimeStep.TotalSeconds);
@@ -436,457 +415,46 @@ namespace DHI.Mike1D.Catchments.Scripts
                                         (_effectiveTimeStep.TotalSeconds);
             else
                 // Apply a constant evaporation
-                _potentialEvaporation = 5e-5 / 3600.0; // 1.2 mm / day
-
-            //Only allow evaporation in dry periods
-            if (_actualRainfall > 0)
                 _potentialEvaporation = 0;
         }
 
-        /// <summary>
-        /// In case any calculations are required after UpdateRouting
-        /// </summary>
-        protected override void FinalizeTimeStep()
-        {
-        }
-        
-        protected virtual void ComputeStep(double E, double P, bool initialStep = false)
-        {
 
-        }
-
+        /// <summary> Updates the routing for the catchment. </summary>
         protected override void UpdateRouting()
         {
-            double Pl = _actualRainfall * 66 * 60 * 1000;
-            double E = _potentialEvaporation * 3600 * 1000;
-            double dt = (_timeNew - _timeOld).TotalSeconds;
-            Pl = _actualRainfall * dt * 1000;
-            E = _potentialEvaporation * dt * 1000;
-            ComputeStep(E, Pl);
+          UpdateRouting(false);
         }
 
-        public override void Prepare(DateTime simulationStartTime, DateTime simulationEndTime, RRParameters rrpars, IDiagnostics diagnostics)
-        {
-            base.Prepare(simulationStartTime, simulationEndTime, rrpars, diagnostics);
-            ComputeStep(0, 0, true);
-        }
-        #endregion
-
-        /// <summary>
-        /// Volume of water stored in catchment.
-        /// </summary>
-        public override double VolumeInCatchment()
-        {
-            double volume = _area * (_surface.Depth + _surface.WettingLoss + _surface.StorageLoss);
-            return volume;
-        }
-
-        /// /<summary>
-        /// In order to get HTML summary right, some statistics must be calculated
-        /// </summary>
-        protected override void CalculateStatistics()
+        /// <summary> Updates the routing for the catchment. </summary>
+        protected void UpdateRouting(bool initialStep)
         {
             double dt = (_timeNew - _timeOld).TotalSeconds;
 
-            double flow = _runoff + _additionalFlow;
-
-            // Figure out min/max flow and its time
-            if (flow < _minimumFlow)
+            double Pl;
+            double E;
+            if (!initialStep)
             {
-                _minimumFlow = flow;
-                _timeOfMinimumFlow = _timeNew;
+                Pl = _actualRainfall * dt * 1000;
+                E = _potentialEvaporation * dt * 1000;
             }
-            if (flow > _maximumFlow)
-            {
-                _maximumFlow = flow;
-                _timeOfMaximumFlow = _timeNew;
-            }
-
-            // Runoff flow is in [m^3/s]
-            double totalRunoffVolume = dt * flow;
-            _totalRunoffVolume += totalRunoffVolume;
-
-            // Infiltration and evaporation is in [m/s]
-            double totalLossVolume = dt * (_surface.InfiltrationActual + _surface.EvapActual) * _area;
-            _totalLossVolume += totalLossVolume;
-
-            // Rainfall is in [m/s]
-            double totalRainfallVolume = dt * _actualRainfall * _area;
-            _totalRainfallVolume += totalRainfallVolume;
-
-            // AdditionalFlow is constant and given in [m3/s]
-            double totalAdditionalInflowVolume = dt * _additionalFlow;
-            _totalAdditionalInflowVolume += totalAdditionalInflowVolume;
-
-            if (_yearlyStatistics != null)
-            {
-                int year = _timeNew.Year;
-                RRYearlyStat yearlyStat = GetYearlyStat(year);
-                yearlyStat.TotalRunoff += totalRunoffVolume;
-                yearlyStat.Losses += totalLossVolume;
-                yearlyStat.Inflow += totalRainfallVolume + totalAdditionalInflowVolume;
-            }
-        }
-    }
-
-    internal class DisposablePFS : DHI.PFS.PFSFile, IDisposable
-    {
-        public DisposablePFS(string path)
-            : base(path)
-        {
-        }
-
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                this.Close();
-            }
-        }
-    }
-
-    static class HelperFunctions
-    {
-        public static IList<GenericCatchmentModel> LoadCatchments(string fileName)
-        {
-            if (!File.Exists(fileName))
-            {
-                return null;
-            }
-            var modelcatchmentsStructures = new List<GenericCatchmentModel>();
-            using (DisposablePFS pfs = new DisposablePFS(fileName))
-            {
-                PFSSection pfsModelStructures = pfs.GetTarget("RRDefinitions", 1);
-                if (pfsModelStructures == null)
-                {
-                    throw new Exception("Incorrect file format");
-                }
-
-                var catchmentCount = pfsModelStructures.GetSectionsCount("Catchment");
-                for (int i = 1; i <= catchmentCount; i++)
-                {
-
-                    var section = pfsModelStructures.GetSection("Catchment", i);
-                    var catchName = section.GetKeyword("name", 1).GetParameter(1).ToString();
-
-                    var modelId = section.GetKeyword("modelId", 1).GetParameter(1).ToString();
-                    var area = section.GetKeyword("area", 1).GetParameter(1).ToDouble();
-                    var parametrsSection = section.GetSection("Parameters",1);
-                    var catchment = new GenericCatchmentModel(modelId, catchName);
-                    catchment.Area = area;
-                    int paramCount = parametrsSection.GetKeywordsCount();
-                    for (int j = 1; j <= paramCount; j++)
-                    {
-                        var param = parametrsSection.GetKeyword(j);
-                        var paramName = param.Name;
-                        var value = param.GetParameter(1).ToDouble();
-                        catchment.Parameters.Add(paramName, value);
-                    }
-                    var stateVariablesSection = section.GetSection("StateVariables", 1);
-                 
-                    int stateVariablesCount = stateVariablesSection.GetKeywordsCount();
-                    for (int j = 1; j <= stateVariablesCount; j++)
-                    {
-                        var param = stateVariablesSection.GetKeyword(j);
-                        var paramName = param.Name;
-                        
-                        var stateVariable = new StateVariable(paramName);
-                        stateVariable.StateValue = param.GetParameter(1).ToDouble();
-                        stateVariable.DefaultValue = param.GetParameter(2).ToDouble();
-                        catchment.StateVariables.Add(paramName, stateVariable);
-                    }
-                    modelcatchmentsStructures.Add(catchment);
-                }
-            }
-            return modelcatchmentsStructures;
-        }
-        public static void LoadGloubalParameters(string fileName, out IDictionary<string, string> stringParams, out IDictionary<string, double> doubleParams)
-        {
-            
-            stringParams = new Dictionary<string, string>();
-            doubleParams = new Dictionary<string, double>();
-            if (!File.Exists(fileName))
-            {
-                return;
-            }
-
-            using (DisposablePFS pfs = new DisposablePFS(fileName))
-            {
-                PFSSection pfsModelStructures = pfs.GetTarget("RRDefinitions", 1);
-                if (pfsModelStructures == null)
-                {
-                    throw new Exception("Incorrect file format");
-                }
-                var parametrsSection = pfsModelStructures.GetSection("GlobalVariables",1);
-                int paramCount = parametrsSection.GetKeywordsCount();
-                for (int j = 1; j <= paramCount; j++)
-                {
-                    var param = parametrsSection.GetKeyword(j);
-                    var paramName = param.Name;
-                    var parameterType = param.GetParameter(1).ToString();
-                    if (string.Compare(parameterType, "string") == 0)
-                    {
-                        stringParams.Add(paramName, param.GetParameter(2).ToString());
-                    }
-                    if (string.Compare(parameterType, "double") == 0)
-                    {
-                        doubleParams.Add(paramName, param.GetParameter(2).ToDouble());
-                    }
-                }
-            }
-        }
-
-
-                public static IDictionary<string, ModelStructure> LoadModelStructures(string fileName)
-        {
-            if (!File.Exists(fileName))
-            {
-                return null;
-            }
-            IDictionary<string, ModelStructure> modelStructures = new Dictionary<string, ModelStructure>();
-            using (DisposablePFS pfs = new DisposablePFS(fileName))
-            {
-                PFSSection pfsModelStructures = pfs.GetTarget("RRDefinitions", 1);
-                if (pfsModelStructures == null)
-                {
-                    throw new Exception("Incorrect file format");
-                }
-
-                var modelCount = pfsModelStructures.GetSectionsCount("ModelDefinition");
-                for (int i = 1; i <= modelCount; i++)
-                {
-                    var section = pfsModelStructures.GetSection("ModelDefinition", i);
-                    var name = section.GetKeyword("ModelName", 1).GetParameter(1).ToString();
-                    ModelStructure modelStructure = new ModelStructure(name);
-                    modelStructures.Add(name, modelStructure);
-
-                    var parametersCount = section.GetSectionsCount("Parameter");
-                    for (int j = 1; j <= parametersCount; j++)
-                    {
-                        var paramSection = section.GetSection("Parameter", j);
-                        var paramName = paramSection.GetKeyword("ParameterName", 1).GetParameter(1).ToString();
-                        var defaultValue = paramSection.GetKeyword("DefaultValue", 1).GetParameter(1).ToDouble();
-                        modelStructure.Parameters.Add(paramName, defaultValue);
-                    }
-                    var stateVariablesCount = section.GetSectionsCount("StateVariable");
-                    for (int j = 1; j <= stateVariablesCount; j++)
-                    {
-                        var stateVariableSection = section.GetSection("StateVariable", j);
-                        var id = stateVariableSection.GetKeyword("Id", 1).GetParameter(1).ToString();
-                        var stateVariableName = stateVariableSection.GetKeyword("Name", 1).GetParameter(1).ToString();
-                        
-                        var defaultValue = stateVariableSection.GetKeyword("DefaultValue", 1).GetParameter(1).ToDouble();
-                        
-                        var item = (eumItem)stateVariableSection.GetKeyword("eumItem", 1).GetParameter(1).ToInt();
-                        var unit = (eumUnit)stateVariableSection.GetKeyword("eumUnit", 1).GetParameter(1).ToInt();
-                        StateVariable stateVariable = new StateVariable(id, stateVariableName, item, unit);
-                        modelStructure.StateVariables.Add(id, stateVariable);
-                    }
-                  
-                    //    UsedCatchmentSourceBoundaryTypes = new List<CatchmentSourceBoundaryTypes>();
-                    //    UsedGlobalSourceBoundaryTypes = new List<GlobalSourceBoundaryTypes>();
-                }
-            }
-                return modelStructures;
-        }
-
-        public static void CopyMikeCatchmentData(ICatchment source, GenericCatchmentModel target)
-        { 
-            target.CenterPoint = source.CenterPoint;
-            target.CatchmentGeometry = source.CatchmentGeometry;
-            target.Area = source.Area;
-            target.TimeStep = source.TimeStep;
-            target.MinTime = source.MinTime;
-           
-        }
-
-        public static void CopyUserCatchmentData(GenericCatchmentModel source, GenericCatchmentModel target)
-        {
-            foreach (var param in source.Parameters)
-            {
-                if (target.Parameters.ContainsKey(param.Key))
-                {
-                    target.Parameters[param.Key] = source.Parameters[param.Key];
-                }
-            }
-            foreach (var stateVar in source.StateVariables)
-            {
-                if (target.StateVariables.ContainsKey(stateVar.Key))
-                {
-                    target.StateVariables[stateVar.Key].DefaultValue = source.StateVariables[stateVar.Key].DefaultValue;
-                    target.StateVariables[stateVar.Key].StateValue = source.StateVariables[stateVar.Key].StateValue;
-                }
-            }
-
-        }
-    }
-
-    public class StateVariable : ICloneable
-    {
-        public StateVariable(string id)
-        {
-            Id = id;
-            Name = id;
-            Item = eumItem.eumIItemUndefined;
-            Unit = eumUnit.eumUUnitUndefined;
-            StateQuantity = null;
-        }
-
-        public StateVariable(string id, string name, eumItem item, eumUnit unit)
-        {
-            Id = id;
-            Name = name;
-            Item = item;
-            Unit = unit;
-            StateValue = 0.0;
-            DefaultValue = 0.0;
-            StateQuantity = null;
-        }
-
-        public string Id { get; internal set; }
-        public string Name { get; set; }
-        public double StateValue { get; set; }
-        public double DefaultValue { get; set; }
-        public eumItem Item { get; internal set; }
-        public eumUnit Unit { get; internal set; }
-        public IQuantity StateQuantity { get; set; }
-        
-        public object Clone()
-        {
-            StateVariable result = new StateVariable(Id, Name, Item, Unit);
-            result.DefaultValue = DefaultValue;
-            result.StateQuantity = StateQuantity;
-            return result;
-        }
-    }
-
-    public class ModelStructure
-    {
-        public ModelStructure(string name)
-        {
-            Name = name;
-            Parameters = new Dictionary<string, double>();
-            StateVariables = new Dictionary<string, StateVariable>();
-            UsedCatchmentSourceBoundaryTypes = new List<CatchmentSourceBoundaryTypes>();
-            UsedGlobalSourceBoundaryTypes = new List<GlobalSourceBoundaryTypes>();
-        }
-        public string Name { get; set; }
-        public IDictionary<string, double> Parameters { get; internal set; }
-        public IDictionary<string, StateVariable> StateVariables { get; internal set; }
-        public List<CatchmentSourceBoundaryTypes> UsedCatchmentSourceBoundaryTypes { get; internal set; }
-        public IList<GlobalSourceBoundaryTypes> UsedGlobalSourceBoundaryTypes { get; internal set; }
-    }
-
-    /*========================= Rainfall Runoff Model====================*/
-    public class TestModel : GenericCatchmentModel
-    {
-        /// <summary>
-        /// Create new catchment, given its <paramref name="name"/>.
-        /// The <see cref="ICatchment.ModelId"/> will equal the name.
-        /// </summary>
-        public TestModel(string name) : base(name)
-        {
-        }
-
-        /////////////// to be copied for new computation engine //////////////////
-
-        /// <summary>
-        /// Create new catchment, given its <paramref name="modelId"/> and <paramref name="name"/>.
-        /// </summary>
-        public TestModel(string modelId, string name) : base(modelId, name)
-        {
-        }
-
-        /// <summary>
-        /// The type name of this catchmentModel type.
-        /// This is a unique name for all catchment model types.
-        /// </summary>
-        public override string Type()
-        {
-            return "TestModel";
-        }
-
-        ///<summary>
-        /// Initialize Rainfall Runoff model. Sets up static data.
-        ///</summary>
-        public override void Initialize(IDiagnostics diagnostics)
-        {
-            base.Initialize(diagnostics);
-            //// more can be add there
-        }
-
-        /// <summary>
-        /// example of override function 
-        /// </summary>
-        public override void SetSurfaceParameters()
-        {
-            base.SetSurfaceParameters();
-            Surface.StorageCapacity = 2.5e-3;
-        }
-        // other override methods can be implemented
-
-        /// <summary>
-        /// This routine updates the boundary/forcing values of rainfall, evaporation etc
-        /// This is specific
-        /// </summary>
-        internal override void UpdateForcings()
-        {
-            if (_boundarySourceRainfall != null)
-                _actualRainfall = _boundarySourceRainfall.GetAccumulatedValue(_timeOld, _timeNew) / (_effectiveTimeStep.TotalSeconds);
-
-            if (_boundarySourceEvaporation != null)
-                // GetAccumulatedValue returns a negative value for evaporation boundary
-                _potentialEvaporation = -_boundarySourceEvaporation.GetAccumulatedValue(_timeOld, _timeNew) /
-                                        (_effectiveTimeStep.TotalSeconds);
             else
-                // Apply a constant evaporation
-                _potentialEvaporation = 0;
-        }
+            {
+                Pl = 0;
+                E = 0;
+            }
 
-
-        /// <summary>
-        /// This is part of the RR engine
-        /// </summary>
-        protected override void ComputeStep(double e, double p, bool initialStep = false)
-        {
-            // Model Converted from Seiller's Matlab code to C# by Stanislav Vanecek 
-
-            // posible implementations
-            // posibility 1
-            //StateVariables["Rbf"].StateValue = _actualRainfall * Parameters["cmso"] + StateVariables["Rbf"].StateValue / 10.0;
-
-            // posibility 2
-
-            double cmso = Parameters["cmso"];
-            double crof = Parameters["crof"];
-            double csib = Parameters["csib"];
-            double drqi = Parameters["drqi"];
-            double drsi = Parameters["drsi"];
-            double mrin = Parameters["mrin"];
-            double rtpc = Parameters["rtpc"];
-            double trpc = Parameters["trpc"];
-            
-
-            double Rbf = StateVariables["Rbf"].StateValue;
-            double Rif = StateVariables["Rif"].StateValue;
-            double Rof = StateVariables["Rof"].StateValue;
-            double So = StateVariables["So"].StateValue;
+            double Rbf = RbfState.StateValue;
+            double Rif = RifState.StateValue;
+            double Rof = RofState.StateValue;
+            double So  = SoState .StateValue;
 
             // Snow module
             // Snow/Rain split (Ps)
             /////////////////////////////////////////
             double Pg = 0.0;
-            double Pl = p;
-            
+
             // Snow accumulation and melt (G)
             double Me = 0.0;
-            double E = e;
 
             // Production part
             // Surface processes (Sf)
@@ -943,12 +511,280 @@ namespace DHI.Mike1D.Catchments.Scripts
             // Save states if not if not initial step
             if (!initialStep)
             {
-                StateVariables["Rbf"].StateValue = Rbf;
-                StateVariables["Rif"].StateValue = Rif;
-                StateVariables["Rof"].StateValue = Rof;
-                StateVariables["So"].StateValue = So;
+                RbfState.StateValue = Rbf;
+                RifState.StateValue = Rif;
+                RofState.StateValue = Rof;
+                SoState .StateValue = So;
             }
             _runoff = Qsim * Area / (1000 * _timeStep.TotalSeconds);
         }
+
+        /// <summary>
+        /// In case any calculations are required after UpdateRouting
+        /// </summary>
+        protected override void FinalizeTimeStep()
+        {
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Volume of water stored in catchment.
+        /// </summary>
+        public override double VolumeInCatchment()
+        {
+            double volume = 0;
+            return volume;
+        }
+
+        /// /<summary>
+        /// In order to get HTML summary right, some statistics must be calculated
+        /// </summary>
+        protected override void CalculateStatistics()
+        {
+            double dt = (_timeNew - _timeOld).TotalSeconds;
+
+            double flow = _runoff + _additionalFlow;
+
+            // Figure out min/max flow and its time
+            if (flow < _minimumFlow)
+            {
+                _minimumFlow = flow;
+                _timeOfMinimumFlow = _timeNew;
+            }
+            if (flow > _maximumFlow)
+            {
+                _maximumFlow = flow;
+                _timeOfMaximumFlow = _timeNew;
+            }
+
+            // Runoff flow is in [m^3/s]
+            double totalRunoffVolume = dt * flow;
+            _totalRunoffVolume += totalRunoffVolume;
+
+            // Infiltration and evaporation is in [m/s]
+            double totalLossVolume = dt * (0) * _area;
+            _totalLossVolume += totalLossVolume;
+
+            // Rainfall is in [m/s]
+            double totalRainfallVolume = dt * _actualRainfall * _area;
+            _totalRainfallVolume += totalRainfallVolume;
+
+            // AdditionalFlow is constant and given in [m3/s]
+            double totalAdditionalInflowVolume = dt * _additionalFlow;
+            _totalAdditionalInflowVolume += totalAdditionalInflowVolume;
+
+            if (_yearlyStatistics != null)
+            {
+                int year = _timeNew.Year;
+                RRYearlyStat yearlyStat = GetYearlyStat(year);
+                yearlyStat.TotalRunoff += totalRunoffVolume;
+                yearlyStat.Losses += totalLossVolume;
+                yearlyStat.Inflow += totalRainfallVolume + totalAdditionalInflowVolume;
+            }
+        }
     }
+
+    /// <summary>
+    /// State variable class, containing the current value of the state, <see cref="StateValue"/>,
+    /// and the default value, <see cref="DefaultValue"/>. It also stores the item and unit definition
+    /// of the variable
+    /// </summary>
+    public class StateVariable : ICloneable
+    {
+        public StateVariable(string id)
+        {
+            Id = id;
+            Name = id;
+            Item = eumItem.eumIItemUndefined;
+            Unit = eumUnit.eumUUnitUndefined;
+            StateQuantity = new Quantity(Id, Name, Item, Unit);
+        }
+
+        public StateVariable(string id, string name, eumItem item, eumUnit unit)
+        {
+            Id = id;
+            Name = name;
+            Item = item;
+            Unit = unit;
+            StateValue = 0.0;
+            DefaultValue = 0.0;
+            StateQuantity = new Quantity(Id, Name, Item, Unit);
+        }
+
+        public string Id { get; internal set; }
+        public string Name { get; set; }
+        public double StateValue { get; set; }
+        public double DefaultValue { get; set; }
+        public eumItem Item { get; internal set; }
+        public eumUnit Unit { get; internal set; }
+        public IQuantity StateQuantity { get; set; }
+
+        public object Clone()
+        {
+            StateVariable result = new StateVariable(Id, Name, Item, Unit);
+            result.DefaultValue = DefaultValue;
+            result.StateQuantity = StateQuantity;
+            return result;
+        }
+    }
+
+    /// <summary>
+    /// Static class containing various helper methods
+    /// </summary>
+    static class HelperFunctions
+    {
+
+        /// <summary>
+        /// Load catchments from pfs file
+        /// </summary>
+        public static IList<SellierCatchment> LoadCatchments(string fileName)
+        {
+            if (!File.Exists(fileName))
+            {
+                return null;
+            }
+            var modelcatchments = new List<SellierCatchment>();
+            using (DisposablePFS pfs = new DisposablePFS(fileName))
+            {
+                PFSSection pfsRRDefs = pfs.GetTarget("RRDefinitions", 1);
+                if (pfsRRDefs == null)
+                    throw new Exception("Incorrect file format");
+
+                var catchmentCount = pfsRRDefs.GetSectionsCount("Catchment");
+                for (int i = 1; i <= catchmentCount; i++)
+                {
+
+                    var pfsCatchment = pfsRRDefs.GetSection("Catchment", i);
+                    var catchName = pfsCatchment.GetKeyword("name", 1).GetParameter(1).ToString();
+
+                    var catchmentType = pfsCatchment.GetKeyword("modelId", 1).GetParameter(1).ToString();
+
+                    ICatchment catchment;
+                    switch (catchmentType)
+                    {
+                        case "HM62095":
+                            var scatchment = new SellierCatchment(catchName, catchName);
+                            SetupSellierCatchment(scatchment, pfsCatchment);
+                            catchment = scatchment;
+                            modelcatchments.Add(scatchment);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException("modelId");
+                    }
+
+                    catchment.Area = pfsCatchment.GetKeyword("area", 1).GetParameter(1).ToDouble();
+
+                }
+            }
+            return modelcatchments;
+        }
+
+        /// <summary>
+        /// Set parameters and state values to catchment
+        /// </summary>
+        private static void SetupSellierCatchment(SellierCatchment catchment, PFSSection catchmentSection)
+        {
+            var pfsParams = catchmentSection.GetSection("Parameters", 1);
+            catchment.cmso = pfsParams.GetKeyword("cmso").GetParameter(1).ToDouble();
+            catchment.crof = pfsParams.GetKeyword("crof").GetParameter(1).ToDouble();
+            catchment.csib = pfsParams.GetKeyword("csib").GetParameter(1).ToDouble();
+            catchment.drqi = pfsParams.GetKeyword("drqi").GetParameter(1).ToDouble();
+            catchment.drsi = pfsParams.GetKeyword("drsi").GetParameter(1).ToDouble();
+            catchment.mrin = pfsParams.GetKeyword("mrin").GetParameter(1).ToDouble();
+            catchment.rtpc = pfsParams.GetKeyword("rtpc").GetParameter(1).ToDouble();
+            catchment.trpc = pfsParams.GetKeyword("trpc").GetParameter(1).ToDouble();
+
+            var pfsStateVars = catchmentSection.GetSection("StateVariables", 1);
+            catchment.RbfState.StateValue   = pfsStateVars.GetKeyword("Rbf").GetParameter(1).ToDouble();
+            catchment.RifState.StateValue   = pfsStateVars.GetKeyword("Rif").GetParameter(1).ToDouble();
+            catchment.RofState.StateValue   = pfsStateVars.GetKeyword("Rof").GetParameter(1).ToDouble();
+            catchment.SoState .StateValue   = pfsStateVars.GetKeyword("So" ).GetParameter(1).ToDouble();
+            catchment.RbfState.DefaultValue = pfsStateVars.GetKeyword("Rbf").GetParameter(2).ToDouble();
+            catchment.RifState.DefaultValue = pfsStateVars.GetKeyword("Rif").GetParameter(2).ToDouble();
+            catchment.RofState.DefaultValue = pfsStateVars.GetKeyword("Rof").GetParameter(2).ToDouble();
+            catchment.SoState .DefaultValue = pfsStateVars.GetKeyword("So" ).GetParameter(2).ToDouble();
+
+        }
+
+        /// <summary>
+        /// Load global parameters from pfs file, and store parameters in two dictionaries
+        /// </summary>
+        /// <param name="fileName">Name of PFS file</param>
+        /// <param name="stringParams">Global string parameters</param>
+        /// <param name="doubleParams">Global double parameters</param>
+        public static void LoadGlobalParameters(string fileName, out IDictionary<string, string> stringParams, out IDictionary<string, double> doubleParams)
+        {
+            stringParams = new Dictionary<string, string>();
+            doubleParams = new Dictionary<string, double>();
+            if (!File.Exists(fileName))
+            {
+                return;
+            }
+
+            using (DisposablePFS pfs = new DisposablePFS(fileName))
+            {
+                PFSSection pfsModelStructures = pfs.GetTarget("RRDefinitions", 1);
+                if (pfsModelStructures == null)
+                {
+                    throw new Exception("Incorrect file format");
+                }
+                var parametrsSection = pfsModelStructures.GetSection("GlobalVariables",1);
+                int paramCount = parametrsSection.GetKeywordsCount();
+                for (int j = 1; j <= paramCount; j++)
+                {
+                    var param = parametrsSection.GetKeyword(j);
+                    var paramName = param.Name;
+                    var parameterType = param.GetParameter(1).ToString();
+                    if (string.Equals(parameterType, "string"))
+                    {
+                        stringParams.Add(paramName, param.GetParameter(2).ToString());
+                    }
+                    if (string.Equals(parameterType, "double"))
+                    {
+                        doubleParams.Add(paramName, param.GetParameter(2).ToDouble());
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Copy data from source to target
+        /// </summary>
+        /// <param name="source">Source catchment</param>
+        /// <param name="target">Target catchment</param>
+        public static void CopyMikeCatchmentData(ICatchment source, SellierCatchment target)
+        { 
+            target.CenterPoint = source.CenterPoint;
+            target.CatchmentGeometry = source.CatchmentGeometry;
+            target.Area = source.Area;
+            target.TimeStep = source.TimeStep;
+            target.MinTime = source.MinTime;
+        }
+
+    }
+
+    /// <summary>
+    /// Helper class, making the PFSFile disposable
+    /// </summary>
+    internal class DisposablePFS : DHI.PFS.PFSFile, IDisposable
+    {
+        public DisposablePFS(string path) : base(path) { }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.Close();
+            }
+        }
+    }
+
 }
