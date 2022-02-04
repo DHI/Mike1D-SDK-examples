@@ -10,7 +10,7 @@
    EndSect  // GlobalVariables
 
    [Catchment]
-      name = 'Catchment_2'
+      name = 'Catchment_1'
       area = 199.1
       modelId = 'HM62095'
       useHotStartFile = true

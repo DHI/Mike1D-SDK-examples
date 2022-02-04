@@ -67,7 +67,6 @@
     <Compile Include="Scripts\RainfallRunoffScripts.cs" />
     <Compile Include="Scripts\RainfallRunoff\ModelBExample.cs" />
     <Compile Include="Scripts\RainfallRunoff\Seiller_et_al_2017.cs" />
-    <Compile Include="Scripts\RainfallRunoff\Templage.cs" />
     <Compile Include="Scripts\RRSumTotalRunoff.cs" />
     <Compile Include="Scripts\ScriptParameters.cs" />
     <Compile Include="Scripts\SetupParameters.cs" />
