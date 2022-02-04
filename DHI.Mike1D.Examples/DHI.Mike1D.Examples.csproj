@@ -57,6 +57,7 @@
     <Compile Include="RunExamples.cs" />
     <Compile Include="Scripts\AdditionalOutput.cs" />
     <Compile Include="Scripts\AdditionalParameter.cs" />
+    <Compile Include="Scripts\BasinConeAreaInterpolation.cs" />
     <Compile Include="Scripts\BedResistanceToolbox.cs" />
     <Compile Include="Scripts\CatchmentMyModel.cs" />
     <Compile Include="Scripts\ControllerScripts.cs" />
