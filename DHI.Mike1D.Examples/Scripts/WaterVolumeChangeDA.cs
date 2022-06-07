@@ -19,7 +19,7 @@ namespace DHI.Mike1D.Examples.Scripts
     private DAWaterVolumeChangeCalculator _daWaterVolumeChangeCalculator;
 
     /// <summary>
-    /// Method called when IMike1DController is available.
+    /// Calculate volume change due to DA and save to result file
     /// </summary>
     [Script]
     public void Initialize(IMike1DController controller)
@@ -33,9 +33,8 @@ namespace DHI.Mike1D.Examples.Scripts
       if (e.State == ControllerState.Initialized)
       {
         _mike1dController = (Mike1DController)sender;
-        _mike1dController.Mike1DData.ResultSpecifications[0].WhatAddUnique(new Quantity("WaterVolumeChangeDA", "DA - Water volume change", eumItem.eumIVolume));
-        _mike1dController.Mike1DData.ResultSpecifications[0].WhatAddUnique(new Quantity(
-          "WaterVolumeAccumulatedChangeDA", "DA - Accumulated water volume change", eumItem.eumIVolume));
+        _mike1dController.Mike1DData.ResultSpecifications[0].WhatAddUnique(DAWaterVolumeChangeCalculator.QuantVolChangeDa);
+        _mike1dController.Mike1DData.ResultSpecifications[0].WhatAddUnique(DAWaterVolumeChangeCalculator.QuantAccVolChangeDA);
       }
 
       if (e.State == ControllerState.Preparing)
@@ -72,6 +71,9 @@ namespace DHI.Mike1D.Examples.Scripts
     private HDModule _hdModule;
     EngineDataItemAll<double> _volPostHd;
     EngineDataItemAll<double> _volAccumulated;
+    public static Quantity QuantVolChangeDa = new Quantity("WaterVolumeChangeDA", "DA - Water volume change", eumItem.eumIVolume);
+    public static Quantity QuantAccVolChangeDA = new Quantity(
+      "WaterVolumeAccumulatedChangeDA", "DA - Accumulated water volume change", eumItem.eumIVolume);
 
     internal DAWaterVolumeChangeCalculator(EngineNet engineNet, IQuantity quantity)
       : base(engineNet, quantity)
@@ -82,10 +84,8 @@ namespace DHI.Mike1D.Examples.Scripts
       _volPostHd.SetupDataForNodes(engineNet);
       _volPostHd.SetupDataForReaches(engineNet, (gp) => (gp is HGridPoint));
       _volPostHd.GenericData = new EngineDataGeneric<double>() { Values = new double[1] };
-
-      var volumeAccumulatedQuant =
-        new Quantity("WaterVolumeAccumulatedChangeDA", "DA - Accumulated water volume change", eumItem.eumIVolume);
-      _volAccumulated = new EngineDataItemAll<double>(engineNet, volumeAccumulatedQuant);
+      
+      _volAccumulated = new EngineDataItemAll<double>(engineNet, QuantAccVolChangeDA);
       _volAccumulated.SetupDataForNodes(engineNet);
       _volAccumulated.SetupDataForReaches(engineNet, (gp) => (gp is HGridPoint));
       _volAccumulated.GenericData = new EngineDataGeneric<double>() { Values = new double[1] };
@@ -98,8 +98,7 @@ namespace DHI.Mike1D.Examples.Scripts
     ///<param name="engineNet"></param>
     public static DAWaterVolumeChangeCalculator Create(EngineNet engineNet)
     {
-      // TODO: Quantity
-      DAWaterVolumeChangeCalculator res = new DAWaterVolumeChangeCalculator(engineNet, new Quantity("WaterVolumeChangeDA", "DA - Water volume change", eumItem.eumIVolume));
+      DAWaterVolumeChangeCalculator res = new DAWaterVolumeChangeCalculator(engineNet, QuantVolChangeDa);
 
       res.SetupDataForNodes(engineNet);
       res.SetupDataForReaches(engineNet, (gp) => (gp is HGridPoint));
@@ -110,7 +109,7 @@ namespace DHI.Mike1D.Examples.Scripts
 
     public double GetAccumulatedAddedVolume()
     {
-      return Math.Round(_volAccumulated.GenericData[0],1);
+      return System.Math.Round(_volAccumulated.GenericData[0],1);
     }
 
     public void UpdatePostHDValues()
