@@ -140,7 +140,7 @@ namespace DHI.Mike1D.Examples.Scripts
         basinVolumeTable.Columns.Add(new HTMLTableColumnValueGetter<EngineNode>("Basin Volume - capacity with expanding cover", n => GetBasinVolumeWithCover(n as EngineNodeBasin), new eumQuantity(eumItem.eumIVolume, eumUnit.eumUm3)));
         basinVolumeTable.Columns.Add(new HTMLTableColumnValueGetter<EngineNode>("Basin Volume - maximum", n => _basinMaxVolume.GetValue(n), new eumQuantity(eumItem.eumIVolume, eumUnit.eumUm3)));
         basinVolumeTable.Columns.Add(new HTMLTableColumnValueGetter<EngineNode>("Basin Volume - maximum raw full percent", n => _basinMaxVolume.GetValue(n) / GetBasinRawVolume(n as EngineNodeBasin) * 100, new eumQuantity(eumItem.eumIFraction, eumUnit.eumUPerCent)));
-        basinVolumeTable.Columns.Add(new HTMLTableColumnValueGetter<EngineNode>("Critical level", n => _criticalNodeLevels[n.NodeListIndex], new eumQuantity(eumItem.eumITime, eumUnit.eumUsec)));
+        basinVolumeTable.Columns.Add(new HTMLTableColumnValueGetter<EngineNode>("Critical level", n => _criticalNodeLevels[n.NodeListIndex], new eumQuantity(eumItem.eumIWaterLevel, eumUnit.eumUmeter)));
         basinVolumeTable.Columns.Add(new HTMLTableColumnValueGetter<EngineNode>("Minutes above critical level", n => _nodeWlAboveCriticalTime.GetValue(n) / 60, new eumQuantity(eumItem.eumITime, eumUnit.eumUminute)));
         hdMySection.Items.Add(basinVolumeTable);
       }

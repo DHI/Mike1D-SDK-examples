@@ -62,6 +62,7 @@
     <Compile Include="Scripts\CatchmentMyModel.cs" />
     <Compile Include="Scripts\ControllerScripts.cs" />
     <Compile Include="Scripts\HonmaWeirCoefficient.cs" />
+    <Compile Include="Scripts\HtmlSummaryBasinVolume.cs" />
     <Compile Include="Scripts\HTMLSummaryScripts.cs" />
     <Compile Include="Scripts\InitialWaterLevel.cs" />
     <Compile Include="Scripts\PowerPlantEnergyOutput.cs" />
