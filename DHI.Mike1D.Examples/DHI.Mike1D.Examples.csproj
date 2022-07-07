@@ -73,6 +73,7 @@
     <Compile Include="Scripts\StateRunExample.cs" />
     <Compile Include="Scripts\StructureScripts.cs" />
     <Compile Include="Scripts\SWMM5IntFile.cs" />
+    <Compile Include="Scripts\WaterVolumeChangeDA.cs" />
     <Compile Include="UserDataExamples.cs" />
   </ItemGroup>
   <ItemGroup>
