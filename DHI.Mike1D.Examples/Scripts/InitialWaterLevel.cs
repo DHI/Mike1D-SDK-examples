@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DHI.Mike1D.Generic;
+﻿using DHI.Mike1D.Generic;
 using DHI.Mike1D.HDParameterDataAccess;
 using DHI.Mike1D.Mike1DDataAccess;
 using DHI.Mike1D.Plugins;

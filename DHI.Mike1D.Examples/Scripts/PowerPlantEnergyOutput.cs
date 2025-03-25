@@ -29,8 +29,8 @@ namespace DHI.Mike1D.Examples.Scripts
 
     // Common efficiency table for all PowerPlants
     private XYTable _efficiencyTable = new XYTable(
-      new double[] {0, 0.1, 1.0, 5.0, 100},      // dH values
-      new double[] {0, 0.3, 0.5, 0.7, 0.95});    // Efficiency
+      new[] {0, 0.1, 1.0, 5.0, 100},      // dH values
+      new[] {0, 0.3, 0.5, 0.7, 0.95});    // Efficiency
 
     private IMike1DController _controller;
     private List<PowerPlantData> _powerPlants;

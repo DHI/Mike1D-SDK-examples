@@ -51,9 +51,9 @@ namespace DHI.Mike1D.Examples.Scripts
       // 1) Add table by creating table class manually and associate them with an ID. 
       // Table data could be read from a file or similar, but here we insert table data directly. 
       Table2D table = new Table2D();
-      table.XAxis = new double[] { 6.0, 6.5, 6.8, 7.0, 7.2, 7.5, 8.0 };
-      table.YAxis = new double[] { 0.7, 1.0, 1.3 };
-      table.TableValues = new double[,]{ {6.00, 6.00, 6.00},   // x = 6.0
+      table.XAxis = new[] { 6.0, 6.5, 6.8, 7.0, 7.2, 7.5, 8.0 };
+      table.YAxis = new[] { 0.7, 1.0, 1.3 };
+      table.TableValues = new[,]{ {6.00, 6.00, 6.00},   // x = 6.0
                                          {6.40, 6.30, 6.20},   // x = 6.5
                                          {6.50, 6.40, 6.30},   // x = 6.8
                                          {6.60, 6.45, 6.35},   // x = 7.0
@@ -84,7 +84,7 @@ namespace DHI.Mike1D.Examples.Scripts
       FilePath tablePath = new FilePath(tableFile, mike1DData.Connection.FilePath);
 
       // Check if file exists
-      if (System.IO.File.Exists(tablePath.FullFilePath))
+      if (File.Exists(tablePath.FullFilePath))
       {
         StreamReader sr = new StreamReader(tableFile);
 

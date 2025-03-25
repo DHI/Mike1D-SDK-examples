@@ -14,20 +14,20 @@ namespace DHI.Mike1D.Examples.Scripts
   /// </summary>
   public class RRSumTotalRunoff
   {
-    CatchmentCombined sumTotalRunoffCatchment;
-    Func<double> runoffGetter;
+    private CatchmentCombined _sumTotalRunoffCatchment;
+    private Func<double> _runoffGetter;
 
-    StreamWriter writer;
+    private StreamWriter _writer;
 
     /// <summary>
     /// Create Combined catchments containing all other catchments
-    /// Make sure to close <see cref="writer"/> on simulation end
+    /// Make sure to close <see cref="_writer"/> on simulation end
     /// </summary>
     [Script]
     public void CreateSumAllCatchment(IMike1DController controller)
     {
       Mike1DData mike1DData = controller.Mike1DData;
-      sumTotalRunoffCatchment = new CatchmentCombined("SumAllCatchments")
+      _sumTotalRunoffCatchment = new CatchmentCombined("SumAllCatchments")
       {
         ScaleByArea = false,
         Area        = 1,
@@ -38,32 +38,32 @@ namespace DHI.Mike1D.Examples.Scripts
       {
         if (!(catchment is CatchmentCombined))
         {
-          sumTotalRunoffCatchment.AddNewCatchment(catchment.ModelId, 1.0);
+          _sumTotalRunoffCatchment.AddNewCatchment(catchment.ModelId, 1.0);
           minTimestep = System.Math.Min(minTimestep, catchment.TimeStep.TotalSeconds);
           maxTimestep = System.Math.Max(maxTimestep, catchment.TimeStep.TotalSeconds);
         }
       }
-      sumTotalRunoffCatchment.TimeStep = TimeSpan.FromSeconds(minTimestep);
-      mike1DData.RainfallRunoffData.Catchments.Add(sumTotalRunoffCatchment);
+      _sumTotalRunoffCatchment.TimeStep = TimeSpan.FromSeconds(minTimestep);
+      mike1DData.RainfallRunoffData.Catchments.Add(_sumTotalRunoffCatchment);
 
 
       // Setup writer to write total runoff to csv file
-      writer = new StreamWriter("SumTotalRunoff.csv");
-      writer.WriteLine("sep=;");
+      _writer = new StreamWriter("SumTotalRunoff.csv");
+      _writer.WriteLine("sep=;");
 
-      sumTotalRunoffCatchment.PostTimeStepEvent +=
+      _sumTotalRunoffCatchment.PostTimeStepEvent +=
         delegate (DateTime time)
         {
-          writer.WriteLine("{0};{1}", 
+          _writer.WriteLine("{0};{1}", 
             time.ToString(Util.DateTimeFormatString), 
-            runoffGetter().ToString(CultureInfo.InvariantCulture));
+            _runoffGetter().ToString(CultureInfo.InvariantCulture));
         };
 
       controller.ControllerEvent += HandleControllerEvent;
     }
 
     /// <summary>
-    /// Make sure to close <see cref="writer"/> on simulation end
+    /// Make sure to close <see cref="_writer"/> on simulation end
     /// </summary>
     private void HandleControllerEvent(object sender, ControllerEventArgs e)
     {
@@ -71,14 +71,14 @@ namespace DHI.Mike1D.Examples.Scripts
       {
         case ControllerState.Prepared:
           // Getter is available when Prepared
-          runoffGetter = sumTotalRunoffCatchment.Getter(Quantity.Create(PredefinedQuantity.TotalRunOff));
+          _runoffGetter = _sumTotalRunoffCatchment.Getter(Quantity.Create(PredefinedQuantity.TotalRunOff));
           break;
         case ControllerState.Finalized:
         case ControllerState.Failed:
-          if (writer != null)
+          if (_writer != null)
           {
-            writer.Close();
-            writer = null;
+            _writer.Close();
+            _writer = null;
           }
           break;
       }
