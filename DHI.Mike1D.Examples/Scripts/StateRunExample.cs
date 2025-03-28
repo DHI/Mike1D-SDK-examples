@@ -33,8 +33,8 @@ namespace DHI.Mike1D.Examples.Scripts
     public void SetStateOutput(Mike1DData mike1DData, bool atEndOfSimulation = true)
     {
       // State file name template
-      IFilePath stateFilePath = mike1DData.Connection.FilePath.Clone();
-      stateFilePath.Extension                =  ".sta1d";
+      FilePath stateFilePath = mike1DData.Connection.FilePath.Clone();
+      stateFilePath.Extension = ".sta1d";
       stateFilePath.FileNameWithoutExtension += "-{0}";
 
       if (atEndOfSimulation)
@@ -46,10 +46,10 @@ namespace DHI.Mike1D.Examples.Scripts
       else
       {
         // Write out state every 60 minutes for the first 600 minutes.
-        mike1DData.StateWriteSpecification.StartTime        = mike1DData.SimulationStart.AddMinutes(60);
+        mike1DData.StateWriteSpecification.StartTime = mike1DData.SimulationStart.AddMinutes(60);
         // If you only want to output state at one time, set TimeStep to Zero (delete the next two lines, TimeStep is by default zero).
-        mike1DData.StateWriteSpecification.EndTime          = mike1DData.SimulationStart.AddMinutes(600);
-        mike1DData.StateWriteSpecification.TimeStep         = TimeSpan.FromMinutes(60);
+        mike1DData.StateWriteSpecification.EndTime = mike1DData.SimulationStart.AddMinutes(600);
+        mike1DData.StateWriteSpecification.TimeStep = TimeSpan.FromMinutes(60);
         mike1DData.StateWriteSpecification.TemplateFilePath = stateFilePath;
       }
     }
@@ -61,8 +61,8 @@ namespace DHI.Mike1D.Examples.Scripts
     public void SetStateInitialConditions(Mike1DData mike1DData, IDiagnostics diagnostics)
     {
       // State file name template
-      IFilePath stateFilePath                = mike1DData.Connection.FilePath.Clone();
-      stateFilePath.Extension                =  ".sta1d";
+      FilePath stateFilePath = mike1DData.Connection.FilePath.Clone();
+      stateFilePath.Extension = ".sta1d";
       stateFilePath.FileNameWithoutExtension += "-{0}";
 
       // DateTime of state to use. Here using mike1DData.SimulationStart;

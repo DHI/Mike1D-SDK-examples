@@ -79,7 +79,7 @@ namespace DHI.Mike1D.Examples.Scripts
     /// This method will add catchment connections to nodes with
     /// the same id as the catchment id, for catchments in the <paramref name="rrFile"/>
     /// </summary>
-    private static void UpdateCatchmentConnections(Mike1DData mike1DData, IFilePath rrFile, IDiagnostics diagnostics)
+    private static void UpdateCatchmentConnections(Mike1DData mike1DData, FilePath rrFile, IDiagnostics diagnostics)
     {
       // Make a map of all node id's - for fast searching on node id, used to only add connections to existing nodes
       var nodeIdDictionary = new HashSet<string>(mike1DData.Network.Nodes.Select(n => n.Id), StringComparer.OrdinalIgnoreCase);

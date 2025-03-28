@@ -91,16 +91,18 @@ namespace DHI.Mike1D.Examples.Scripts
 
       foreach (var c in c1.Surfaces) { c.AreaFraction = 0; }
       foreach (var c in c2.Surfaces) { c.AreaFraction = 0; }
-      c1.Surfaces[3].AreaFraction = 1.0;
-      c2.Surfaces[3].AreaFraction = 1.0;
-      c1.Surfaces[3].ManningM = 65;
-      c2.Surfaces[3].ManningM = 65;
-      c1.Surfaces[3].WettingCapacity = 0.05e-3;
-      c2.Surfaces[3].WettingCapacity = 0.05e-3;
-      c1.Surfaces[3].StorageCapacity = 2.0e-3;
-      c2.Surfaces[3].StorageCapacity = 2.0e-3;
-      c1.Surfaces[3].Infiltration = new Horton() { F0 = 2 * mmph2mps, Fc = 0.5 * mmph2mps, Kwet = 0.0015, Kdry = 3.0e-5 };
-      c2.Surfaces[3].Infiltration = new Horton() { F0 = 2 * mmph2mps, Fc = 0.5 * mmph2mps, Kwet = 0.0015, Kdry = 3.0e-5 };
+
+      var subCatchment = c1.SubCatchments[3];
+      subCatchment.AreaFraction = 1.0;
+      subCatchment.AreaFraction = 1.0;
+      subCatchment.ManningM = 65;
+      subCatchment.ManningM = 65;
+      subCatchment.WettingCapacity = 0.05e-3;
+      subCatchment.WettingCapacity = 0.05e-3;
+      subCatchment.StorageCapacity = 2.0e-3;
+      subCatchment.StorageCapacity = 2.0e-3;
+      subCatchment.Infiltration = new Horton() { F0 = 2 * mmph2mps, Fc = 0.5 * mmph2mps, Kwet = 0.0015, Kdry = 3.0e-5 };
+      subCatchment.Infiltration = new Horton() { F0 = 2 * mmph2mps, Fc = 0.5 * mmph2mps, Kwet = 0.0015, Kdry = 3.0e-5 };
 
       myModels.Add(c1);
       myModels.Add(c2);
@@ -257,7 +259,7 @@ namespace DHI.Mike1D.Examples.Scripts
       _offerDelegates.Add(() => (_actualRainfall - _potentialEvaporation));
 
       _offers.Add(Quantity.Create(PredefinedQuantity.ActualEvaporation));
-      _offerDelegates.Add(() => _surface.EvapActual);
+      _offerDelegates.Add(() => _surface.EvaporationActual);
 
       _offers.Add(Quantity.Create(PredefinedQuantity.ActualRainfall));
       _offerDelegates.Add(() => _actualRainfall);
@@ -471,7 +473,7 @@ namespace DHI.Mike1D.Examples.Scripts
       _totalRunoffVolume += totalRunoffVolume;
 
       // Infiltration and evaporation is in [m/s]
-      double totalLossVolume = dt * (_surface.InfiltrationActual + _surface.EvapActual) * _area;
+      double totalLossVolume = dt * (_surface.InfiltrationActual + _surface.EvaporationActual) * _area;
       _totalLossVolume += totalLossVolume;
 
       // Rainfall is in [m/s]
@@ -482,10 +484,11 @@ namespace DHI.Mike1D.Examples.Scripts
       double totalAdditionalInflowVolume = dt * _additionalFlow;
       _totalAdditionalInflowVolume += totalAdditionalInflowVolume;
 
-      if (_yearlyStatistics != null)
+      var yearlyStatistics = PeriodicStatistics as CatchmentYearlyStatistics;
+      if (yearlyStatistics != null)
       {
-        int year = _timeNew.Year;
-        RRYearlyStat yearlyStat = GetYearlyStat(year);
+        DateTime year = new DateTime(_timeNew.Year, 1, 1);
+        RRYearlyStat yearlyStat = yearlyStatistics.GetPeriodicStat(year);
         yearlyStat.TotalRunoff += totalRunoffVolume;
         yearlyStat.Losses += totalLossVolume;
         yearlyStat.Inflow += totalRainfallVolume + totalAdditionalInflowVolume;

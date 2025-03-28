@@ -32,8 +32,8 @@ namespace DHI.Mike1D.Examples.Scripts
 
     /// <summary>
     /// The EnergyLoss structure solves a set of energy-loss equations using an iterative approach.
-    /// This can be somewhat unstable. A number of iterative methods have been implemented,
-    /// and choosing another method can make an unstable energy-loss structure stable.
+    /// This can be somewhat unstable.
+    /// Choosing another method can make an unstable energy-loss structure stable.
     /// </summary>
     [Script]
     public void UpdateEnergyLossSolverMethod(Mike1DData mike1DData)
@@ -43,9 +43,7 @@ namespace DHI.Mike1D.Examples.Scripts
         EnergyLoss energyLoss = structure as EnergyLoss;
         if (energyLoss != null)
         {
-          // The Mike11Mod method keeps upstream and downstream energy level constant, regardless
-          // of actual flow through the structure.
-          energyLoss.SolverMethod = EnergyLoss.EnergyLossSolverMethod.Mike11Mod;
+          energyLoss.SolverMethod = EnergyEquationSolverMethod.LevenbergMarquardt;
         }
       }
     }
