@@ -75,17 +75,18 @@
     <Compile Include="Scripts\StructureScripts.cs" />
     <Compile Include="Scripts\SWMM5IntFile.cs" />
     <Compile Include="Scripts\WaterVolumeChangeDA.cs" />
+    <Compile Include="UnitTestHelper.cs" />
     <Compile Include="UserDataExamples.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DHI.Mike.Install">
-      <Version>1.0.0</Version>
+      <Version>1.0.1</Version>
     </PackageReference>
     <PackageReference Include="DHI.Mike1D">
-      <Version>19.0.0</Version>
+      <Version>24.1.2-20008</Version>
     </PackageReference>
     <PackageReference Include="DHI.MikeCore">
-      <Version>19.0.0</Version>
+      <Version>24.1.2-20008</Version>
     </PackageReference>
     <PackageReference Include="NUnit">
       <Version>3.12.0</Version>

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DHI.Mike1D.Generic;
 using DHI.Mike1D.Mike1DDataAccess;
-using DHI.Mike1D.ResultDataAccess;
 using DHI.Mike1D.SimLauncher;
 
 namespace DHI.Mike1D.Examples
@@ -22,7 +18,7 @@ namespace DHI.Mike1D.Examples
       // It must be called BEFORE any method using MIKE libraries is called, i.e. it is not sufficient
       // to call it as the first thing in that method using the MIKE libraries. Often this can be achieved
       // by having this code in the static constructor.
-      if (!DHI.Mike.Install.MikeImport.Setup(19, DHI.Mike.Install.MikeProducts.Mike1D))
+      if (!DHI.Mike.Install.MikeImport.Setup(24, DHI.Mike.Install.MikeProducts.Mike1D))
         throw new Exception("Could not find a MIKE installation");
     }
 

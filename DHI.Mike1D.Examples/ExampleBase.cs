@@ -20,7 +20,7 @@ namespace DHI.Mike1D.Examples
     /// <summary>
     /// Path to the data folder.
     /// </summary>
-    public static string ExampleRoot = @"C:\Work\GitHub\Mike1D-SDK-examples\data\";
+    public static string ExampleRoot = UnitTestHelper.TestDataRoot;
 
     /// <summary>
     /// Static constructor, setting up search paths for MIKE assemblies
@@ -33,7 +33,7 @@ namespace DHI.Mike1D.Examples
       // to call it as the first thing in that method using the MIKE libraries. Often this can be achieved
       // by having this code in the static constructor.
       // This is not required by plugins and scripts, only by standalone applications using MIKE 1D components
-      if (!DHI.Mike.Install.MikeImport.Setup(19, DHI.Mike.Install.MikeProducts.Mike1D))
+      if (!DHI.Mike.Install.MikeImport.Setup(24, DHI.Mike.Install.MikeProducts.Mike1D))
         throw new Exception("Could not find a MIKE installation");
     }
 
