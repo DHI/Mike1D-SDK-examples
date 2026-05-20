@@ -8,14 +8,16 @@ can be found in sub-branches.
 
 ## Content
 * DHI.Mike1D.Examples: Various C# examples of working with MIKE 1D, plugins and scripts.
-* mike1d-rtc-simulator-example: Example wrapper for getting and setting engine variables during simulation.  
 * bin: Binaries of MIKE 1D, used for building the DHI.Mike1D.Examples.
 * data: A bit of test data to play around with. Used by the examples in DHI.Mike1D.Examples.
 * m1daExamples: Examples of how to build up a MIKE 1D Additional parameter file, to automatically load and configure plugins.
-* scripts: Scripts in IronPython.
-
 
 # MIKE 1D API
 An introduction to the MIKE 1D API can be found on:
 
 http://docs.mikepoweredbydhi.com/engine_libraries/mike1d/mike1d_api/
+
+And a overview of the entire MIKE 1D engine and API can be found here:
+
+https://manuals.mikepoweredbydhi.help/latest/General/Class_Library/DHI_MIKE1D/html/R_Project_DHI_Mike1D.htm
+
