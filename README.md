@@ -8,7 +8,6 @@ can be found in sub-branches.
 
 ## Content
 * DHI.Mike1D.Examples: Various C# examples of working with MIKE 1D, plugins and scripts.
-* bin: Binaries of MIKE 1D, used for building the DHI.Mike1D.Examples.
 * data: A bit of test data to play around with. Used by the examples in DHI.Mike1D.Examples.
 * m1daExamples: Examples of how to build up a MIKE 1D Additional parameter file, to automatically load and configure plugins.
 
@@ -21,3 +20,11 @@ And a overview of the entire MIKE 1D engine and API can be found here:
 
 https://manuals.mikepoweredbydhi.help/latest/General/Class_Library/DHI_MIKE1D/html/R_Project_DHI_Mike1D.htm
 
+# MIKE 1D scripts
+A description of how to use a script with a MIKE+ installation can be found in this README
+
+https://github.com/DHI/Mike1D-SDK-examples/blob/master/DHI.Mike1D.Examples/Scripts/Readme.md
+
+And a specific introduction to calculating bed resistance with a script is provided here as a replacement of the Bed Resistance Toolbox available for MIKE 11 engine
+
+https://github.com/DHI/Mike1D-SDK-examples/blob/master/DHI.Mike1D.Examples/Scripts/BedResistanceToolbox.md
