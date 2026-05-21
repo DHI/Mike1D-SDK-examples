@@ -21,10 +21,21 @@ And a overview of the entire MIKE 1D engine and API can be found here:
 https://manuals.mikepoweredbydhi.help/latest/General/Class_Library/DHI_MIKE1D/html/R_Project_DHI_Mike1D.htm
 
 # MIKE 1D scripts
-A description of how to use a script with a MIKE+ installation can be found in this README
+A description of how to use a script with a MIKE+ installation can be found in this README:
 
 https://github.com/DHI/Mike1D-SDK-examples/blob/master/DHI.Mike1D.Examples/Scripts/Readme.md
 
-And a specific introduction to calculating bed resistance with a script is provided here as a replacement of the Bed Resistance Toolbox available for MIKE 11 engine
+And a specific introduction to calculating bed resistance with a script is provided here as a replacement of the Bed Resistance Toolbox available for MIKE 11 engine:
 
 https://github.com/DHI/Mike1D-SDK-examples/blob/master/DHI.Mike1D.Examples/Scripts/BedResistanceToolbox.md
+
+# MIKE 1D with python
+For interacting with MIKE 1D simulations with python, we refer to the MIKE+Py and MIKE IO 1D Python packages.
+
+MIKE+Py is a Python package for interacting with MIKE+ model files to automating simulation execution:
+
+https://github.com/DHI/mikepluspy
+
+To inteact with input and output files in python the MIKE IO 1D package can be found here:
+
+https://dhi.github.io/mikeio1d/
