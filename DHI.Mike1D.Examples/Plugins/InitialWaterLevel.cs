@@ -48,7 +48,7 @@ namespace DHI.Mike1D.Examples.Plugins
         Mike1DPluginArgument argument = arguments[i];
         if (StringComparer.OrdinalIgnoreCase.Equals("Node", argument.Key))
         {
-          string[] split = StringAlgorithms.SplitQuoted(argument.Value, ';', '"');
+          string[] split = StringUtil.SplitQuoted(argument.Value, ';', '"');
           if (split.Length == 2 || split.Length == 3)
           {
             string nodeId = split[0];
@@ -65,7 +65,7 @@ namespace DHI.Mike1D.Examples.Plugins
         }
         else if (StringComparer.OrdinalIgnoreCase.Equals("Location", argument.Key))
         {
-          string[] split = StringAlgorithms.SplitQuoted(argument.Value, ';', '"');
+          string[] split = StringUtil.SplitQuoted(argument.Value, ';', '"');
           if (split.Length == 3 || split.Length == 4)
           {
             string reachId = split[0];
@@ -85,7 +85,7 @@ namespace DHI.Mike1D.Examples.Plugins
         }
         else if (StringComparer.OrdinalIgnoreCase.Equals("Span", argument.Key))
         {
-          string[] split = StringAlgorithms.SplitQuoted(argument.Value, ';', '"');
+          string[] split = StringUtil.SplitQuoted(argument.Value, ';', '"');
           if (split.Length == 4 || split.Length == 5)
           {
             string reachId = split[0];
