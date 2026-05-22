@@ -1,0 +1,27 @@
+
+name: Build .NET Framework
+
+on:
+  workflow_dispatch:   # manual trigger
+  schedule:
+    - cron: '0 0 * * *'  
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
+
+    - name: Restore NuGet packages
+      run: nuget restore
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build solution
+      run: msbuild /p:Configuration=Release
