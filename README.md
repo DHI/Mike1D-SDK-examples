@@ -4,7 +4,7 @@ This repository contains a number of examples of Plugins and [Scripts](DHI.Mike1
 
 Since MIKE 1D is an active code base, its API changes. The master branch contains 
 example code for the most recent release of MIKE software. Code for older releases 
-can be found in sub-branches.
+can be found in [here](https://github.com/DHI/Mike1D-SDK-examples/releases) and in sub-branches.
 
 ## Content
 * DHI.Mike1D.Examples: Various C# examples of working with MIKE 1D, plugins and scripts.
@@ -23,19 +23,19 @@ https://manuals.mikepoweredbydhi.help/latest/General/Class_Library/DHI_MIKE1D/ht
 # MIKE 1D scripts
 A description of how to use a script with a MIKE+ installation can be found in this README:
 
-https://github.com/DHI/Mike1D-SDK-examples/blob/master/DHI.Mike1D.Examples/Scripts/Readme.md
+[DHI.Mike1D.Examples/Scripts/Readme.md](DHI.Mike1D.Examples/Scripts/Readme.md)
 
 And a specific introduction to calculating bed resistance with a script is provided here as a replacement of the Bed Resistance Toolbox available for MIKE 11 engine:
 
-https://github.com/DHI/Mike1D-SDK-examples/blob/master/DHI.Mike1D.Examples/Scripts/BedResistanceToolbox.md
+[DHI.Mike1D.Examples/Scripts/BedResistanceToolbox.md](DHI.Mike1D.Examples/Scripts/BedResistanceToolbox.md)
 
-# MIKE 1D with python
-For interacting with MIKE 1D simulations with python, we refer to the MIKE+Py and MIKE IO 1D Python packages.
+# MIKE 1D with Python
+For interacting with MIKE 1D simulations and results using Python, we refer to the MIKE+Py and MIKE IO 1D Python packages.
 
-MIKE+Py is a Python package for interacting with MIKE+ model files to automating simulation execution:
+MIKE+Py is a Python package for interacting with MIKE+ model files and automating simulation execution:
 
 https://github.com/DHI/mikepluspy
 
-To inteact with input and output files in python the MIKE IO 1D package can be found here:
+To interact with input and output files in Python the MIKE IO 1D package can be found here:
 
-https://dhi.github.io/mikeio1d/
+https://github.com/DHI/mikeio1d
