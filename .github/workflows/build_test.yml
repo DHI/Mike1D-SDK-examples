@@ -3,8 +3,7 @@ name: Build .NET Framework
 
 on:
   workflow_dispatch:   # manual trigger
-  schedule:
-    - cron: '0 0 * * *'  
+  pull_request:  
 
 jobs:
   build:
