@@ -1,0 +1,25 @@
+name: Build .NET Framework
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Restore NuGet packages
+        run: nuget restore DHI.Mike1D.Examples/DHI.Mike1D.Examples.sln
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build solution
+        run: msbuild DHI.Mike1D.Examples/DHI.Mike1D.Examples.sln /p:Configuration=Release
