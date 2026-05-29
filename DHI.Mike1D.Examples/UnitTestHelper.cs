@@ -15,6 +15,6 @@ namespace DHI.Mike1D.Examples
         /// <summary>
         /// Path to test data
         /// </summary>
-        public static string TestDataRoot => new Uri(Path.Combine(TestContext.CurrentContext.TestDirectory, TestDataRootRelative)).LocalPath;
+        public static string TestDataRoot => Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, TestDataRootRelative));
     }
 }
