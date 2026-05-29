@@ -57,9 +57,9 @@ namespace DHI.Mike1D.Examples
         // Create a DataContractSerializer. It must in this case "preserveObjectReferences". In many cases that is not
         // required, for more simple types than NetworkData<MyData>, it can be set to false, which gives much nicer xml. 
         Type[] knownTypes = new Type[] { typeof(NetworkData<double>) };
-        var dcs = new DataContractSerializer(typeof(NetworkData<MyData>), knownTypes, int.MaxValue,  
-                                             false /*ignoreExtensionDataObject*/, true /* preserveObjectReferences */, 
-                                             null /*Surrogate*/);
+        var dcs = new DataContractSerializer(typeof(NetworkData<MyData>), knownTypes);
+
+
 
         // Write data to file
         dcs.WriteObject(writer, myComplexData);
@@ -74,9 +74,7 @@ namespace DHI.Mike1D.Examples
         
         // Create a DataContractSerializer, matching the one used when writing the file
         Type[] knownTypes = new Type[] { typeof(NetworkData<double>) };
-        var dcs = new DataContractSerializer(typeof(NetworkData<MyData>), knownTypes, int.MaxValue,
-                                                     false /*ignoreExtensionDataObject*/, true /* preserveObjectReferences */,
-                                                     null /*Surrogate*/);
+        var dcs = new DataContractSerializer(typeof(NetworkData<MyData>), knownTypes);
         
         // Read file again
         NetworkData<MyData> myComplexData = (NetworkData<MyData>)dcs.ReadObject(reader, true); 

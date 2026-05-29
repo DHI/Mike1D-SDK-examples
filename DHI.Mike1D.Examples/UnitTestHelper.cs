@@ -10,7 +10,7 @@ namespace DHI.Mike1D.Examples
         /// <summary>
         /// Relative path to test data. Must end with a \
         /// </summary>
-        public static string TestDataRootRelative = @"..\..\..\data\";
+        public static string TestDataRootRelative = @"..\..\..\..\data\";
 
         /// <summary>
         /// Path to test data
