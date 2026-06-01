@@ -1,4 +1,4 @@
-name: Build .NET Framework
+name: Build .NET
 
 on:
   workflow_dispatch:
@@ -15,14 +15,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v2
-
-      - name: Restore NuGet packages
-        run: nuget restore DHI.Mike1D.Examples/DHI.Mike1D.Examples.sln
-
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
 
       - name: Build solution
-        run: msbuild DHI.Mike1D.Examples/DHI.Mike1D.Examples.sln /p:Configuration=Release
+        run: dotnet build DHI.Mike1D.Examples/DHI.Mike1D.Examples.sln --configuration Debug
+
+      - name: Run tests
+        run: dotnet test DHI.Mike1D.Examples/DHI.Mike1D.Examples.sln --configuration Debug --no-build --verbosity normal
+

@@ -54,12 +54,9 @@ namespace DHI.Mike1D.Examples
         // Open the file for writing
         XmlDictionaryWriter writer = XmlDictionaryWriter.CreateDictionaryWriter(XmlWriter.Create(filename, xmlWriterSettings));
 
-        // Create a DataContractSerializer. It must in this case "preserveObjectReferences". In many cases that is not
-        // required, for more simple types than NetworkData<MyData>, it can be set to false, which gives much nicer xml. 
+        // Create a DataContractSerializer.
         Type[] knownTypes = new Type[] { typeof(NetworkData<double>) };
         var dcs = new DataContractSerializer(typeof(NetworkData<MyData>), knownTypes);
-
-
 
         // Write data to file
         dcs.WriteObject(writer, myComplexData);
