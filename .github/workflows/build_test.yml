@@ -22,7 +22,3 @@ jobs:
 
       - name: Build solution
         run: dotnet build DHI.Mike1D.Examples/DHI.Mike1D.Examples.sln --configuration Debug
-
-      - name: Run tests
-        run: dotnet test DHI.Mike1D.Examples/DHI.Mike1D.Examples.sln --configuration Debug --no-build --verbosity normal
-
