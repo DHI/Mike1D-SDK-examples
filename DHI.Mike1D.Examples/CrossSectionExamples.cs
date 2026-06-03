@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DHI.Mike1D.CrossSectionModule;
 using DHI.Mike1D.Generic;
 using DHI.Mike1D.Mike1DDataAccess;
