@@ -1,5 +1,14 @@
-root = true
-[*.cs]
-indent_style = space
-indent_size = 2
+# To learn more about .editorconfig see https://aka.ms/editorconfigdocs
+############################### 
+# Core EditorConfig Options   # 
+############################### 
+# All files 
+[*] 
+indent_style = space 
+# Code files 
+[*.{cs,csx,vb,vbx}] 
+indent_size = 2 
+insert_final_newline = true 
+#charset = utf-8-bom 
 tab_width = 2
+root = true
