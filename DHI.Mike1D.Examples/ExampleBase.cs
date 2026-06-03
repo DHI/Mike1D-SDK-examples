@@ -16,7 +16,7 @@ namespace DHI.Mike1D.Examples
   /// </summary>
   public class ExampleBase
   {
-    
+
     /// <summary>
     /// Path to the data folder.
     /// </summary>
@@ -141,7 +141,7 @@ namespace DHI.Mike1D.Examples
     public void UserDataExamplesSaveComplexData()
     {
       string resultFilePath = Path.Combine(ExampleBase.ExampleRoot, @"Vida\vida96-3.sim11");
-      string assemblyFile = Path.GetFullPath(Path.Combine(ExampleBase.ExampleRoot, @"..\DHI.Mike1D.Examples\bin\Debug\DHI.Mike1D.Examples.dll")); 
+      string assemblyFile = Path.Combine(AppContext.BaseDirectory, "DHI.Mike1D.Examples.dll");
 
       UserDataExamples.SaveComplexNetworkDataWithSetup(resultFilePath, assemblyFile);
     }
@@ -164,7 +164,8 @@ namespace DHI.Mike1D.Examples
       IMike1DController controller = controllerFactory.OpenAndCreate(Connection.Create(setupFilePath), diagnostics);
 
       // Add custom assembly and type - required for the standalong engine to load it again.
-      controller.Mike1DData.CustomTypes.AssemblyFiles.Add(@"..\..\DHI.Mike1D.Examples\bin\Debug\DHI.Mike1D.Examples.dll");
+      string assemblyFile = Path.Combine(AppContext.BaseDirectory, "DHI.Mike1D.Examples.dll");
+      controller.Mike1DData.CustomTypes.AssemblyFiles.Add(assemblyFile);
       controller.Mike1DData.CustomTypes.Add(typeof(MyStructure));
 
       // Save to .m1dx file
@@ -207,12 +208,12 @@ namespace DHI.Mike1D.Examples
 
       // load result file
       IResultData resultData = new ResultData();
-      resultData.Connection            = Connection.Create(filename);
+      resultData.Connection = Connection.Create(filename);
       Diagnostics resultDiagnostics = new Diagnostics("Example");
       resultData.Load(resultDiagnostics);
 
       // Save to res1d
-      resultData.Connection.BridgeName         = "res1d";
+      resultData.Connection.BridgeName = "res1d";
       resultData.Connection.FilePath.Extension = "res1d";
       resultData.Save();
     }

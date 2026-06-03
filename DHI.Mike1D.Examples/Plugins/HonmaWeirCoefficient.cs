@@ -7,6 +7,7 @@ using DHI.Mike1D.Mike1DDataAccess;
 using DHI.Mike1D.Plugins;
 using DHI.Mike1D.StructureModule;
 using IMike1DPlugin = DHI.Mike1D.Plugins.IMike1DPlugin;
+using DDoubleGetter = System.Func<double>;
 
 namespace DHI.Mike1D.Examples.Plugins
 {
@@ -16,7 +17,7 @@ namespace DHI.Mike1D.Examples.Plugins
     {
       public HonmaWeir Weir;
       public XYTable Coefficient;
-      public IDoubleGetter Getter;
+      public System.Func<double> Getter;
     }
 
     private List<HonmaWeirInfo> _weirCoefficients = new List<HonmaWeirInfo>();
@@ -113,12 +114,12 @@ namespace DHI.Mike1D.Examples.Plugins
       {
         HonmaWeir weir = _weirCoefficients[i].Weir;
         XYTable table = _weirCoefficients[i].Coefficient;
-        IDoubleGetter getter = _weirCoefficients[i].Getter;
+        System.Func<double> getter = _weirCoefficients[i].Getter;
 
         // Update weir coefficient
         if (getter != null)
         {
-          double upstreamWaterLevel = getter.GetValue();
+          double upstreamWaterLevel = getter();
           double depthOverCrest = upstreamWaterLevel-weir.CrestLevel;
           weir.WeirCoefficient = table.YFromX(depthOverCrest, ExtrapolationTypes.Nearest);
         }

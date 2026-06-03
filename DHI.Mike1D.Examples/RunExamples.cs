@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DHI.Mike1D.Generic;
 using DHI.Mike1D.Mike1DDataAccess;
-using DHI.Mike1D.ResultDataAccess;
 using DHI.Mike1D.SimLauncher;
 
 namespace DHI.Mike1D.Examples

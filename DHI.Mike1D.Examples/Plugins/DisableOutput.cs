@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DHI.Mike1D.Mike1DDataAccess;
 using DHI.Mike1D.Plugins;
 using IMike1DPlugin = DHI.Mike1D.Plugins.IMike1DPlugin;

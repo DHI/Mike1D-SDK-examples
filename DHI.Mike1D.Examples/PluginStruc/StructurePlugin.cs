@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using DHI.Mike1D.Generic;
 using DHI.Mike1D.Mike1DDataAccess;
 using DHI.Mike1D.Plugins;

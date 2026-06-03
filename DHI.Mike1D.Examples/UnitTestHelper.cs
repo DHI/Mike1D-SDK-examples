@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using NUnit.Framework;
 
 namespace DHI.Mike1D.Examples
@@ -10,7 +9,7 @@ namespace DHI.Mike1D.Examples
         /// <summary>
         /// Relative path to test data. Must end with a \
         /// </summary>
-        public static string TestDataRootRelative = @"..\..\..\data\";
+        public static string TestDataRootRelative = @"..\..\..\..\data\";
 
         /// <summary>
         /// Path to test data
